@@ -16,20 +16,38 @@ void ARollingPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("RotateLeft", this, &ARollingPlayerController::rotateLeft);
 }
 void ARollingPlayerController::moveRight(float AxisValue) {
-	Cast<IControllableInterface>(GetPawn())->moveRight(AxisValue);
+	IControllableInterface * pawn = Cast<IControllableInterface>(GetPawn());
+	if (pawn) {
+		pawn->moveRight(AxisValue);
+	}
 }
 void ARollingPlayerController::moveLeft(float AxisValue) {
-	Cast<IControllableInterface>(GetPawn())->moveLeft(AxisValue);
+	IControllableInterface * pawn = Cast<IControllableInterface>(GetPawn());
+	if (pawn) {
+		pawn->moveLeft(AxisValue);
+	}
 }
 void ARollingPlayerController::moveForward(float AxisValue) {
-	Cast<IControllableInterface>(GetPawn())->moveForward(AxisValue);
+	IControllableInterface * pawn = Cast<IControllableInterface>(GetPawn());
+	if (pawn) {
+		pawn->moveForward(AxisValue);
+	}
 }
 void ARollingPlayerController::moveBack(float AxisValue) {
-	Cast<IControllableInterface>(GetPawn())->moveBack(AxisValue);
+	IControllableInterface * pawn = Cast<IControllableInterface>(GetPawn());
+	if (pawn) {
+		pawn->moveBack(AxisValue);
+	}
 }
 void ARollingPlayerController::rotateRight(float AxisValue) {
-	Cast<IControllableInterface>(GetPawn())->rotateRight(AxisValue);
+	IControllableInterface * pawn = Cast<IControllableInterface>(GetPawn());
+	if (pawn) {
+		pawn->rotateRight(AxisValue);
+	}
 }
 void ARollingPlayerController::rotateLeft(float AxisValue) {
-	Cast<IControllableInterface>(GetPawn())->rotateLeft(AxisValue);
+	IControllableInterface * pawn = Cast<IControllableInterface>(GetPawn());
+	if (pawn) {
+		pawn->rotateLeft(AxisValue);
+	}
 }

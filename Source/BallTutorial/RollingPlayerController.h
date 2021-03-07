@@ -15,6 +15,7 @@ class BALLTUTORIAL_API ARollingPlayerController : public APlayerController
 	GENERATED_BODY()
 public:
     virtual void SetupInputComponent() override;
+
 	void moveRight(float AxisValue);
 	void moveLeft(float AxisValue);
 	void moveForward(float AxisValue);

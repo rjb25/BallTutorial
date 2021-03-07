@@ -23,6 +23,7 @@ protected:
 
 public:	
 	ARollingBall();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -45,4 +46,14 @@ public:
 	float m_back;
 	float m_rotateRight;
 	float m_rotateLeft;
+
+	UFUNCTION(Server, Unreliable, WithValidation)
+	void ServerSetPosition(FTransform position);
+	bool ServerSetPosition_Validate(FTransform position);
+	void ServerSetPosition_Implementation(FTransform position);
+
+	UFUNCTION( NetMulticast, Unreliable,  WithValidation)
+	void ClientSetPosition(FTransform position);
+    bool ClientSetPosition_Validate(FTransform position);
+    void ClientSetPosition_Implementation(FTransform position);
 };

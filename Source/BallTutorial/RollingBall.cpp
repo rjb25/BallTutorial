@@ -32,45 +32,63 @@ ARollingBall::ARollingBall()
 	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	camera->SetupAttachment(spring);
 	camera->SetRelativeRotation(FRotator(15.0f, 0.0f, 0.0f));
+
+	//Multiplayer settings
+	bReplicates = false;
+	bReplicateMovement = false;
+	bAlwaysRelevant = true;
 }
 
 // Called when the game starts or when spawned
 void ARollingBall::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	if (!IsLocallyControlled()) {
+		base->SetSimulatePhysics(false);
+		base->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
+	}
 }
 
 void ARollingBall::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//Directional push
-    FRotator springRotation = spring->GetComponentRotation();
-	float side = m_right + m_left;
-	float ahead = m_forward + m_back;
-	FVector direction = { ahead, side, 0 };
-	FVector nowhere = { 0,0,0 };
-	FVector verticalAxis = { 0,0,1 };
-	FVector unitDirection = UKismetMathLibrary::GetDirectionUnitVector(nowhere, direction);
-	float pushScale = 3000.0;
-	FVector rotatedUnitDirection = UKismetMathLibrary::RotateAngleAxis(unitDirection, springRotation.Yaw, verticalAxis);
-	base->AddForce(DeltaTime * rotatedUnitDirection * pushScale * base->GetMass());
+	//Send our position to server which will then send our position to other clients
+	if (HasAuthority()) {
+		ClientSetPosition(GetActorTransform());
+	}
+	else if (!HasAuthority() && IsLocallyControlled()) {
+		ServerSetPosition(GetActorTransform());
+	}
 
-	//Rotational torque for movement
-	float swap = rotatedUnitDirection.Y;
-	rotatedUnitDirection.Y = rotatedUnitDirection.X;
-	rotatedUnitDirection.X = swap * (-1);
-	float torqueScale = 100000000.0;
-	base->AddTorqueInRadians(DeltaTime * rotatedUnitDirection * torqueScale);
+	if (IsLocallyControlled()) {
+		//Directional push
+		FRotator springRotation = spring->GetComponentRotation();
+		float side = m_right + m_left;
+		float ahead = m_forward + m_back;
+		FVector direction = { ahead, side, 0 };
+		FVector nowhere = { 0,0,0 };
+		FVector verticalAxis = { 0,0,1 };
+		FVector unitDirection = UKismetMathLibrary::GetDirectionUnitVector(nowhere, direction);
+		float pushScale = 3000.0;
+		FVector rotatedUnitDirection = UKismetMathLibrary::RotateAngleAxis(unitDirection, springRotation.Yaw, verticalAxis);
+		base->AddForce(DeltaTime * rotatedUnitDirection * pushScale * base->GetMass());
 
-	//Rotation setting for camera angle
-	float rotation = m_rotateRight + m_rotateLeft;
-	FRotator rotationChange = FRotator(0.0f, 0.0f, 0.0f);
-	float rotationScale = 3.0*60*DeltaTime;
-	rotationChange.Yaw = rotation * rotationScale;
-	USceneComponent * springComponent = CastChecked<USceneComponent>(spring);
-	springComponent->AddWorldRotation(rotationChange);
+		//Rotational torque for movement
+		float swap = rotatedUnitDirection.Y;
+		rotatedUnitDirection.Y = rotatedUnitDirection.X;
+		rotatedUnitDirection.X = swap * (-1);
+		float torqueScale = 100000000.0;
+		base->AddTorqueInRadians(DeltaTime * rotatedUnitDirection * torqueScale);
+
+		//Rotation setting for camera angle
+		float rotation = m_rotateRight + m_rotateLeft;
+		FRotator rotationChange = FRotator(0.0f, 0.0f, 0.0f);
+		float rotationScale = 3.0 * 60 * DeltaTime;
+		rotationChange.Yaw = rotation * rotationScale;
+		USceneComponent * springComponent = CastChecked<USceneComponent>(spring);
+		springComponent->AddWorldRotation(rotationChange);
+	}
 }
 
 //These are called by our player controller
@@ -91,4 +109,18 @@ void ARollingBall::rotateRight(float AxisValue) {
 }
 void ARollingBall::rotateLeft(float AxisValue) {
 	m_rotateLeft = AxisValue;
+}
+bool ARollingBall::ServerSetPosition_Validate(FTransform position) {
+	return true;
+}
+void ARollingBall::ServerSetPosition_Implementation(FTransform position) {
+	SetActorTransform(position);
+}
+bool ARollingBall::ClientSetPosition_Validate(FTransform position) {
+	return true;
+}
+void ARollingBall::ClientSetPosition_Implementation(FTransform position) {
+	if (!IsLocallyControlled()) {
+		SetActorTransform(position);
+	}
 }
