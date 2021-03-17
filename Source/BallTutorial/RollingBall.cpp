@@ -78,8 +78,8 @@ void ARollingBall::Tick(float DeltaTime)
 		float swap = rotatedUnitDirection.Y;
 		rotatedUnitDirection.Y = rotatedUnitDirection.X;
 		rotatedUnitDirection.X = swap * (-1);
-		float torqueScale = 100000000.0;
-		base->AddTorqueInRadians(DeltaTime * rotatedUnitDirection * torqueScale);
+		float torqueScale = 1000000.0;
+		base->AddTorqueInRadians(DeltaTime * rotatedUnitDirection * torqueScale * base->GetMass());
 
 		//Rotation setting for camera angle
 		float rotation = m_rotateRight + m_rotateLeft;
