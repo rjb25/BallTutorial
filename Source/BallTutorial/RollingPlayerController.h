@@ -22,4 +22,5 @@ public:
 	void moveBack(float AxisValue);
 	void rotateRight(float AxisValue);
 	void rotateLeft(float AxisValue);
+	void jump();
 };

@@ -88,6 +88,8 @@ void ARollingBall::Tick(float DeltaTime)
 		rotationChange.Yaw = rotation * rotationScale;
 		USceneComponent * springComponent = CastChecked<USceneComponent>(spring);
 		springComponent->AddWorldRotation(rotationChange);
+
+
 	}
 }
 
@@ -109,6 +111,11 @@ void ARollingBall::rotateRight(float AxisValue) {
 }
 void ARollingBall::rotateLeft(float AxisValue) {
 	m_rotateLeft = AxisValue;
+}
+void ARollingBall::jump() {
+		//Jump Code
+		float jumpForce = 30000.0;
+		base->AddForce(FVector(0.0f,0.0f,1.0f) * jumpForce * base->GetMass());
 }
 bool ARollingBall::ServerSetPosition_Validate(FTransform position) {
 	return true;

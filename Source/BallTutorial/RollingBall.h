@@ -39,6 +39,7 @@ public:
 	void moveBack(float AxisValue) override;
 	void rotateRight(float AxisValue) override;
 	void rotateLeft(float AxisValue) override;
+	void jump() override;
 
 	float m_right;
 	float m_left;

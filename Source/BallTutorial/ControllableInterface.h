@@ -24,4 +24,5 @@ public:
 	virtual void moveBack(float AxisValue) = 0;
 	virtual void rotateRight(float AxisValue) = 0;
 	virtual void rotateLeft(float AxisValue) = 0;
+	virtual void jump() = 0;
 };

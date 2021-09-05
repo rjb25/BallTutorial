@@ -14,6 +14,7 @@ void ARollingPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("Back", this, &ARollingPlayerController::moveBack);
 	InputComponent->BindAxis("RotateRight", this, &ARollingPlayerController::rotateRight);
 	InputComponent->BindAxis("RotateLeft", this, &ARollingPlayerController::rotateLeft);
+	InputComponent->BindAction("Jump", IE_Pressed, this, &ARollingPlayerController::jump);
 }
 void ARollingPlayerController::moveRight(float AxisValue) {
 	IControllableInterface * pawn = Cast<IControllableInterface>(GetPawn());
@@ -49,5 +50,11 @@ void ARollingPlayerController::rotateLeft(float AxisValue) {
 	IControllableInterface * pawn = Cast<IControllableInterface>(GetPawn());
 	if (pawn) {
 		pawn->rotateLeft(AxisValue);
+	}
+}
+void ARollingPlayerController::jump() {
+	IControllableInterface * pawn = Cast<IControllableInterface>(GetPawn());
+	if (pawn) {
+		pawn->jump();
 	}
 }
