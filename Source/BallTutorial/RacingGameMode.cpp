@@ -8,24 +8,24 @@
 #include "RacingHUD.h"
 
 ARacingGameMode::ARacingGameMode() {
-	DefaultPawnClass = ARollingBall::StaticClass();
-	GameStateClass = ARacingGameState::StaticClass();
-	PlayerStateClass = ARacingPlayerState::StaticClass();
-	PlayerControllerClass = ARollingPlayerController::StaticClass();
+    DefaultPawnClass = ARollingBall::StaticClass();
+    GameStateClass = ARacingGameState::StaticClass();
+    PlayerStateClass = ARacingPlayerState::StaticClass();
+    PlayerControllerClass = ARollingPlayerController::StaticClass();
 }
 
 bool ARacingGameMode::checkAllReady() {
-	ARacingGameState * gameState = GetGameState<ARacingGameState>();
-	TArray<APlayerState *> playerArray = gameState->PlayerArray;
-	for (int i = 0; i < playerArray.Num(); i++) {
-		if (ARacingPlayerState * racer = Cast<ARacingPlayerState>(playerArray[i])) {
-			if (!racer->getPlayerReady()) {
-			    return false;
-			}
-		}
-	}
-	gameState->StartRace();
-	return true;
+    ARacingGameState * gameState = GetGameState<ARacingGameState>();
+    TArray<APlayerState *> playerArray = gameState->PlayerArray;
+    for (int i = 0; i < playerArray.Num(); i++) {
+        if (ARacingPlayerState * racer = Cast<ARacingPlayerState>(playerArray[i])) {
+            if (!racer->getPlayerReady()) {
+                return false;
+            }
+        }
+    }
+    gameState->StartRace();
+    return true;
 }
 
 void ARacingGameMode::setRacerTime(float time) {
@@ -38,38 +38,38 @@ void ARacingGameMode::ActorDied(AActor* DeadActor)
 
     if(player)
     {
-	DeadActor->SetActorLocation(FVector(0,0,0));
+        DeadActor->SetActorLocation(FVector(0,0,0));
     }
     else 
     {
-	DeadActor->Destroy();
+        DeadActor->Destroy();
     }    
 }
 
 bool ARacingGameMode::checkAllDone() {
-	ARacingGameState * gameState = GetGameState<ARacingGameState>();
-	TArray<APlayerState *> playerArray = gameState->PlayerArray;
-	for (int i = 0; i < playerArray.Num(); i++) {
-		if (ARacingPlayerState * racer = Cast<ARacingPlayerState>(playerArray[i])) {
-			if (!racer->getPlayerDone()) {
-			    return false;
-			}
-		}
-	}
-	TArray<ARacingPlayerState *> playerPlaces;
+    ARacingGameState * gameState = GetGameState<ARacingGameState>();
+    TArray<APlayerState *> playerArray = gameState->PlayerArray;
+    for (int i = 0; i < playerArray.Num(); i++) {
+        if (ARacingPlayerState * racer = Cast<ARacingPlayerState>(playerArray[i])) {
+            if (!racer->getPlayerDone()) {
+                return false;
+            }
+        }
+    }
+    TArray<ARacingPlayerState *> playerPlaces;
 
-	for (int playerIndex = 0; playerIndex < playerArray.Num(); playerIndex++) {
-		if (ARacingPlayerState * racer = Cast<ARacingPlayerState>(playerArray[playerIndex])) {
-			racer->m_isDone = false;
-		    racer->m_isReady = false;
-			playerPlaces.Add(racer);
-		}
-	}
-	playerPlaces.Sort([](const ARacingPlayerState& left, const ARacingPlayerState& right) { return left.m_totalTime < right.m_totalTime; });
-	for (int placeIndex = 0; placeIndex < playerPlaces.Num(); placeIndex++) {
-		playerPlaces[placeIndex]->clientSetPlace(placeIndex+1);
-	}
+    for (int playerIndex = 0; playerIndex < playerArray.Num(); playerIndex++) {
+        if (ARacingPlayerState * racer = Cast<ARacingPlayerState>(playerArray[playerIndex])) {
+            racer->m_isDone = false;
+            racer->m_isReady = false;
+            playerPlaces.Add(racer);
+        }
+    }
+    playerPlaces.Sort([](const ARacingPlayerState& left, const ARacingPlayerState& right) { return left.m_totalTime < right.m_totalTime; });
+    for (int placeIndex = 0; placeIndex < playerPlaces.Num(); placeIndex++) {
+        playerPlaces[placeIndex]->clientSetPlace(placeIndex+1);
+    }
 
-	gameState->StopRace();
-	return true;
+    gameState->StopRace();
+    return true;
 }

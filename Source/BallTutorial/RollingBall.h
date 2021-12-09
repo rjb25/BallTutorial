@@ -33,6 +33,8 @@ public:
 	UPROPERTY(VisibleAnywhere,BlueprintReadonly)
 	UStaticMeshComponent* base;
 
+	void timeout(float duration);
+
 	void moveRight(float AxisValue) override;
 	void moveLeft(float AxisValue) override;
 	void moveForward(float AxisValue) override;
@@ -47,6 +49,8 @@ public:
 	float m_back;
 	float m_rotateRight;
 	float m_rotateLeft;
+
+	float m_timeout;
 
 	UFUNCTION(Server, Unreliable, WithValidation)
 	void ServerSetPosition(FTransform position);
