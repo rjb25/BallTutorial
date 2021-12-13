@@ -25,4 +25,6 @@ public:
 	virtual void rotateRight(float AxisValue) = 0;
 	virtual void rotateLeft(float AxisValue) = 0;
 	virtual void jump() = 0;
+	virtual void slow(float AxisValue) = 0;
+	virtual void boost(float AxisValue) = 0;
 };

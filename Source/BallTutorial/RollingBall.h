@@ -42,6 +42,12 @@ public:
 	void rotateRight(float AxisValue) override;
 	void rotateLeft(float AxisValue) override;
 	void jump() override;
+	void slow(float AxisValue) override;
+	void boost(float AxisValue) override;
+
+    UFUNCTION(BlueprintNativeEvent, Category = "Checkers")
+    bool jumpCheck();
+    bool jumpCheck_Implementation();
 
 	float m_right;
 	float m_left;
@@ -49,8 +55,16 @@ public:
 	float m_back;
 	float m_rotateRight;
 	float m_rotateLeft;
+	float m_slow;
+	float m_boost;
 
 	float m_timeout;
+
+	UPROPERTY(EditAnywhere)
+    float m_gripDepth = 15.0;
+
+	UPROPERTY(EditAnywhere)
+    float m_gripWidth = 50.0;
 
 	UFUNCTION(Server, Unreliable, WithValidation)
 	void ServerSetPosition(FTransform position);

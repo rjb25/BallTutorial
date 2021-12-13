@@ -23,4 +23,6 @@ public:
 	void rotateRight(float AxisValue);
 	void rotateLeft(float AxisValue);
 	void jump();
+	void boost(float AxisValue);
+	void slow(float AxisValue);
 };

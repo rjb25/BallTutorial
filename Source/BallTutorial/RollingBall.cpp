@@ -9,6 +9,7 @@
 #include "Components/PrimitiveComponent.h"
 #include "Math/Vector.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Materials/Material.h"
 #include "Logging/MessageLog.h"
 
@@ -66,6 +67,13 @@ void ARollingBall::Tick(float DeltaTime)
         //Directional push
         if (m_timeout < 0.0f){
             FRotator springRotation = spring->GetComponentRotation();
+            float mod = 1;
+            bool boosting = m_boost > 0.0f;
+            bool slowing = m_slow > 0.0f;
+            bool grounded = (boosting || slowing) && jumpCheck();
+            if (grounded && boosting){
+                mod += m_boost+0.5;
+            }
             float side = m_right + m_left;
             float ahead = m_forward + m_back;
             FVector direction = { ahead, side, 0 };
@@ -74,14 +82,20 @@ void ARollingBall::Tick(float DeltaTime)
             FVector unitDirection = UKismetMathLibrary::GetDirectionUnitVector(nowhere, direction);
             float pushScale = 3000.0;
             FVector rotatedUnitDirection = UKismetMathLibrary::RotateAngleAxis(unitDirection, springRotation.Yaw, verticalAxis);
-            base->AddForce(DeltaTime * rotatedUnitDirection * pushScale * base->GetMass());
+            base->AddForce(DeltaTime * rotatedUnitDirection * mod * pushScale * base->GetMass());
 
             //Rotational torque for movement
             float swap = rotatedUnitDirection.Y;
             rotatedUnitDirection.Y = rotatedUnitDirection.X;
             rotatedUnitDirection.X = swap * (-1);
             float torqueScale = 1000000.0;
-            base->AddTorqueInRadians(DeltaTime * rotatedUnitDirection * torqueScale * base->GetMass());
+            base->AddTorqueInRadians(DeltaTime * rotatedUnitDirection * mod * torqueScale * base->GetMass());
+            if(grounded && slowing){
+                FVector slowed = -1 * this->GetVelocity() * m_slow * pushScale * 0.01;
+                base->AddForce(DeltaTime * slowed * base->GetMass());
+                FVector slowedAngular = -1 * base->GetPhysicsAngularVelocity() * m_slow * torqueScale * 0.01;
+                base->AddTorqueInRadians(DeltaTime * slowedAngular * base->GetMass());
+            }
         } else {
             m_timeout -= DeltaTime;
         }
@@ -121,10 +135,21 @@ void ARollingBall::rotateRight(float AxisValue) {
 void ARollingBall::rotateLeft(float AxisValue) {
     m_rotateLeft = AxisValue;
 }
+
+void ARollingBall::slow(float AxisValue) {
+    m_slow = AxisValue;
+}
+
+void ARollingBall::boost(float AxisValue) {
+    m_boost = AxisValue;
+}
+
 void ARollingBall::jump() {
-    //Jump Code
-    float jumpForce = 30000.0;
-    base->AddForce(FVector(0.0f,0.0f,1.0f) * jumpForce * base->GetMass());
+    bool check = jumpCheck();
+    if(check){
+        float jumpForce = 30000.0;
+        base->AddForce(FVector(0.0f,0.0f,1.0f) * jumpForce * base->GetMass());
+    }
 }
 bool ARollingBall::ServerSetPosition_Validate(FTransform position) {
     return true;
@@ -139,4 +164,21 @@ void ARollingBall::ClientSetPosition_Implementation(FTransform position) {
     if (!IsLocallyControlled()) {
         SetActorTransform(position);
     }
+}
+bool ARollingBall::jumpCheck_Implementation() {
+    FVector Start = GetActorLocation();
+    FVector End = Start - FVector(0.0f,0.0f,m_gripDepth);
+    FHitResult OutHit;
+    bool ignoreSelf = true;
+    float DrawTime = 5.0f;
+    FLinearColor TraceColor = FLinearColor::Red;
+    FLinearColor TraceHitColor = FLinearColor::Green;
+    TArray<AActor*> ActorsToIgnore;
+    bool bTraceComplex = true;
+    TArray<TEnumAsByte<EObjectTypeQuery> > ObjectTypes;
+    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery1);
+    bool hit = UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), Start, End, m_gripWidth, ObjectTypes, bTraceComplex, ActorsToIgnore, EDrawDebugTrace::None, OutHit, ignoreSelf, TraceColor, TraceHitColor, DrawTime);
+    
+
+    return hit;
 }
