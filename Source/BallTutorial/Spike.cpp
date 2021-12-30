@@ -10,6 +10,7 @@ USpike::USpike()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
+    m_damage = 1.0f;
 
 	// ...
 }
@@ -22,8 +23,6 @@ void USpike::BeginPlay()
 	Owner = GetOwner();
 
 	Owner->OnActorBeginOverlap.AddDynamic(this, &USpike::DealDamage);
-
-	
 }
 
 
@@ -38,5 +37,5 @@ void USpike::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponent
 
 void USpike::DealDamage(AActor* OverlappedActor, AActor* OtherActor){
 	TSubclassOf<UDamageType> P;
-	UGameplayStatics::ApplyDamage(OtherActor, 1.0f, nullptr, Owner, P);
+	UGameplayStatics::ApplyDamage(OtherActor, m_damage, nullptr, Owner, P);
 }

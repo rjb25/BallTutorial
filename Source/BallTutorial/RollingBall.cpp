@@ -107,13 +107,17 @@ void ARollingBall::Tick(float DeltaTime)
         rotationChange.Yaw = rotation * rotationScale;
         USceneComponent * springComponent = CastChecked<USceneComponent>(spring);
         springComponent->AddWorldRotation(rotationChange);
-
-
     }
 }
 
 void ARollingBall::timeout(float duration) {
     m_timeout = duration;
+}
+
+void ARollingBall::checkpoint() {
+    Cast<UPrimitiveComponent>(base)->SetPhysicsLinearVelocity(FVector(0,0,0));
+    Cast<UPrimitiveComponent>(base)->SetPhysicsAngularVelocityInDegrees(FVector(0,0,0));
+    this->SetActorLocation(m_checkpoint);
 }
 
 //These are called by our player controller
@@ -167,7 +171,7 @@ void ARollingBall::ClientSetPosition_Implementation(FTransform position) {
 }
 bool ARollingBall::jumpCheck_Implementation() {
     FVector Start = GetActorLocation();
-    FVector End = Start - FVector(0.0f,0.0f,m_gripDepth);
+    FVector End = Start - FVector(0.0f,0.0f,m_gripDepth+0.001f);
     FHitResult OutHit;
     bool ignoreSelf = true;
     float DrawTime = 5.0f;

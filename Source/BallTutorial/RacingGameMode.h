@@ -18,6 +18,4 @@ public:
 	bool checkAllReady();
 	bool checkAllDone();
 	void setRacerTime(float time);
-	void ActorDied(AActor* DeadActor);
-	
 };

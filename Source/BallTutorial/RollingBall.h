@@ -34,6 +34,8 @@ public:
 	UStaticMeshComponent* base;
 
 	void timeout(float duration);
+    UFUNCTION(BlueprintCallable, Category = "Checkers")
+	void checkpoint();
 
 	void moveRight(float AxisValue) override;
 	void moveLeft(float AxisValue) override;
@@ -59,6 +61,9 @@ public:
 	float m_boost;
 
 	float m_timeout;
+
+	UPROPERTY(BlueprintReadWrite)
+	FVector m_checkpoint;
 
 	UPROPERTY(EditAnywhere)
     float m_gripDepth = 15.0;

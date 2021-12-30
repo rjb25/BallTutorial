@@ -32,20 +32,6 @@ void ARacingGameMode::setRacerTime(float time) {
 
 }
 
-void ARacingGameMode::ActorDied(AActor* DeadActor) 
-{
-    ARollingBall * player = Cast<ARollingBall>(DeadActor);    
-
-    if(player)
-    {
-        DeadActor->SetActorLocation(FVector(0,0,0));
-    }
-    else 
-    {
-        DeadActor->Destroy();
-    }    
-}
-
 bool ARacingGameMode::checkAllDone() {
     ARacingGameState * gameState = GetGameState<ARacingGameState>();
     TArray<APlayerState *> playerArray = gameState->PlayerArray;

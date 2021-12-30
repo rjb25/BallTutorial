@@ -18,6 +18,9 @@ public:
 	USpike();
 	AActor * Owner;
 
+    UPROPERTY(EditAnywhere)
+    float m_damage;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

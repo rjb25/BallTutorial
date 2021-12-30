@@ -20,9 +20,6 @@ UHealthComponent::UHealthComponent()
 void UHealthComponent::BeginPlay()
 {
     Super::BeginPlay();
-    if (GEngine) {
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Health Exists!"));
-    }
 
     Health = DefaultHealth;	
     GameModeRef = Cast<ARacingGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
@@ -51,17 +48,13 @@ void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDam
 
             if(player)
             {
-                if (GEngine) {
-                    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Pre"));
-                }
-                player->timeout(5.0f);
+                player->timeout(1.0f);
+                player->checkpoint();
             }
             else 
             {
                 DeadActor->Destroy();
             }    
-
-            //GameModeRef->ActorDied(GetOwner());
         }		
         else
         {
