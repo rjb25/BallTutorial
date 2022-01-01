@@ -1,6 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "RollingPlayerController.h"
+#include "Kismet/GameplayStatics.h"
+#include "AdventureGameInstance.h"
+#include "AdventureSaveGame.h"
 #include "ControllableInterface.h"
 // Called to bind functionality to input
 void ARollingPlayerController::SetupInputComponent()
@@ -17,6 +20,7 @@ void ARollingPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("Slow", this, &ARollingPlayerController::slow);
 	InputComponent->BindAxis("Boost", this, &ARollingPlayerController::boost);
 	InputComponent->BindAction("Jump", IE_Pressed, this, &ARollingPlayerController::jump);
+	InputComponent->BindAction("Menu", IE_Pressed, this, &ARollingPlayerController::menu);
 }
 void ARollingPlayerController::moveRight(float AxisValue) {
 	IControllableInterface * pawn = Cast<IControllableInterface>(GetPawn());
@@ -59,6 +63,13 @@ void ARollingPlayerController::jump() {
 	if (pawn) {
 		pawn->jump();
 	}
+}
+void ARollingPlayerController::menu() {
+    UAdventureGameInstance * game = Cast<UAdventureGameInstance>(GetGameInstance());
+    UAdventureSaveGame * save = game->AdventureSave;
+    save->newGame = false;
+    //TODO Set player location and checkpoint
+    UGameplayStatics::SaveGameToSlot(save, game->AdventureSlot, 0);
 }
 
 void ARollingPlayerController::slow(float AxisValue) {

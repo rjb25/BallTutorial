@@ -1,4 +1,6 @@
 #include "RollingBall.h"
+#include "AdvancedFriendsGameInstance.h"
+#include "AdventureGameInstance.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
@@ -48,6 +50,18 @@ void ARollingBall::BeginPlay()
     if (!IsLocallyControlled()) {
         base->SetSimulatePhysics(false);
         base->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
+    } else {
+        UAdventureGameInstance * game = Cast<UAdventureGameInstance>(GetGameInstance());
+        if (game != nullptr){
+            UAdventureSaveGame * save = game->AdventureSave;
+            if (save != nullptr){
+                if(!save->newGame){
+                    this->SetActorLocation(save->PlayerCheckpoint);
+                    m_checkpoint = save->PlayerCheckpoint;
+                    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("INSTANCEVALIDFULL")));
+                }
+            }
+        }
     }
 }
 
