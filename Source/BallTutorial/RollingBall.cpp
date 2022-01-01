@@ -56,7 +56,7 @@ void ARollingBall::BeginPlay()
             UAdventureSaveGame * save = game->AdventureSave;
             if (save != nullptr){
                 if(!save->newGame){
-                    this->SetActorLocation(save->PlayerCheckpoint);
+                    this->SetActorLocation(save->PlayerLocation);
                     m_checkpoint = save->PlayerCheckpoint;
                     GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("INSTANCEVALIDFULL")));
                 }

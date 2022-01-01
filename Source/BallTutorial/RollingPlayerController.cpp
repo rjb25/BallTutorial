@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "RollingPlayerController.h"
+#include "RollingBall.h"
 #include "Kismet/GameplayStatics.h"
 #include "AdventureGameInstance.h"
 #include "AdventureSaveGame.h"
@@ -69,6 +70,11 @@ void ARollingPlayerController::menu() {
     UAdventureSaveGame * save = game->AdventureSave;
     save->newGame = false;
     //TODO Set player location and checkpoint
+	ARollingBall * rollingBall = Cast<ARollingBall>(GetPawn());
+    if(rollingBall != nullptr){
+        save->PlayerLocation = rollingBall->GetActorLocation();
+        save->PlayerCheckpoint =  rollingBall->m_checkpoint;
+    }
     UGameplayStatics::SaveGameToSlot(save, game->AdventureSlot, 0);
 }
 
