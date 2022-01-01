@@ -192,11 +192,12 @@ bool ARollingBall::jumpCheck_Implementation() {
     FLinearColor TraceColor = FLinearColor::Red;
     FLinearColor TraceHitColor = FLinearColor::Green;
     TArray<AActor*> ActorsToIgnore;
+    ActorsToIgnore.Add(this);
     bool bTraceComplex = true;
     TArray<TEnumAsByte<EObjectTypeQuery> > ObjectTypes;
     ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery1);
+    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery2);
     bool hit = UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), Start, End, m_gripWidth, ObjectTypes, bTraceComplex, ActorsToIgnore, EDrawDebugTrace::None, OutHit, ignoreSelf, TraceColor, TraceHitColor, DrawTime);
-    
 
     return hit;
 }

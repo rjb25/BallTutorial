@@ -69,7 +69,6 @@ void ARollingPlayerController::menu() {
     UAdventureGameInstance * game = Cast<UAdventureGameInstance>(GetGameInstance());
     UAdventureSaveGame * save = game->AdventureSave;
     save->newGame = false;
-    //TODO Set player location and checkpoint
 	ARollingBall * rollingBall = Cast<ARollingBall>(GetPawn());
     if(rollingBall != nullptr){
         save->PlayerLocation = rollingBall->GetActorLocation();
