@@ -1,4 +1,5 @@
 #include "RollingBall.h"
+#include "HealthComponent.h"
 #include "AdvancedFriendsGameInstance.h"
 #include "AdventureGameInstance.h"
 #include "Components/SphereComponent.h"
@@ -41,6 +42,7 @@ ARollingBall::ARollingBall()
     bReplicateMovement = false;
     bAlwaysRelevant = true;
     m_timeout = -1.0f;
+    m_reload = 1.0f;
 }
 
 // Called when the game starts or when spawned
@@ -69,16 +71,24 @@ void ARollingBall::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    //Send our position to server which will then send our position to other clients
+    //For every ball on the server set the position on the client. Clients will check to make sure their local pawn is not being told what to do.
     if (HasAuthority()) {
         ClientSetPosition(GetActorTransform());
     }
+    //Send local positions to server which will then send our position to other clients
     else if (!HasAuthority() && IsLocallyControlled()) {
         ServerSetPosition(GetActorTransform());
     }
 
     if (IsLocallyControlled()) {
         //Directional push
+        m_reloadLeft -= DeltaTime;
+        if (m_attack > 0.1f){
+            if(m_reloadLeft < 0.0f){
+                laser();
+                m_reloadLeft = m_reload;
+            }
+        }
         if (m_timeout < 0.0f){
             FRotator springRotation = spring->GetComponentRotation();
             float mod = 1;
@@ -124,6 +134,35 @@ void ARollingBall::Tick(float DeltaTime)
     }
 }
 
+void ARollingBall::laser() {
+    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("IMMAFIRIN")));
+
+    FVector Start = GetActorLocation() - FVector(0.0f,0.0f,50.0f);
+    FVector End = GetActorLocation() + FVector(0.0f,0.0f,50.0f);
+    FHitResult OutHit;
+    TArray<FHitResult> OutHits;
+    bool ignoreSelf = true;
+    float DrawTime = 5.0f;
+    FLinearColor TraceColor = FLinearColor::Red;
+    FLinearColor TraceHitColor = FLinearColor::Green;
+    TArray<AActor*> ActorsToIgnore;
+    ActorsToIgnore.Add(this);
+    bool bTraceComplex = true;
+    TArray<TEnumAsByte<EObjectTypeQuery> > ObjectTypes;
+    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery1);
+    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery2);
+    bool hit = UKismetSystemLibrary::SphereTraceMultiForObjects(GetWorld(), Start, End, 100.0f, ObjectTypes, bTraceComplex, ActorsToIgnore, EDrawDebugTrace::None, OutHits, ignoreSelf, TraceColor, TraceHitColor, DrawTime);
+    for (FHitResult hit : OutHits) {
+    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("IMMAFIRed")));
+        AActor * otherActor = hit.GetActor();
+        UHealthComponent * health = otherActor->FindComponentByClass<UHealthComponent>();
+        if (health != nullptr){
+            health->Suffer(1.0f);
+        }
+    }
+    
+}
+
 void ARollingBall::timeout(float duration) {
     m_timeout = duration;
 }
@@ -156,6 +195,10 @@ void ARollingBall::rotateLeft(float AxisValue) {
 
 void ARollingBall::slow(float AxisValue) {
     m_slow = AxisValue;
+}
+
+void ARollingBall::attack(float AxisValue) {
+    m_attack = AxisValue;
 }
 
 void ARollingBall::boost(float AxisValue) {

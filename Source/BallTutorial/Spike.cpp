@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Spike.h"
+#include "HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
 
@@ -36,6 +37,5 @@ void USpike::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponent
 
 
 void USpike::DealDamage(AActor* OverlappedActor, AActor* OtherActor){
-	TSubclassOf<UDamageType> P;
-	UGameplayStatics::ApplyDamage(OtherActor, m_damage, nullptr, Owner, P);
+        OtherActor->FindComponentByClass<UHealthComponent>()->Suffer(m_damage);
 }

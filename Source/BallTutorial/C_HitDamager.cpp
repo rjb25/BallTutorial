@@ -2,6 +2,7 @@
 
 #include "C_HitDamager.h"
 #include "Kismet/GameplayStatics.h"
+#include "HealthComponent.h"
 #include "GameFramework/Actor.h"
 
 // Sets default values for this component's properties
@@ -39,10 +40,12 @@ void UC_HitDamager::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 }
 
 void UC_HitDamager::DealDamage(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit){
+        //GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damage ATTEMPT: ")));
     float currentTime = GetWorld()->GetTimeSeconds();
     if( currentTime > 1.0f + m_prevHitTime){
-        TSubclassOf<UDamageType> P;
-        UGameplayStatics::ApplyDamage(OtherActor, 1.0f, nullptr, Owner, P);
+		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("I Hit: %s"), *OtherActor->GetName()));
+        OtherActor->FindComponentByClass<UHealthComponent>()->Suffer(1.0f);
+        
         m_prevHitTime = currentTime;
     }
 }

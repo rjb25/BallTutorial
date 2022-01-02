@@ -45,11 +45,14 @@ public:
 	void rotateLeft(float AxisValue) override;
 	void jump() override;
 	void slow(float AxisValue) override;
+	void attack(float AxisValue) override;
 	void boost(float AxisValue) override;
 
     UFUNCTION(BlueprintNativeEvent, Category = "Checkers")
     bool jumpCheck();
     bool jumpCheck_Implementation();
+
+	void laser();
 
 	float m_right;
 	float m_left;
@@ -59,8 +62,10 @@ public:
 	float m_rotateLeft;
 	float m_slow;
 	float m_boost;
-
 	float m_timeout;
+	float m_attack;
+	float m_reload;
+	float m_reloadLeft;
 
 	UPROPERTY(BlueprintReadWrite)
 	FVector m_checkpoint;

@@ -27,4 +27,5 @@ public:
 	virtual void jump() = 0;
 	virtual void slow(float AxisValue) = 0;
 	virtual void boost(float AxisValue) = 0;
+	virtual void attack(float AxisValue) = 0;
 };

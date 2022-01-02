@@ -19,14 +19,14 @@ private:
 	float DefaultHealth = 3.0f;
 	float Health = 0.0f;
 	ARacingGameMode* GameModeRef;
+	AActor* owner;
 
 public:	
 	// Sets default values for this component's properties
 	UHealthComponent();
+	void Suffer(float Damage);
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	UFUNCTION()
-	void TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
 };

@@ -23,11 +23,12 @@ void UHealthComponent::BeginPlay()
 
     Health = DefaultHealth;	
     GameModeRef = Cast<ARacingGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-    GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::TakeDamage);
+
+    owner = GetOwner();
 }
 
-void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser) 
-{
+void UHealthComponent::Suffer(float Damage){
+    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Health SUCCESS: ")));
     if(Damage == 0 || Health <= 0)
     {
         return;
@@ -35,31 +36,25 @@ void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDam
 
     Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
 
-    if (GEngine) {
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damage taken! Health: %f"), Health));
-    }
+    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damage taken! Health: %f"), Health));
 
     if(Health <= 0)
     {
-        if(GameModeRef)
-        {
-            AActor * DeadActor = GetOwner();
-            ARollingBall * player = Cast<ARollingBall>(DeadActor);    
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("DEATH!"), Health));
+        AActor * DeadActor = GetOwner();
+        ARollingBall * player = Cast<ARollingBall>(DeadActor);    
 
-            if(player)
-            {
-                player->timeout(1.0f);
-                player->checkpoint();
-            }
-            else 
-            {
-                DeadActor->Destroy();
-            }    
-        }		
-        else
+        if(player)
         {
-            UE_LOG(LogTemp, Warning, TEXT("Health Component has no reference to the GameMode"));
+            player->timeout(1.0f);
+            player->checkpoint();
         }
+        else 
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("SUPERDEATH!"), Health));
+            DeadActor->Destroy(true);
+            //owner->SetActorLocation(owner->GetActorLocation() + FVector(0.0f,0.0f,100.0f));
+        }    
         Health = DefaultHealth;
     }
 }
