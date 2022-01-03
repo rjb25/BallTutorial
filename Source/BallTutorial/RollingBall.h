@@ -34,6 +34,7 @@ public:
 	UStaticMeshComponent* base;
 
 	void timeout(float duration);
+	void hurt(AActor * toHurt, float pain);
     UFUNCTION(BlueprintCallable, Category = "Checkers")
 	void checkpoint();
 
@@ -85,4 +86,9 @@ public:
 	void ClientSetPosition(FTransform position);
     bool ClientSetPosition_Validate(FTransform position);
     void ClientSetPosition_Implementation(FTransform position);
+
+	UFUNCTION(Server, Unreliable, WithValidation)
+	void ServerHurt(AActor* toHurt, float pain);
+	bool ServerHurt_Validate(AActor* toHurt, float pain);
+	void ServerHurt_Implementation(AActor* toHurt, float pain);
 };

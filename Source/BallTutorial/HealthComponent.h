@@ -22,9 +22,19 @@ private:
 	AActor* owner;
 
 public:	
+	UPROPERTY(EditAnywhere)
+    bool m_networked = false;
 	// Sets default values for this component's properties
 	UHealthComponent();
 	void Suffer(float Damage);
+
+	void Hurt(float Damage);
+	void Death();
+
+	UFUNCTION( NetMulticast, Reliable,  WithValidation)
+	void ClientSuffer(float Damage);
+    bool ClientSuffer_Validate(float Damage);
+    void ClientSuffer_Implementation(float Damage);
 
 protected:
 	// Called when the game starts

@@ -25,24 +25,38 @@ void UHealthComponent::BeginPlay()
     GameModeRef = Cast<ARacingGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 
     owner = GetOwner();
+    if(m_networked){
+        owner->SetReplicates(true);
+    }
 }
 
 void UHealthComponent::Suffer(float Damage){
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Health SUCCESS: ")));
+    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Sufre")));
     if(Damage == 0 || Health <= 0)
     {
         return;
     }
 
+    //Only done locally don't worry about networking
+    if (!m_networked) {
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Locally")));
+        Hurt(Damage);
+    } 
+    //Case for if this is networked and called on the server -> controls damage keeping
+    else if (owner->HasAuthority()) { 
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("OnServer")));
+        ClientSuffer(Damage);
+    } 
+}
+
+void UHealthComponent::Hurt(float Damage){
     Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
 
     GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damage taken! Health: %f"), Health));
 
     if(Health <= 0)
     {
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("DEATH!"), Health));
-        AActor * DeadActor = GetOwner();
-        ARollingBall * player = Cast<ARollingBall>(DeadActor);    
+        ARollingBall * player = Cast<ARollingBall>(owner);    
 
         if(player)
         {
@@ -51,10 +65,21 @@ void UHealthComponent::Suffer(float Damage){
         }
         else 
         {
-            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("SUPERDEATH!"), Health));
-            DeadActor->Destroy(true);
-            //owner->SetActorLocation(owner->GetActorLocation() + FVector(0.0f,0.0f,100.0f));
+            Death();
         }    
         Health = DefaultHealth;
     }
+}
+
+void UHealthComponent::Death(){
+    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("SUPERDEATH!"), Health));
+    owner->Destroy(true);
+}
+
+bool UHealthComponent::ClientSuffer_Validate(float Damage) {
+    return true;
+}
+void UHealthComponent::ClientSuffer_Implementation(float Damage) {
+		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, FString::Printf(TEXT("I spawned: %s %s"), *owner->GetName(), owner->HasAuthority() ? TEXT("SERVER") : TEXT("CLIENT")));
+    Hurt(Damage);
 }

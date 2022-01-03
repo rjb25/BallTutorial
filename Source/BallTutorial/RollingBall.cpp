@@ -38,7 +38,7 @@ ARollingBall::ARollingBall()
     camera->SetRelativeRotation(FRotator(15.0f, 0.0f, 0.0f));
 
     //Multiplayer settings
-    bReplicates = false;
+    bReplicates = true;
     bReplicateMovement = false;
     bAlwaysRelevant = true;
     m_timeout = -1.0f;
@@ -48,6 +48,7 @@ ARollingBall::ARollingBall()
 // Called when the game starts or when spawned
 void ARollingBall::BeginPlay()
 {
+		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, FString::Printf(TEXT("I spawned: %s %s"), *GetName(), HasAuthority() ? TEXT("SERVER") : TEXT("CLIENT")));
     Super::BeginPlay();
     if (!IsLocallyControlled()) {
         base->SetSimulatePhysics(false);
@@ -58,7 +59,7 @@ void ARollingBall::BeginPlay()
             UAdventureSaveGame * save = game->AdventureSave;
             if (save != nullptr){
                 if(!save->newGame){
-                    this->SetActorLocation(save->PlayerLocation);
+                    //this->SetActorLocation(save->PlayerLocation);
                     m_checkpoint = save->PlayerCheckpoint;
                     GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("INSTANCEVALIDFULL")));
                 }
@@ -157,10 +158,20 @@ void ARollingBall::laser() {
         AActor * otherActor = hit.GetActor();
         UHealthComponent * health = otherActor->FindComponentByClass<UHealthComponent>();
         if (health != nullptr){
-            health->Suffer(1.0f);
+            if(health->m_networked){
+                ServerHurt(otherActor, 1.0f);
+            }else{
+                hurt(otherActor,1.0f);
+            }
         }
     }
-    
+}
+
+void ARollingBall::hurt(AActor * toHurt, float pain){
+        UHealthComponent * health = toHurt->FindComponentByClass<UHealthComponent>();
+        if (health != nullptr){
+            health->Suffer(pain);
+        }
 }
 
 void ARollingBall::timeout(float duration) {
@@ -212,20 +223,33 @@ void ARollingBall::jump() {
         base->AddForce(FVector(0.0f,0.0f,1.0f) * jumpForce * base->GetMass());
     }
 }
+
 bool ARollingBall::ServerSetPosition_Validate(FTransform position) {
     return true;
 }
+
 void ARollingBall::ServerSetPosition_Implementation(FTransform position) {
     SetActorTransform(position);
 }
+
+bool ARollingBall::ServerHurt_Validate(AActor* toHurt, float pain) {
+    return true;
+}
+
+void ARollingBall::ServerHurt_Implementation(AActor* toHurt, float pain) {
+    hurt(toHurt, pain);
+}
+
 bool ARollingBall::ClientSetPosition_Validate(FTransform position) {
     return true;
 }
+
 void ARollingBall::ClientSetPosition_Implementation(FTransform position) {
     if (!IsLocallyControlled()) {
         SetActorTransform(position);
     }
 }
+
 bool ARollingBall::jumpCheck_Implementation() {
     FVector Start = GetActorLocation();
     FVector End = Start - FVector(0.0f,0.0f,m_gripDepth+0.001f);
