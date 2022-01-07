@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "ControllableInterface.h"
+#include "CanActInterface.h"
+#include "ActableInterface.h"
 #include "RollingBall.generated.h"
 
 class USpringArmComponent;
@@ -12,7 +14,7 @@ class UCameraComponent;
 class UStaticMeshComponent;
 
 UCLASS()
-class BALLTUTORIAL_API ARollingBall : public APawn, public IControllableInterface
+class BALLTUTORIAL_API ARollingBall : public APawn, public IControllableInterface, public ICanActInterface
 {
 	GENERATED_BODY()
 
@@ -46,8 +48,10 @@ public:
 	void rotateLeft(float AxisValue) override;
 	void jump() override;
 	void slow(float AxisValue) override;
-	void attack(float AxisValue) override;
 	void boost(float AxisValue) override;
+	void attack(float AxisValue) override;
+	void act() override;
+	void setAct(IActableInterface * item) override;
 
     UFUNCTION(BlueprintNativeEvent, Category = "Checkers")
     bool jumpCheck();
@@ -67,6 +71,10 @@ public:
 	float m_attack;
 	float m_reload;
 	float m_reloadLeft;
+
+	UPROPERTY(EditAnywhere)
+	float m_jumpForce;
+    IActableInterface * mItem;
 
 	UPROPERTY(BlueprintReadWrite)
 	FVector m_checkpoint;

@@ -21,6 +21,7 @@ void ARollingPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("Slow", this, &ARollingPlayerController::slow);
 	InputComponent->BindAxis("Boost", this, &ARollingPlayerController::boost);
 	InputComponent->BindAxis("Attack", this, &ARollingPlayerController::attack);
+	InputComponent->BindAxis("Act", this, &ARollingPlayerController::act);
 	InputComponent->BindAction("Jump", IE_Pressed, this, &ARollingPlayerController::jump);
 	InputComponent->BindAction("Menu", IE_Pressed, this, &ARollingPlayerController::menu);
 }
@@ -89,6 +90,12 @@ void ARollingPlayerController::attack(float AxisValue) {
 	IControllableInterface * pawn = Cast<IControllableInterface>(GetPawn());
 	if (pawn) {
 		pawn->attack(AxisValue);
+	}
+}
+void ARollingPlayerController::act(float AxisValue) {
+	ICanActInterface * pawn = Cast<ICanActInterface>(GetPawn());
+	if (pawn && AxisValue > 0.0f) {
+		pawn->act();
 	}
 }
 

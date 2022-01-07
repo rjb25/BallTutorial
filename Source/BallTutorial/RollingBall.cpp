@@ -43,6 +43,7 @@ ARollingBall::ARollingBall()
     bAlwaysRelevant = true;
     m_timeout = -1.0f;
     m_reload = 1.0f;
+    m_jumpForce = 600.0f;
 }
 
 // Called when the game starts or when spawned
@@ -59,7 +60,7 @@ void ARollingBall::BeginPlay()
             UAdventureSaveGame * save = game->AdventureSave;
             if (save != nullptr){
                 if(!save->newGame){
-                    //this->SetActorLocation(save->PlayerLocation);
+                    this->SetActorLocation(save->PlayerLocation);
                     m_checkpoint = save->PlayerCheckpoint;
                     GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("INSTANCEVALIDFULL")));
                 }
@@ -152,6 +153,8 @@ void ARollingBall::laser() {
     TArray<TEnumAsByte<EObjectTypeQuery> > ObjectTypes;
     ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery1);
     ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery2);
+    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery3);
+    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery4);
     bool hit = UKismetSystemLibrary::SphereTraceMultiForObjects(GetWorld(), Start, End, 100.0f, ObjectTypes, bTraceComplex, ActorsToIgnore, EDrawDebugTrace::None, OutHits, ignoreSelf, TraceColor, TraceHitColor, DrawTime);
     for (FHitResult hit : OutHits) {
     GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("IMMAFIRed")));
@@ -165,6 +168,14 @@ void ARollingBall::laser() {
             }
         }
     }
+}
+
+void ARollingBall::act(){
+    mItem->act();
+}
+
+void ARollingBall::setAct(IActableInterface * item){
+    mItem = item;
 }
 
 void ARollingBall::hurt(AActor * toHurt, float pain){
@@ -219,8 +230,7 @@ void ARollingBall::boost(float AxisValue) {
 void ARollingBall::jump() {
     bool check = jumpCheck();
     if(check){
-        float jumpForce = 30000.0;
-        base->AddForce(FVector(0.0f,0.0f,1.0f) * jumpForce * base->GetMass());
+        base->AddImpulse(FVector(0.0f,0.0f,1.0f) * m_jumpForce * base->GetMass());
     }
 }
 

@@ -18,6 +18,10 @@ public:
 	AActor * Owner;
 
 	float m_prevHitTime;
+    UPROPERTY(EditAnywhere)
+	float m_damage;
+    UPROPERTY(EditAnywhere)
+	bool m_selfFire;
 
 protected:
 	// Called when the game starts

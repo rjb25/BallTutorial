@@ -4,33 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "ActableInterface.h"
 #include "SpawnBall.generated.h"
 
-class UCameraComponent;
-class AProjectileBase;
-
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BALLTUTORIAL_API USpawnBall : public UActorComponent
+UCLASS( ClassGroup=(Custom), Blueprintable, meta=(BlueprintSpawnableComponent) )
+class BALLTUTORIAL_API USpawnBall : public UActorComponent, public IActableInterface
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
 	USpawnBall();
+	void act() override;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> ActorToSpawn;
+	UPROPERTY(EditAnywhere)
+    float m_speed;
+	UPROPERTY(EditAnywhere)
+    float m_reload;
+    float m_timeLastFire;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-private:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Projectile Type", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AProjectileBase> ProjectileClass;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Projectile Type", meta = (AllowPrivateAccess = "true"))
-	FVector offset;
-	void SetupInputComponent();
-	void SpawnIt();
-	UInputComponent* InputComponent = nullptr;
 };

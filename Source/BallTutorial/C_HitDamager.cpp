@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "C_HitDamager.h"
+#include "RollingBall.h"
+
 #include "Kismet/GameplayStatics.h"
 #include "HealthComponent.h"
 #include "GameFramework/Actor.h"
@@ -12,10 +14,11 @@ UC_HitDamager::UC_HitDamager()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
     m_prevHitTime = -10;
+    m_damage = 1.0f;
+    m_selfFire = false;
 
 	// ...
 }
-
 
 // Called when the game starts
 void UC_HitDamager::BeginPlay()
@@ -30,7 +33,6 @@ void UC_HitDamager::BeginPlay()
 	
 }
 
-
 // Called every frame
 void UC_HitDamager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -40,12 +42,18 @@ void UC_HitDamager::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 }
 
 void UC_HitDamager::DealDamage(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit){
-        //GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damage ATTEMPT: ")));
     float currentTime = GetWorld()->GetTimeSeconds();
     if( currentTime > 1.0f + m_prevHitTime){
-		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("I Hit: %s"), *OtherActor->GetName()));
-        OtherActor->FindComponentByClass<UHealthComponent>()->Suffer(1.0f);
-        
-        m_prevHitTime = currentTime;
+        UHealthComponent * health = OtherActor->FindComponentByClass<UHealthComponent>();
+
+        ARollingBall * pawn = Cast<ARollingBall>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn());
+        if(health != nullptr && (m_selfFire || OtherActor != Owner)){
+            if(health->m_networked){
+                pawn->ServerHurt(OtherActor, m_damage);
+            }else{
+                health->Suffer(m_damage);
+            }
+            m_prevHitTime = currentTime;
+        }
     }
 }

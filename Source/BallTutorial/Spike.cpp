@@ -37,5 +37,9 @@ void USpike::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponent
 
 
 void USpike::DealDamage(AActor* OverlappedActor, AActor* OtherActor){
-        OtherActor->FindComponentByClass<UHealthComponent>()->Suffer(m_damage);
+
+        UHealthComponent * health = OtherActor->FindComponentByClass<UHealthComponent>();
+        if (health != nullptr){
+            health->Suffer(m_damage);
+        }
 }

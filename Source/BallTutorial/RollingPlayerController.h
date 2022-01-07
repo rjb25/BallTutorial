@@ -27,4 +27,5 @@ public:
 	void boost(float AxisValue);
 	void slow(float AxisValue);
 	void attack(float AxisValue);
+	void act(float AxisValue);
 };

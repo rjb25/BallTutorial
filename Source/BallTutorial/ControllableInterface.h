@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "ActableInterface.h"
 #include "ControllableInterface.generated.h"
 
 UINTERFACE(MinimalAPI)
