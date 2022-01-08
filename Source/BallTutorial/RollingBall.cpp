@@ -12,6 +12,7 @@
 #include "Components/PrimitiveComponent.h"
 #include "Math/Vector.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "SpawnBall.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Materials/Material.h"
 #include "Logging/MessageLog.h"
@@ -62,7 +63,6 @@ void ARollingBall::BeginPlay()
                 if(!save->newGame){
                     this->SetActorLocation(save->PlayerLocation);
                     m_checkpoint = save->PlayerCheckpoint;
-                    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("INSTANCEVALIDFULL")));
                 }
             }
         }
@@ -137,7 +137,6 @@ void ARollingBall::Tick(float DeltaTime)
 }
 
 void ARollingBall::laser() {
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("IMMAFIRIN")));
 
     FVector Start = GetActorLocation() - FVector(0.0f,0.0f,50.0f);
     FVector End = GetActorLocation() + FVector(0.0f,0.0f,50.0f);
@@ -157,7 +156,6 @@ void ARollingBall::laser() {
     ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery4);
     bool hit = UKismetSystemLibrary::SphereTraceMultiForObjects(GetWorld(), Start, End, 100.0f, ObjectTypes, bTraceComplex, ActorsToIgnore, EDrawDebugTrace::None, OutHits, ignoreSelf, TraceColor, TraceHitColor, DrawTime);
     for (FHitResult hit : OutHits) {
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("IMMAFIRed")));
         AActor * otherActor = hit.GetActor();
         UHealthComponent * health = otherActor->FindComponentByClass<UHealthComponent>();
         if (health != nullptr){
@@ -171,11 +169,15 @@ void ARollingBall::laser() {
 }
 
 void ARollingBall::act(){
-    mItem->act();
-}
-
-void ARollingBall::setAct(IActableInterface * item){
-    mItem = item;
+    FRotator springRotation = spring->GetComponentRotation();
+    FVector verticalAxis = { 0,0,1 };
+    FVector rotatedUnitDirection = UKismetMathLibrary::RotateAngleAxis(FVector(1.0f,0.0f,0.0f), springRotation.Yaw, verticalAxis);
+    IActableInterface * IAction = Cast<IActableInterface>(Action);
+    if(IAction != nullptr ){
+    IAction->act(rotatedUnitDirection);
+    } else {
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Rolling ball action does not implement actable interface")));
+    }
 }
 
 void ARollingBall::hurt(AActor * toHurt, float pain){

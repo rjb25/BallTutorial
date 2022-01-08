@@ -18,5 +18,5 @@ class BALLTUTORIAL_API IActableInterface
 	GENERATED_BODY()
 
 public:
-	virtual void act() = 0;
+	virtual void act(FVector Direction) = 0;
 };

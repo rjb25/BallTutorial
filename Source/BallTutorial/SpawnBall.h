@@ -15,7 +15,7 @@ class BALLTUTORIAL_API USpawnBall : public UActorComponent, public IActableInter
 public:	
 	// Sets default values for this component's properties
 	USpawnBall();
-	void act() override;
+	void act(FVector Direction) override;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> ActorToSpawn;
 	UPROPERTY(EditAnywhere)

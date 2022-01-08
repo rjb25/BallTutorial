@@ -7,6 +7,7 @@
 #include "ControllableInterface.h"
 #include "CanActInterface.h"
 #include "ActableInterface.h"
+#include "SpawnBall.h"
 #include "RollingBall.generated.h"
 
 class USpringArmComponent;
@@ -51,7 +52,6 @@ public:
 	void boost(float AxisValue) override;
 	void attack(float AxisValue) override;
 	void act() override;
-	void setAct(IActableInterface * item) override;
 
     UFUNCTION(BlueprintNativeEvent, Category = "Checkers")
     bool jumpCheck();
@@ -74,7 +74,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float m_jumpForce;
-    IActableInterface * mItem;
+
+    UPROPERTY(BlueprintReadWrite)
+    UActorComponent * Action;
 
 	UPROPERTY(BlueprintReadWrite)
 	FVector m_checkpoint;

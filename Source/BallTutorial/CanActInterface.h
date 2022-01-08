@@ -21,5 +21,4 @@ class BALLTUTORIAL_API ICanActInterface
 
 public:
 	virtual void act() = 0;
-	virtual void setAct(IActableInterface * item) = 0;
 };

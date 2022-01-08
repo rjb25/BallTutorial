@@ -14,6 +14,7 @@ UEnemyAIBasic::UEnemyAIBasic()
 	PrimaryComponentTick.bCanEverTick = true;
     Speed = 1000.0f;
     SensoryScale = FVector(1.0f, 1.0f, 1.0f);
+    Direction = FVector(0.0f, 0.0f, 0.0f);
 
 	// ...
 }
@@ -52,19 +53,25 @@ void UEnemyAIBasic::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
     UStaticMeshComponent * Body = Owner->FindComponentByClass<UStaticMeshComponent>();
     float Mass = Body->GetMass();
-    FVector Destination = Targets.Num() ? Targets[0]->GetActorLocation() : StartLocation;
-    FVector UnitDirection = UKismetMathLibrary::GetDirectionUnitVector(Owner->GetActorLocation(), Destination);
-    Body->AddForce(UnitDirection * Mass * Speed);
+    FVector Destination = Targets.Num() > 0 ? Targets[0]->GetActorLocation() : StartLocation;
+    Direction = UKismetMathLibrary::GetDirectionUnitVector(Owner->GetActorLocation(), Destination);
+    Body->AddForce(Direction * Mass * Speed);
+    if (Targets.Num() > 0){
+        act();
+    }
+    
 
 
 	// ...
 }
 
 void UEnemyAIBasic::act(){
-    mItem->act();
-}
-void UEnemyAIBasic::setAct(IActableInterface * item){
-    mItem = item;
+    IActableInterface * IAction = Cast<IActableInterface>(Action);
+    if (IAction != nullptr){
+        IAction->act(Direction);
+    } else {
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("No Item to act on")));
+    }
 }
 
 void UEnemyAIBasic::OnOverlapBegin(AActor * OverlappedActor, AActor * OtherActor){
