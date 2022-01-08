@@ -265,7 +265,7 @@ void ARollingBall::ClientSetPosition_Implementation(FTransform position) {
 bool ARollingBall::jumpCheck_Implementation() {
     FVector Start = GetActorLocation();
     FVector End = Start - FVector(0.0f,0.0f,m_gripDepth+0.001f);
-    FHitResult OutHit;
+    TArray<FHitResult> OutHits;
     bool ignoreSelf = true;
     float DrawTime = 5.0f;
     FLinearColor TraceColor = FLinearColor::Red;
@@ -276,7 +276,21 @@ bool ARollingBall::jumpCheck_Implementation() {
     TArray<TEnumAsByte<EObjectTypeQuery> > ObjectTypes;
     ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery1);
     ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery2);
-    bool hit = UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), Start, End, m_gripWidth, ObjectTypes, bTraceComplex, ActorsToIgnore, EDrawDebugTrace::None, OutHit, ignoreSelf, TraceColor, TraceHitColor, DrawTime);
-
-    return hit;
+    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery3);
+    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery4);
+    UKismetSystemLibrary::SphereTraceMultiForObjects(GetWorld(), Start, End, m_gripWidth, ObjectTypes, bTraceComplex, ActorsToIgnore, EDrawDebugTrace::None, OutHits, ignoreSelf, TraceColor, TraceHitColor, DrawTime);
+    for (FHitResult hit : OutHits) {
+        AActor * otherActor = hit.GetActor();
+        UPrimitiveComponent * Mesh = otherActor->FindComponentByClass<UPrimitiveComponent>();
+        if (Mesh){
+            ECollisionResponse response = Mesh->GetCollisionResponseToChannel(ECollisionChannel::ECC_PhysicsBody);
+        //GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("ResponseChannel: %d %s %s"), response, *otherActor->GetName(), *Mesh->GetName()));
+            if(response == ECollisionResponse::ECR_Block || response == ECollisionResponse::ECR_MAX){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+            return false;
 }

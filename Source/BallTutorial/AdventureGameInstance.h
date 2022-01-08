@@ -18,7 +18,7 @@ class BALLTUTORIAL_API UAdventureGameInstance : public UAdvancedFriendsGameInsta
 public:
 
 	UPROPERTY(BlueprintReadWrite)
-	FString AdventureSlot = FString(TEXT("Adventure"));
+	FString AdventureSlot = FString(TEXT("L_Adventure"));
 	UPROPERTY(BlueprintReadWrite)
 	UAdventureSaveGame * AdventureSave;
 

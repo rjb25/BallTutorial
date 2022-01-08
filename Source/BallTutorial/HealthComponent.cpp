@@ -31,7 +31,6 @@ void UHealthComponent::BeginPlay()
 }
 
 void UHealthComponent::Suffer(float Damage){
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Sufre")));
     if(Damage == 0 || Health <= 0)
     {
         return;
@@ -39,12 +38,10 @@ void UHealthComponent::Suffer(float Damage){
 
     //Only done locally don't worry about networking
     if (!m_networked) {
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Locally")));
         Hurt(Damage);
     } 
     //Case for if this is networked and called on the server -> controls damage keeping
     else if (owner->HasAuthority()) { 
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("OnServer")));
         ClientSuffer(Damage);
     } 
 }
@@ -72,7 +69,6 @@ void UHealthComponent::Hurt(float Damage){
 }
 
 void UHealthComponent::Death(){
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("SUPERDEATH!"), Health));
     owner->Destroy(true);
 }
 
@@ -80,6 +76,5 @@ bool UHealthComponent::ClientSuffer_Validate(float Damage) {
     return true;
 }
 void UHealthComponent::ClientSuffer_Implementation(float Damage) {
-		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, FString::Printf(TEXT("I spawned: %s %s"), *owner->GetName(), owner->HasAuthority() ? TEXT("SERVER") : TEXT("CLIENT")));
     Hurt(Damage);
 }
