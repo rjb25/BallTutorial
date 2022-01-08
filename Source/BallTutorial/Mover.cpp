@@ -26,8 +26,8 @@ void UMover::BeginPlay()
     } else {
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("No static mesh for mover")));
     }
-    StateSet LocationSet;
-    LocationSet.States = LocationChanges;
+    StateSet *LocationSet;
+    LocationSet->States = &LocationChanges;
     LocationSet.StateIndex = LocationChangesStartIndex;
     LocationSet.From = GetOwner()->GetActorLocation();
     StateSets.Add(LocationSet);

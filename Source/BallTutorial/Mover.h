@@ -76,6 +76,19 @@ public:
 
     FVector ActorScale;
 
+    UPROPERTY(EditAnywhere)
+    float TimeToStartLocation;
+    UPROPERTY(EditAnywhere)
+    float PauseAfterStartLocation;
+    UPROPERTY(EditAnywhere)
+    float TimeToStartRotation;
+    UPROPERTY(EditAnywhere)
+    float PauseAfterStartRotation;
+    UPROPERTY(EditAnywhere)
+    float TimeToStart;
+    UPROPERTY(EditAnywhere)
+    float PauseAfterStart;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
