@@ -39,6 +39,7 @@ set ttimeoutlen=100
 set visualbell
 set wildmenu
 set wildmode=list:longest,longest:full
+set window=69
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -239,12 +240,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 173 - ((39 * winheight(0) + 33) / 67)
+let s:l = 110 - ((48 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-173
-normal! 013|
+110
+normal! 0
 lcd ~/Documents/Unreal\ Projects/BallTutorial/Source
 wincmd w
 argglobal
@@ -374,18 +375,18 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 41 - ((40 * winheight(0) + 33) / 67)
+let s:l = 41 - ((38 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 41
-normal! 05|
+normal! 018|
 lcd ~/Documents/Unreal\ Projects/BallTutorial/Source
 wincmd w
 exe 'vert 1resize ' . ((&columns * 118 + 118) / 237)
 exe 'vert 2resize ' . ((&columns * 118 + 118) / 237)
 tabnext
-edit ~/Desktop/4.21EngineCopy/Classes/GameFramework/Actor.h
+edit ~/Desktop/4.21EngineCopy/Classes/Kismet/KismetMathLibrary.h
 set splitbelow splitright
 wincmd _ | wincmd |
 split
@@ -398,10 +399,11 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe '1resize ' . ((&lines * 56 + 35) / 70)
-exe '2resize ' . ((&lines * 10 + 35) / 70)
+exe '1resize ' . ((&lines * 51 + 35) / 70)
+exe '2resize ' . ((&lines * 15 + 35) / 70)
 argglobal
-if bufexists("~/Desktop/4.21EngineCopy/Classes/GameFramework/Actor.h") | buffer ~/Desktop/4.21EngineCopy/Classes/GameFramework/Actor.h | else | edit ~/Desktop/4.21EngineCopy/Classes/GameFramework/Actor.h | endif
+1argu
+if bufexists("~/Desktop/4.21EngineCopy/Classes/Kismet/KismetMathLibrary.h") | buffer ~/Desktop/4.21EngineCopy/Classes/Kismet/KismetMathLibrary.h | else | edit ~/Desktop/4.21EngineCopy/Classes/Kismet/KismetMathLibrary.h | endif
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -526,15 +528,16 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 907 - ((30 * winheight(0) + 28) / 56)
+let s:l = 713 - ((12 * winheight(0) + 25) / 51)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-907
+713
 normal! 05|
 lcd ~/Desktop/4.21EngineCopy
 wincmd w
 argglobal
+1argu
 enew
 setlocal keymap=
 setlocal noarabic
@@ -661,17 +664,17 @@ setlocal wrap
 setlocal wrapmargin=0
 lcd ~/Desktop/4.21EngineCopy
 wincmd w
-exe '1resize ' . ((&lines * 56 + 35) / 70)
-exe '2resize ' . ((&lines * 10 + 35) / 70)
+exe '1resize ' . ((&lines * 51 + 35) / 70)
+exe '2resize ' . ((&lines * 15 + 35) / 70)
 tabnext 1
 set stal=1
-badd +31 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.cpp
+badd +136 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Mover.cpp
 badd +4 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/AdventureGameInstance.cpp
 badd +4 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/AdventureSaveGame.cpp
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/BallTutorial.Build.cs
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/BallTutorial.cpp
 badd +0 BallTutorial/Components/
-badd +32 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/C_HitDamager.cpp
+badd +6 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/C_HitDamager.cpp
 badd +75 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/HealthComponent.cpp
 badd +11 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/IsHazard.cpp
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/jasonbuf
@@ -710,9 +713,12 @@ badd +77 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingBa
 badd +30 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingPlayerController.h
 badd +25 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/SpawnBall.h
 badd +21 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.h
+badd +1637 ~/Desktop/4.21EngineCopy/Classes/GameFramework/Actor.h
+badd +82 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Mover.h
+badd +5 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.cpp
+badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Components
 badd +14 ~/Desktop/4.21EngineCopy/Classes/Engine/EngineTypes.h
 badd +26 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.h
-badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Components
 badd +8 ~/Desktop/4.21EngineCopy/Classes/Engine/TriggerBox.h
 badd +2934 ~/Desktop/4.21EngineCopy/Classes/Engine/World.h
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ComponentBasicSpawn.cpp
@@ -725,21 +731,23 @@ badd +10 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ActorBasi
 badd +25 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ActorBasicSpawn.h
 badd +18 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/CanActInterface.h
 badd +1910 ~/Desktop/4.21EngineCopy/Classes/Components/PrimitiveComponent.h
-badd +1231 ~/Desktop/4.21EngineCopy/Classes/Components/SceneComponent.h
+badd +281 ~/Desktop/4.21EngineCopy/Classes/Components/SceneComponent.h
 badd +6000 ~/Desktop/4.21EngineCopy/Private/Components/CharacterMovementComponent.cpp
 badd +1082 ~/Desktop/4.21EngineCopy/Private/PrimitiveComponentPhysics.cpp
 badd +1 ~/Desktop/4.21EngineCopy/Classes/Engine/CollisionProfile.h
-badd +0 ~/Desktop/4.21EngineCopy/Classes/GameFramework/Actor.h
 badd +1 ~/Desktop/4.21EngineCopy/Private/EngineTypes.cpp
 badd +45 ~/Desktop/4.21EngineCopy/Public/Collision.h
 badd +1 ~/Desktop/4.21EngineCopy/CollisionChannel
 badd +50 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingBall.cpp~
-badd +39 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Mover.cpp
-badd +20 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Mover.h
 badd +33 ~/Desktop/4.21EngineCopy/Classes/Animation/AnimSequence.h
-badd +0 \*\*/Math.h
+badd +1 \*\*/Math.h
 badd +120 ~/Desktop/4.21EngineCopy/Classes/Animation/AnimationAsset.h
 badd +4 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ChaseBoundedForce.cpp
+badd +35 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/PointerLocationTest.cpp
+badd +22 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/PointerLocationTest.h
+badd +904 ~/Desktop/4.21EngineCopy/Classes/Camera/PlayerCameraManager.h
+badd +83 ~/Desktop/4.21EngineCopy/Classes/GameFramework/NavMovementComponent.h
+badd +0 ~/Desktop/4.21EngineCopy/Classes/Kismet/KismetMathLibrary.h
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf
 endif

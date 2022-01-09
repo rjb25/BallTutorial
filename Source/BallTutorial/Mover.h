@@ -31,15 +31,19 @@ public:
 
 };
 
-struct StateSet
+USTRUCT()
+struct FStateSet
 {
-    TArray<FToState>
+    GENERATED_BODY()
+
+public:
+    FVector Current;
+    //Pointer to LocationChanges, RotationChanges, or SizeChanges array
+    TArray<FToState> *
     States;
     int StateIndex;
+    int PriorStateIndex;
     float TimeOfNextIndex;
-    bool HasStates;
-    FVector From;
-    FVector Current;
     int IndexDirection = 1;
 
 };
@@ -75,7 +79,10 @@ public:
 
     TArray<bool*> Reverses;
 
-    TArray<StateSet> StateSets;
+    TArray<FStateSet*> StateSets;
+    FStateSet LocationSet;
+    FStateSet RotationSet;
+    FStateSet SizeSet;
 
     float TimeTotal;
 
