@@ -15,14 +15,20 @@ public:
     UPROPERTY(EditAnywhere)
     FVector Destination;
 
+    FVector SaveRelative;
+
+    UPROPERTY(EditAnywhere)
+    bool Relative = false;
+
+    UPROPERTY(EditAnywhere)
+    AActor * ActorAsDestination = nullptr;
+
     UPROPERTY(EditAnywhere)
     float TimeTo;
 
     UPROPERTY(EditAnywhere)
     float PauseAfter;
 
-    UPROPERTY(EditAnywhere)
-    bool Relative = false;
 };
 
 struct StateSet
@@ -34,6 +40,7 @@ struct StateSet
     bool HasStates;
     FVector From;
     FVector Current;
+    int IndexDirection = 1;
 
 };
 
@@ -51,24 +58,22 @@ public:
     UStaticMeshComponent * Body;
     UPROPERTY(EditAnywhere)
     TArray<FToState> LocationChanges;
-
-    UPROPERTY(EditAnywhere, Category = "Index")
-    int LocationChangesStartIndex;
-
     UPROPERTY(EditAnywhere)
     TArray<FToState> RotationChanges;
-
-    UPROPERTY(EditAnywhere, Category = "Index")
-    int RotationChangesStartIndex;
-
     UPROPERTY(EditAnywhere)
     TArray<FToState> SizeChanges;
+    UPROPERTY(EditAnywhere)
+    bool UpdateActorDestinations;
 
-    UPROPERTY(EditAnywhere, Category = "Index")
-    int SizeChangesStartIndex;
 
     UPROPERTY(EditAnywhere)
-    bool Reverse;
+    bool ReverseNotLoopLocation;
+    UPROPERTY(EditAnywhere)
+    bool ReverseNotLoopRotation;
+    UPROPERTY(EditAnywhere)
+    bool ReverseNotLoopSize;
+
+    TArray<bool*> Reverses;
 
     TArray<StateSet> StateSets;
 
@@ -79,15 +84,16 @@ public:
     UPROPERTY(EditAnywhere)
     float TimeToStartLocation;
     UPROPERTY(EditAnywhere)
-    float PauseAfterStartLocation;
-    UPROPERTY(EditAnywhere)
     float TimeToStartRotation;
+    UPROPERTY(EditAnywhere)
+    float TimeToStartSize;
+
+    UPROPERTY(EditAnywhere)
+    float PauseAfterStartLocation;
     UPROPERTY(EditAnywhere)
     float PauseAfterStartRotation;
     UPROPERTY(EditAnywhere)
-    float TimeToStart;
-    UPROPERTY(EditAnywhere)
-    float PauseAfterStart;
+    float PauseAfterStartSize;
 
 protected:
 	// Called when the game starts
