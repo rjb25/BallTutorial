@@ -75,14 +75,9 @@ void UMover::BeginPlay()
 
     for(int StateSetI = 0; StateSetI< StateSets.Num(); StateSetI++){
         FStateSet * StateSet = StateSets[StateSetI];
-        if (StateSet->States->Num() > StateSet->StateIndex){
-            TArray<FToState> StatesVal= *(StateSet->States);
-            FToState State = StatesVal[StateSet->StateIndex];
-            StateSet->TimeOfNextIndex = State.TimeTo + State.PauseAfter;
-        }else {
-            if(StateSet->States->Num() > 1){
-                GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Mover index out of bounds")));
-            }
+        if(StateSet->States->Num() > 1){
+            FToState * State = &(*StateSet->States)[StateSet->StateIndex];
+            StateSet->TimeOfNextIndex = State->TimeTo + State->PauseAfter;
         }
     }
     ActorScale = GetOwner()->GetActorScale3D();
@@ -94,11 +89,10 @@ void UMover::BeginPlay()
     for (int StateSetI = 0; StateSetI < StateSets.Num(); StateSetI++){
         FStateSet * StateSet = StateSets[StateSetI];
         for (int StateI = 1; StateI < StateSet->States->Num(); StateI++) {
-            TArray<FToState> StatesVal= *(StateSet->States);
-            FToState * StatePrior = &StatesVal[StateI-1];
-            FToState * State = &StatesVal[StateI];
+
+            FToState * StatePrior = &(*StateSet->States)[StateI-1];
+            FToState * State = &(*StateSet->States)[StateI];
             if(State->ActorAsDestination != nullptr){
-GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Not Null")));
                 //BAD FORM SHOULD BE AN ENUM
                 if(StateSetI == 0){
                     State->Destination = State->ActorAsDestination->GetActorLocation();
@@ -108,10 +102,10 @@ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT
                     State->Destination = UKismetMathLibrary::Divide_VectorVector(State->ActorAsDestination->GetActorScale3D(),ActorScale);
                 }
 
-                if(State->Relative){
-                    State->SaveRelative = State->Destination;
-                    State->Destination = StatePrior->Destination + State->SaveRelative;
-                }
+            } else
+            if(State->Relative){
+                State->SaveRelative = State->Destination;
+                State->Destination = StatePrior->Destination + State->SaveRelative;
             }
         }
     }
@@ -123,37 +117,16 @@ void UMover::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponent
 {
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
     TimeTotal += DeltaTime;
+
     for (int StateSetI = 0; StateSetI < StateSets.Num(); StateSetI++){
         FStateSet * StateSet = StateSets[StateSetI];
-        TArray<FToState> DynamicStatesVal = *(StateSet->States);
-        if(DynamicStatesVal.Num() > 1){
+        if(StateSet->States->Num() > 1){
 
-            if(UpdateActorDestinations){
-                for (int StateI = 1; StateI < StateSet->States->Num(); StateI++) {
+            FToState * State;
+            FToState * StatePrior;
 
-                    FToState * StatePrior = &DynamicStatesVal[StateSet->StateIndex];
-                    FToState * State = &DynamicStatesVal[StateSet->PriorStateIndex];
-                    if(State->ActorAsDestination != nullptr){
-                        //BAD FORM SHOULD BE AN ENUM
-                        if(StateSetI == 0){
-                            State->Destination = State->ActorAsDestination->GetActorLocation();
-                        } else if (StateSetI == 1){
-                            State->Destination = State->ActorAsDestination->GetActorRotation().Vector();
-                        } else if (StateSetI == 2){
-                            State->Destination = UKismetMathLibrary::Divide_VectorVector(State->ActorAsDestination->GetActorScale3D(),ActorScale);
-                        }else if(State->Relative){
-                            State->SaveRelative = State->Destination;
-                            State->Destination = StatePrior->Destination + State->SaveRelative;
-                        }
-                    }
-                }
-            }
-            float NextTime = StateSet->TimeOfNextIndex;
-
-            TArray<FToState> StatesVal= *(StateSet->States);
-
-            FToState * State = &StatesVal[StateSet->StateIndex];
-            if (NextTime < TimeTotal){
+            //Update Indexing if finished
+            if (StateSet->TimeOfNextIndex < TimeTotal){
                 StateSet->PriorStateIndex = StateSet->StateIndex;
                 if( StateSet->StateIndex+StateSet->IndexDirection < StateSet->States->Num() && StateSet->StateIndex+ StateSet->IndexDirection > -1){
                     StateSet->StateIndex += StateSet->IndexDirection;
@@ -164,22 +137,47 @@ void UMover::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponent
                     StateSet->IndexDirection = 1;
                     StateSet->StateIndex = 0;
                 }
-                State = &StatesVal[StateSet->StateIndex];
+
+                //We need the updated state
+                StatePrior = &(*StateSet->States)[StateSet->PriorStateIndex];
+                State = &(*StateSet->States)[StateSet->StateIndex];
 
                 FToState * TimeToState;
                 if (StateSet->IndexDirection != -1){
                     TimeToState = State;
                 } else {
-                    TimeToState = &StatesVal[StateSet->StateIndex+1];
+                    TimeToState = StatePrior;
                 }
                 StateSet->TimeOfNextIndex += TimeToState->TimeTo + State->PauseAfter;
+            } else {
+                StatePrior = &(*StateSet->States)[StateSet->PriorStateIndex];
+                State = &(*StateSet->States)[StateSet->StateIndex];
             }
+
+            //Update Destinations if we are referencing moving actors
+            if(UpdateActorDestinations){
+                if(State->ActorAsDestination != nullptr){
+                    //USE ENUM
+                    if(StateSetI == 0){
+                        State->Destination = State->ActorAsDestination->GetActorLocation();
+                    } else if (StateSetI == 1){
+                        State->Destination = State->ActorAsDestination->GetActorRotation().Vector();
+                    } else if (StateSetI == 2){
+                        State->Destination = UKismetMathLibrary::Divide_VectorVector(State->ActorAsDestination->GetActorScale3D(),ActorScale);
+                    }
+                } else if(State->Relative){
+                    State->Destination = StatePrior->Destination + State->SaveRelative;
+                }
+            }
+
+            //Progress based on time code
             FToState * TimeToState;
             if (StateSet->IndexDirection != -1){
                 TimeToState = State;
             } else {
-                TimeToState = &StatesVal[StateSet->StateIndex+1];
+                TimeToState = StatePrior;
             }
+
             float TimeRemaining = StateSet->TimeOfNextIndex-TimeTotal-State->PauseAfter;
             float Progress;
             if (TimeToState->TimeTo < 0.000001){
@@ -187,26 +185,47 @@ void UMover::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponent
             } else {
                 Progress = (TimeToState->TimeTo-TimeRemaining)/TimeToState->TimeTo;
             }
-            FVector Start = StatesVal[StateSet->PriorStateIndex].Destination;
-            FVector End = StatesVal[StateSet->StateIndex].Destination;
+            FVector Start = StatePrior->Destination;
+            FVector End = State->Destination;
 
-            StateSet->Current = FMath::Lerp(Start,End,FMath::Clamp(Progress,0.0f,1.0f));
+            FVector Current = FMath::Lerp(Start,End,FMath::Clamp(Progress,0.0f,1.0f));
+            /*
+            GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, FString::Printf(
+                        TEXT("Progress: %f clamped %f nextindex%f Total%f remain %f timeto %f pause %f Current %s statecount %d"), 
+                        Progress, 
+                        FMath::Clamp(Progress,0.0f,1.0f),
+                        StateSet->TimeOfNextIndex,
+                        TimeTotal, 
+                        TimeRemaining,
+                        TimeToState->TimeTo, 
+                        State->PauseAfter,
+                        *State->Destination.ToString(),
+                        StateSet->States->Num()));
+                        */
+
+            //Actually set the state 
+            //USE ENUM
+            switch(StateSetI){
+                case 0:
+                    GetOwner()->SetActorLocation(Current);
+                    break;
+                case 1:
+                    GetOwner()->SetActorRotation(Current.Rotation());
+                    break;
+                case 2:
+                    FVector AdjustedScale = UKismetMathLibrary::Multiply_VectorVector(Current, ActorScale);
+                    GetOwner()->SetActorScale3D(AdjustedScale);
+            }
+
+            //Do wrap up stuff for next iteration
+
+
         }
-    }
-    FStateSet * LocationStateSet = StateSets[0];
-    if (LocationStateSet->States->Num() > LocationStateSet->StateIndex){
-        GetOwner()->SetActorLocation(LocationStateSet->Current);
-    }
-    FStateSet * RotationStateSet = StateSets[1];
-    if (RotationStateSet->States->Num() > RotationStateSet->StateIndex){
-        GetOwner()->SetActorRotation(RotationStateSet->Current.Rotation());
-    }
-    FStateSet * SizeStateSet = StateSets[2];
-    if (SizeStateSet->States->Num() > SizeStateSet->StateIndex){
-        FVector AdjustedScale = UKismetMathLibrary::Multiply_VectorVector(SizeStateSet->Current, ActorScale);
-        GetOwner()->SetActorScale3D(AdjustedScale);
     }
 }
 
 //GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("RESET StateIndex %d IndexDirection %d States %d  bool1 %d bool2 %d"), CurrentSet->StateIndex,CurrentSet->IndexDirection,CurrentSet->States.Num(),CurrentSet->StateIndex+CurrentSet->IndexDirection < CurrentSet->States.Num(), CurrentSet->StateIndex+CurrentSet->IndexDirection > -1));
 //GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, FString::Printf(TEXT("Progress: %f clamped %f nextindex%f Total%f remain %f  timeto %f pause %f Current %s statecount %d"), Progress, FMath::Clamp(Progress,0.0f,1.0f),CurrentSet->TimeOfNextIndex,TimeTotal,TimeRemaining, TimeToState.TimeTo,TimeToState.PauseAfter,*(CurrentSet->Current).ToString() , CurrentSet->States.Num()));
+//GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, FString::Printf(
+//TEXT("Current %s"), 
+//*(StatesVal[StateSet->StateIndex].Destination.ToString()) ));

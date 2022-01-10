@@ -37,7 +37,6 @@ struct FStateSet
     GENERATED_BODY()
 
 public:
-    FVector Current;
     //Pointer to LocationChanges, RotationChanges, or SizeChanges array
     TArray<FToState> *
     States;
