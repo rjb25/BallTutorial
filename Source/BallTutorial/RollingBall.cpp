@@ -157,6 +157,12 @@ void ARollingBall::laser() {
     bool hit = UKismetSystemLibrary::SphereTraceMultiForObjects(GetWorld(), Start, End, 100.0f, ObjectTypes, bTraceComplex, ActorsToIgnore, EDrawDebugTrace::None, OutHits, ignoreSelf, TraceColor, TraceHitColor, DrawTime);
     for (FHitResult hit : OutHits) {
         AActor * otherActor = hit.GetActor();
+        ARollingBall * PossessMe = Cast<ARollingBall>(otherActor);
+        if (PossessMe != nullptr){
+            AController * Controller = GetController();
+            Controller->Possess(PossessMe);
+        }
+        /*
         UHealthComponent * health = otherActor->FindComponentByClass<UHealthComponent>();
         if (health != nullptr){
             if(health->m_networked){
@@ -165,6 +171,7 @@ void ARollingBall::laser() {
                 hurt(otherActor,1.0f);
             }
         }
+        */
     }
 }
 
