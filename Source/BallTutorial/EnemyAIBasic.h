@@ -32,6 +32,9 @@ public:
     UPROPERTY(EditAnywhere)
     FVector SensoryScale;
     FVector Direction;
+    UPROPERTY(EditAnywhere)
+    bool Enabled;
+    AActor * OldestTarget;
 
 protected:
 	// Called when the game starts
@@ -47,5 +50,4 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void act();
 };

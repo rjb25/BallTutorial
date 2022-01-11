@@ -4,17 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Turret.generated.h"
+#include "Move.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BALLTUTORIAL_API UTurret : public UActorComponent
+class BALLTUTORIAL_API UMove : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UTurret();
+	UMove();
+    void Move(FVector Direction, float DeltaTime);
+    UPROPERTY(EditAnywhere)
+    float SpeedForce;
+    UPROPERTY(EditAnywhere)
+    float SpeedRoll;
+    UStaticMeshComponent * Body;
 
 protected:
 	// Called when the game starts

@@ -15,10 +15,8 @@ UEnemyAIBasic::UEnemyAIBasic()
     Speed = 1000.0f;
     SensoryScale = FVector(1.0f, 1.0f, 1.0f);
     Direction = FVector(0.0f, 0.0f, 0.0f);
-
-	// ...
+    Enabled = true;
 }
-
 
 // Called when the game starts
 void UEnemyAIBasic::BeginPlay()
@@ -42,8 +40,6 @@ void UEnemyAIBasic::BeginPlay()
         Cast<AActor>(SensoryBox)->OnActorEndOverlap.AddDynamic(this, &UEnemyAIBasic::OnOverlapEnd);
 
     }
-	// ...
-	
 }
 
 
@@ -51,33 +47,13 @@ void UEnemyAIBasic::BeginPlay()
 void UEnemyAIBasic::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-    UStaticMeshComponent * Body = Owner->FindComponentByClass<UStaticMeshComponent>();
-    float Mass = Body->GetMass();
-    FVector Destination = Targets.Num() > 0 ? Targets[0]->GetActorLocation() : StartLocation;
-    Direction = UKismetMathLibrary::GetDirectionUnitVector(Owner->GetActorLocation(), Destination);
-    Body->AddForce(Direction * Mass * Speed);
-    if (Targets.Num() > 0){
-        act();
-    }
-    
-
-
-	// ...
-}
-
-void UEnemyAIBasic::act(){
-    IActableInterface * IAction = Cast<IActableInterface>(Action);
-    if (IAction != nullptr){
-        IAction->act(Direction);
-    } else {
-            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("No Item to act on")));
-    }
 }
 
 void UEnemyAIBasic::OnOverlapBegin(AActor * OverlappedActor, AActor * OtherActor){
 	ARollingBall * pawn = Cast<ARollingBall>(OtherActor);
 	if (pawn != nullptr) {
         Targets.AddUnique(OtherActor);
+        OldestTarget = Targets[0];
 	}
 }
 
@@ -85,5 +61,8 @@ void UEnemyAIBasic::OnOverlapEnd(AActor * OverlappedActor, AActor * OtherActor) 
 	ARollingBall * pawn = Cast<ARollingBall>(OtherActor);
 	if (pawn != nullptr) {
         Targets.Remove(OtherActor);
-	}
+        if (Targets.Num() > 0) {
+            OldestTarget = Targets[0];
+        }
+    }
 }

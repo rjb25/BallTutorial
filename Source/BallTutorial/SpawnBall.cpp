@@ -12,21 +12,21 @@ USpawnBall::USpawnBall()
 {
     // Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
     // off to improve performance if you don't need them.
-    PrimaryComponentTick.bCanEverTick = false;
+    PrimaryComponentTick.bCanEverTick = true;
     m_speed = 2000.0f;
     m_reload = 3.0f;
     m_timeLastFire = 0.0f;
-
-        // ...
 }
 
 // Called when the game starts
 void USpawnBall::BeginPlay()
 {
     Super::BeginPlay();
+    Owner = GetOwner();
+    AI = Owner->FindComponentByClass<UEnemyAIBasic>();
 }
 
-void USpawnBall::act(FVector Direction)
+void USpawnBall::Spawn(FVector Direction)
 {
     if(ActorToSpawn != nullptr){
         float time = GetWorld()->GetTimeSeconds();
@@ -36,8 +36,6 @@ void USpawnBall::act(FVector Direction)
             FRotator SpawnRotation = owner->GetActorRotation();
             AActor* TempProjectile = GetWorld()->SpawnActor<AActor>(ActorToSpawn, SpawnLocation, SpawnRotation);
             UStaticMeshComponent * body = TempProjectile->FindComponentByClass<UStaticMeshComponent>();
-
-
             body->AddImpulse(Direction * m_speed * body->GetMass());
             m_timeLastFire = GetWorld()->GetTimeSeconds();
         }
@@ -47,3 +45,10 @@ void USpawnBall::act(FVector Direction)
     }
 }
 
+void USpawnBall::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+    if (AI != nullptr && AI->Enabled && AI->Targets.Num() > 0){
+        FVector TowardTarget = UKismetMathLibrary::GetDirectionUnitVector(Owner->GetActorLocation(), AI->Targets[0]->GetActorLocation());
+        Spawn(TowardTarget);
+    }
+}
