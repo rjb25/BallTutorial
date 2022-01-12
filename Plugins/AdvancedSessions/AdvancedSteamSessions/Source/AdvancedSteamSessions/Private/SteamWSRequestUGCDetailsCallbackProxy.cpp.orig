@@ -2,9 +2,12 @@
 
 #include "SteamWSRequestUGCDetailsCallbackProxy.h"
 #include "OnlineSubSystemHeader.h"
+<<<<<<< local
+=======
 #if PLATFORM_WINDOWS || PLATFORM_MAC || PLATFORM_LINUX
 #include "steam/isteamugc.h"
 #endif
+>>>>>>> graft
 
 //////////////////////////////////////////////////////////////////////////
 // UEndSessionCallbackProxy

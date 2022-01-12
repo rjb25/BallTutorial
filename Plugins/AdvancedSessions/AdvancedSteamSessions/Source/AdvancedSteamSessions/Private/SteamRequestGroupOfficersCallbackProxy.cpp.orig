@@ -4,9 +4,12 @@
 #include "UObject/CoreOnline.h"
 #include "AdvancedSteamFriendsLibrary.h"
 #include "OnlineSubSystemHeader.h"
+<<<<<<< local
+=======
 #if PLATFORM_WINDOWS || PLATFORM_MAC || PLATFORM_LINUX
 #include "steam/isteamfriends.h"
 #endif
+>>>>>>> graft
 //#include "OnlineSubsystemSteamTypes.h"
 
 //////////////////////////////////////////////////////////////////////////

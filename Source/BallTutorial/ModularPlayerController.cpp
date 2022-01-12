@@ -12,11 +12,26 @@ AModularPlayerController::AModularPlayerController()
     Movement = nullptr;
 }
 
-void AModularPlayerController::SetPawn(APawn* InPawn)
+void AModularPlayerController::OnPossess(APawn* InPawn)
 {
-	Super::SetPawn(InPawn);
-    //Movement = InPawn->FindComponentByClass<UMove>();
+	Super::OnPossess(InPawn);
+    Possessed(InPawn);
 
+}
+
+void AModularPlayerController::AcknowledgePossession(APawn* InPawn)
+{
+    Super::AcknowledgePossession(InPawn);
+    Possessed(InPawn);
+
+}
+
+void AModularPlayerController::Possessed(APawn* InPawn) {
+    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("ResponseChannel")));
+    Movement = InPawn->FindComponentByClass<UMove>();
+    if (Movement == nullptr) {
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("OOPS")));
+    }
 }
 
 // Called to bind functionality to input
@@ -111,5 +126,9 @@ void AModularPlayerController::Tick(float DeltaTime)
             springComponent->AddWorldRotation(rotationChange);
         }
         */
+    }
+    else {
+
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("LOST OOPSY")));
     }
 }

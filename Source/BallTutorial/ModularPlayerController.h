@@ -18,9 +18,11 @@ class BALLTUTORIAL_API AModularPlayerController : public APlayerController
 
 protected:
 	// Called when the game starts or when spawned
-	virtual void SetPawn(APawn* InPawn) override;
+	virtual void AcknowledgePossession(APawn* InPawn) override;
+	virtual void OnPossess(APawn* InPawn) override;
 
 public:
+	void Possessed(APawn* InPawn);
 	AModularPlayerController();
 
 	// Called every frame

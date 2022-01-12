@@ -11,6 +11,7 @@ nmap s :w
 vnoremap <silent> <Plug>NetrwBrowseXVis :call netrw#BrowseXVis()
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(netrw#GX(),netrw#CheckIfRemote(netrw#GX()))
 inoremap  u
+imap zz :w
 let &cpo=s:cpo_save
 unlet s:cpo_save
 set autoindent
@@ -97,7 +98,7 @@ $argadd ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.h
 set stal=2
 tabnew
 tabrewind
-edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingPlayerController.cpp
+edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ActableInterface.h
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -114,7 +115,7 @@ exe 'vert 1resize ' . ((&columns * 118 + 118) / 237)
 exe 'vert 2resize ' . ((&columns * 118 + 118) / 237)
 argglobal
 44argu
-if bufexists("~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingPlayerController.cpp") | buffer ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingPlayerController.cpp | else | edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingPlayerController.cpp | endif
+if bufexists("~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ActableInterface.h") | buffer ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ActableInterface.h | else | edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ActableInterface.h | endif
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -239,11 +240,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 13 - ((8 * winheight(0) + 33) / 67)
+let s:l = 6 - ((5 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-13
+6
 normal! 0
 lcd ~/Documents/Unreal\ Projects/BallTutorial/Source
 wincmd w
@@ -374,12 +375,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 162 - ((44 * winheight(0) + 33) / 67)
+let s:l = 120 - ((30 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-162
-normal! 014|
+120
+normal! 069|
 lcd ~/Documents/Unreal\ Projects/BallTutorial/Source
 wincmd w
 2wincmd w
@@ -813,7 +814,6 @@ exe 'vert 2resize ' . ((&columns * 118 + 118) / 237)
 exe '3resize ' . ((&lines * 15 + 35) / 70)
 tabnext 1
 set stal=1
-badd +20 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.h
 badd +4 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/AdventureGameInstance.cpp
 badd +4 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/AdventureSaveGame.cpp
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/BallTutorial.Build.cs
@@ -833,8 +833,8 @@ badd +20 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RacingGam
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RacingHUD.cpp
 badd +68 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RacingPlayerState.cpp
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RacingWidget.cpp
-badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingBall.cpp
-badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingPlayerController.cpp
+badd +0 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingBall.cpp
+badd +8 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingPlayerController.cpp
 badd +44 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/SpawnBall.cpp
 badd +29 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.cpp
 badd +21 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/AdventureGameInstance.h
@@ -858,10 +858,13 @@ badd +77 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingBa
 badd +30 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingPlayerController.h
 badd +25 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/SpawnBall.h
 badd +21 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.h
+badd +1 ~/Desktop/4.21EngineCopy/Private/Pawn.cpp
+badd +1 ~/Desktop/4.21EngineCopy/Private/Controller.cpp
+badd +20 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.h
+badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Components
 badd +713 ~/Desktop/4.21EngineCopy/Classes/Kismet/KismetMathLibrary.h
 badd +81 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.cpp
 badd +110 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Mover.cpp
-badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Components
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Mover.h
 badd +1637 ~/Desktop/4.21EngineCopy/Classes/GameFramework/Actor.h
 badd +14 ~/Desktop/4.21EngineCopy/Classes/Engine/EngineTypes.h
@@ -871,7 +874,7 @@ badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ComponentB
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ComponentBasicSpawn.h
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Intermediate/Build/Win64/BallTutorialEditor/Development/BallTutorialEditor.uhtmanifest
-badd +21 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ActableInterface.h
+badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ActableInterface.h
 badd +119 ~/Desktop/4.21EngineCopy/Classes/Components/StaticMeshComponent.h
 badd +10 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ActorBasicSpawn.cpp
 badd +25 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ActorBasicSpawn.h
@@ -898,8 +901,6 @@ badd +34 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Gravitor.
 badd +95 ~/Desktop/4.21EngineCopy/Classes/Engine/DebugCameraController.h
 badd +89 ~/Desktop/4.21EngineCopy/Classes/GameFramework/Pawn.h
 badd +1500 ~/Desktop/4.21EngineCopy/Classes/GameFramework/PlayerController.h
-badd +0 ~/Desktop/4.21EngineCopy/Private/Controller.cpp
-badd +0 ~/Desktop/4.21EngineCopy/Private/Pawn.cpp
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf
 endif

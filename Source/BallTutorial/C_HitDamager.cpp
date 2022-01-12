@@ -45,15 +45,23 @@ void UC_HitDamager::DealDamage(AActor* SelfActor, AActor* OtherActor, FVector No
     float currentTime = GetWorld()->GetTimeSeconds();
     if( currentTime > 1.0f + m_prevHitTime){
         UHealthComponent * health = OtherActor->FindComponentByClass<UHealthComponent>();
+        APlayerController* PController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+        ARollingBall* pawn;
+        if (PController != nullptr) {
 
-        ARollingBall * pawn = Cast<ARollingBall>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn());
-        if(health != nullptr && (m_selfFire || OtherActor != Owner)){
-            if(health->m_networked){
-                pawn->ServerHurt(OtherActor, m_damage);
-            }else{
-                health->Suffer(m_damage);
+            pawn = Cast<ARollingBall>(PController->GetPawn());
+            if (pawn != nullptr) {
+                if (health != nullptr && (m_selfFire || OtherActor != Owner)) {
+                    if (health->m_networked) {
+                        pawn->ServerHurt(OtherActor, m_damage);
+                    }
+                    else {
+                        health->Suffer(m_damage);
+                    }
+                    m_prevHitTime = currentTime;
+                }
             }
-            m_prevHitTime = currentTime;
         }
+
     }
 }

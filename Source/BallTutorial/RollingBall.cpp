@@ -40,7 +40,6 @@ ARollingBall::ARollingBall()
 
     //Multiplayer settings
     bReplicates = true;
-    bReplicateMovement = false;
     bAlwaysRelevant = true;
     m_timeout = -1.0f;
     m_reload = 1.0f;
@@ -119,8 +118,8 @@ void ARollingBall::Tick(float DeltaTime)
             if(grounded && slowing){
                 FVector slowed = -1 * this->GetVelocity() * m_slow * pushScale * 0.01;
                 base->AddForce(DeltaTime * slowed * base->GetMass());
-                FVector slowedAngular = -1 * base->GetPhysicsAngularVelocity() * m_slow * torqueScale * 0.01;
-                base->AddTorqueInRadians(DeltaTime * slowedAngular * base->GetMass());
+                FVector slowedAngular = -1 * (base->GetPhysicsAngularVelocityInDegrees()/60.0f) * m_slow * torqueScale * 0.01;
+                base->AddTorqueInDegrees(DeltaTime * slowedAngular * base->GetMass()* 60.0f);
             }
         } else {
             m_timeout -= DeltaTime;
@@ -155,12 +154,12 @@ void ARollingBall::laser() {
     ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery3);
     ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery4);
     bool hit = UKismetSystemLibrary::SphereTraceMultiForObjects(GetWorld(), Start, End, 100.0f, ObjectTypes, bTraceComplex, ActorsToIgnore, EDrawDebugTrace::None, OutHits, ignoreSelf, TraceColor, TraceHitColor, DrawTime);
-    for (FHitResult hit : OutHits) {
-        AActor * otherActor = hit.GetActor();
+    for (FHitResult outhit : OutHits) {
+        AActor * otherActor = outhit.GetActor();
         ARollingBall * PossessMe = Cast<ARollingBall>(otherActor);
         if (PossessMe != nullptr){
-            AController * Controller = GetController();
-            Controller->Possess(PossessMe);
+            AController * TheController = GetController();
+            TheController->Possess(PossessMe);
         }
         /*
         UHealthComponent * health = otherActor->FindComponentByClass<UHealthComponent>();
