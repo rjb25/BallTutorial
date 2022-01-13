@@ -125,6 +125,24 @@ void AModularPlayerController::Tick(float DeltaTime)
             USceneComponent * springComponent = CastChecked<USceneComponent>(spring);
             springComponent->AddWorldRotation(rotationChange);
         }
+
+        //Directional push
+        float side = m_right + m_left;
+        float ahead = m_forward + m_back;
+        FVector direction = { ahead, side, 0 };
+        FVector nowhere = { 0,0,0 };
+        FVector verticalAxis = { 0,0,1 };
+        FVector unitDirection = UKismetMathLibrary::GetDirectionUnitVector(nowhere, direction);
+        float pushScale = 3000.0;
+        FVector rotatedUnitDirection = UKismetMathLibrary::RotateAngleAxis(unitDirection, springRotation.Yaw, verticalAxis);
+        base->AddForce(DeltaTime * rotatedUnitDirection * mod * pushScale * base->GetMass());
+
+        //Rotational torque for movement
+        float swap = rotatedUnitDirection.Y;
+        rotatedUnitDirection.Y = rotatedUnitDirection.X;
+        rotatedUnitDirection.X = swap * (-1);
+        float torqueScale = 1000000.0;
+        base->AddTorqueInRadians(DeltaTime * rotatedUnitDirection * mod * torqueScale * base->GetMass());
         */
     }
     else {

@@ -41,6 +41,7 @@ ARollingBall::ARollingBall()
     //Multiplayer settings
     bReplicates = true;
     bAlwaysRelevant = true;
+    SetReplicatingMovement(false);
     m_timeout = -1.0f;
     m_reload = 1.0f;
     m_jumpForce = 600.0f;
@@ -49,7 +50,7 @@ ARollingBall::ARollingBall()
 // Called when the game starts or when spawned
 void ARollingBall::BeginPlay()
 {
-		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, FString::Printf(TEXT("I spawned: %s %s"), *GetName(), HasAuthority() ? TEXT("SERVER") : TEXT("CLIENT")));
+    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, FString::Printf(TEXT("I spawned: %s %s"), *GetName(), HasAuthority() ? TEXT("SERVER") : TEXT("CLIENT")));
     Super::BeginPlay();
     if (!IsLocallyControlled()) {
         base->SetSimulatePhysics(false);
@@ -250,14 +251,6 @@ void ARollingBall::ServerSetPosition_Implementation(FTransform position) {
     SetActorTransform(position);
 }
 
-bool ARollingBall::ServerHurt_Validate(AActor* toHurt, float pain) {
-    return true;
-}
-
-void ARollingBall::ServerHurt_Implementation(AActor* toHurt, float pain) {
-    hurt(toHurt, pain);
-}
-
 bool ARollingBall::ClientSetPosition_Validate(FTransform position) {
     return true;
 }
@@ -266,6 +259,14 @@ void ARollingBall::ClientSetPosition_Implementation(FTransform position) {
     if (!IsLocallyControlled()) {
         SetActorTransform(position);
     }
+}
+
+bool ARollingBall::ServerHurt_Validate(AActor* toHurt, float pain) {
+    return true;
+}
+
+void ARollingBall::ServerHurt_Implementation(AActor* toHurt, float pain) {
+    hurt(toHurt, pain);
 }
 
 bool ARollingBall::jumpCheck_Implementation() {

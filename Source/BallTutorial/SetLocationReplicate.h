@@ -4,26 +4,33 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Move.generated.h"
+#include "SetLocationReplicate.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BALLTUTORIAL_API UMove : public UActorComponent
+class BALLTUTORIAL_API USetLocationReplicate : public UActorComponent
 {
 	GENERATED_BODY()
 
+
 public:	
 	// Sets default values for this component's properties
-	UMove();
-    void Move(FVector Direction, float DeltaTime);
-    UPROPERTY(EditAnywhere)
-    float SpeedForce;
-    UPROPERTY(EditAnywhere)
-    float SpeedRoll;
+	USetLocationReplicate();
+
 private:
     AActor * Owner;
     APawn * Pawn;
     UStaticMeshComponent * Body;
+
+	UFUNCTION(Server, Unreliable, WithValidation)
+	void ServerSetPosition(FTransform position);
+	bool ServerSetPosition_Validate(FTransform position);
+	void ServerSetPosition_Implementation(FTransform position);
+
+	UFUNCTION( NetMulticast, Unreliable,  WithValidation)
+	void ClientSetPosition(FTransform position);
+    bool ClientSetPosition_Validate(FTransform position);
+    void ClientSetPosition_Implementation(FTransform position);
 
 protected:
 	// Called when the game starts

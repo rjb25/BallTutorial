@@ -4,26 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Move.generated.h"
+#include "GroundedCheck.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BALLTUTORIAL_API UMove : public UActorComponent
+class BALLTUTORIAL_API UGroundedCheck : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UMove();
-    void Move(FVector Direction, float DeltaTime);
-    UPROPERTY(EditAnywhere)
-    float SpeedForce;
-    UPROPERTY(EditAnywhere)
-    float SpeedRoll;
-private:
-    AActor * Owner;
-    APawn * Pawn;
-    UStaticMeshComponent * Body;
+	UGroundedCheck();
 
 protected:
 	// Called when the game starts
