@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "Move.h"
 #include "Jump.h"
+#include "SpawnBall.h"
 #include "ControllerInterface.h"
 #include "ModularPlayerController.generated.h"
 
@@ -52,19 +53,21 @@ public:
 	void act(float AxisValue);
 
     UPROPERTY(EditAnywhere)
-    float CameraTurnSpeed;
-	float Right;
-	float Left;
-	float Forward;
-	float Back;
-	float RotateRight;
-	float RotateLeft;
-	float Slow;
-	bool Jump;
-	float Boost;
-	float Attack;
-    UMove * MovementComp;
-    UJump * JumpComp;
-    USceneComponent * SpringComp;
+    float CameraTurnSpeed = 1.0f;
+	float Right = 0.0f;
+	float Left = 0.0f;
+	float Forward = 0.0f;
+	float Back = 0.0f;
+	float RotateRight = 0.0f;
+	float RotateLeft = 0.0f;
+	float Slow = 0.0f;
+	float Act = 0.0f;
+	bool Jump = false;
+	float Boost = 0.0f;
+	float Attack = 0.0f;
+    UMove * MovementComp = nullptr;
+    UJump * JumpComp = nullptr;
+    USceneComponent * SpringComp = nullptr;
+    USpawnBall * SpawnBallComp = nullptr;
 	
 };

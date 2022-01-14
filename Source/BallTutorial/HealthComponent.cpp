@@ -55,7 +55,7 @@ void UHealthComponent::Hurt(float Damage){
     {
         APawn * Pawn = Cast<APawn>(owner);    
 
-        if(Pawn->IsPlayerControlled())
+        if(Pawn != nullptr && Pawn->IsPlayerControlled())
         {
             /*
             player->timeout(1.0f);

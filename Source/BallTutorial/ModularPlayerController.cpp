@@ -9,14 +9,6 @@
 
 AModularPlayerController::AModularPlayerController()
 {
-    Right = 0.0f;
-    Left = 0.0f;
-    Forward = 0.0f;
-    Back = 0.0f;
-    MovementComp = nullptr;
-    JumpComp = nullptr;
-    SpringComp = nullptr;
-    CameraTurnSpeed = 1.0f;
 }
 
 void AModularPlayerController::OnPossess(APawn* InPawn)
@@ -37,6 +29,7 @@ void AModularPlayerController::Possessed(APawn* InPawn) {
     MovementComp = InPawn->FindComponentByClass<UMove>();
     JumpComp = InPawn->FindComponentByClass<UJump>();
     SpringComp = InPawn->FindComponentByClass<USpringArmComponent>();
+    SpawnBallComp = InPawn->FindComponentByClass<USpawnBall>();
 }
 
 // Called to bind functionality to input
@@ -111,6 +104,8 @@ void AModularPlayerController::slow(float AxisValue) {
 void AModularPlayerController::attack(float AxisValue) {
 }
 void AModularPlayerController::act(float AxisValue) {
+
+    Act = AxisValue;
 }
 
 void AModularPlayerController::boost(float AxisValue) {
@@ -120,32 +115,42 @@ void AModularPlayerController::boost(float AxisValue) {
 void AModularPlayerController::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    if (SpringComp != nullptr && MovementComp != nullptr && DeltaTime < 0.3f){
-        float Side = Right + Left;
-        float Ahead = Forward + Back;
-        if (!(Side == 0 && Ahead == 0)){
-            FVector Direction = { Ahead, Side, 0 };
-            FVector Nowhere = { 0,0,0 };
-            FVector UnitDirection = UKismetMathLibrary::GetDirectionUnitVector(Nowhere, Direction);
-            FVector VerticalAxis = { 0,0,1 };
-            FRotator SpringRotation = SpringComp->GetComponentRotation();
-            FVector RotatedUnitDirection = UKismetMathLibrary::RotateAngleAxis(UnitDirection, SpringRotation.Yaw, VerticalAxis);
-            MovementComp->Move(RotatedUnitDirection,DeltaTime);
+    if (SpringComp != nullptr){
+        FRotator SpringRotation = SpringComp->GetComponentRotation();
+        FVector VerticalAxis = { 0,0,1 };
+        if (MovementComp != nullptr){
+            float Side = Right + Left;
+            float Ahead = Forward + Back;
+            if (!(Side == 0 && Ahead == 0) && DeltaTime < 0.3f){
+                FVector Direction = { Ahead, Side, 0 };
+                FVector Nowhere = { 0,0,0 };
+                FVector UnitDirection = 
+                    UKismetMathLibrary::GetDirectionUnitVector(Nowhere, 
+                            Direction);
+                FVector RotatedUnitDirection = 
+                    UKismetMathLibrary::RotateAngleAxis(UnitDirection, 
+                            SpringRotation.Yaw, 
+                            VerticalAxis);
+                MovementComp->Move(RotatedUnitDirection,DeltaTime);
+            }
         }
-    }
-    else {
-
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("MOVEMENT NULL")));
-    }
-        if (JumpComp != nullptr && Jump){
-            JumpComp->Jump();
+        if (SpawnBallComp != nullptr && Act != 0){
+            FVector RotatedUnitForwardDirection = 
+                UKismetMathLibrary::RotateAngleAxis(FVector(1.0f,0.0f,0.0f), 
+                        SpringRotation.Yaw, 
+                        VerticalAxis);
+            SpawnBallComp->Spawn(RotatedUnitForwardDirection);
         }
         float Rotate = RotateRight + RotateLeft;
-        if(SpringComp != nullptr && Rotate != 0){
+        if( Rotate != 0){
             FRotator RotationChange = FRotator(0.0f, 0.0f, 0.0f);
             RotationChange.Yaw = Rotate * CameraTurnSpeed;
             SpringComp->AddWorldRotation(RotationChange);
         }
+    }
+    if (JumpComp != nullptr && Jump){
+        JumpComp->Jump();
+    }
 }
 
 bool AModularPlayerController::ServerHurt_Validate(AActor* toHurt, float pain) {
