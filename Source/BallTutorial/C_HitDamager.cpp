@@ -5,6 +5,7 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "HealthComponent.h"
+#include "ControllerInterface.h"
 #include "GameFramework/Actor.h"
 
 // Sets default values for this component's properties
@@ -46,22 +47,15 @@ void UC_HitDamager::DealDamage(AActor* SelfActor, AActor* OtherActor, FVector No
     if( currentTime > 1.0f + m_prevHitTime){
         UHealthComponent * health = OtherActor->FindComponentByClass<UHealthComponent>();
         APlayerController* PController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-        ARollingBall* pawn;
-        if (PController != nullptr) {
-
-            pawn = Cast<ARollingBall>(PController->GetPawn());
-            if (pawn != nullptr) {
-                if (health != nullptr && (m_selfFire || OtherActor != Owner)) {
-                    if (health->m_networked) {
-                        pawn->ServerHurt(OtherActor, m_damage);
-                    }
-                    else {
-                        health->Suffer(m_damage);
-                    }
-                    m_prevHitTime = currentTime;
-                }
+        IControllerInterface * MyController = Cast<IControllerInterface>(PController);
+        if (health != nullptr && (m_selfFire || OtherActor != Owner)) {
+            if (health->m_networked && MyController != nullptr) {
+                MyController->ServerHurt(OtherActor, m_damage);
             }
+            else {
+                health->Suffer(m_damage);
+            }
+            m_prevHitTime = currentTime;
         }
-
     }
 }

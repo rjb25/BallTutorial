@@ -53,12 +53,14 @@ void UHealthComponent::Hurt(float Damage){
 
     if(Health <= 0)
     {
-        ARollingBall * player = Cast<ARollingBall>(owner);    
+        APawn * Pawn = Cast<APawn>(owner);    
 
-        if(player)
+        if(Pawn->IsPlayerControlled())
         {
+            /*
             player->timeout(1.0f);
             player->checkpoint();
+            */
         }
         else 
         {

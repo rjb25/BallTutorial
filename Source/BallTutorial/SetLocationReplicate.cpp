@@ -27,6 +27,7 @@ void USetLocationReplicate::BeginPlay()
     if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, FString::Printf(TEXT("I spawned: %s %s"), *Pawn->GetName(), Pawn->HasAuthority() ? TEXT("SERVER") : TEXT("CLIENT")));
 
     if (!(Pawn->IsLocallyControlled())) {
+    GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, FString::Printf(TEXT("PHYSICS DISABLED")));
         Body->SetSimulatePhysics(false);
         Body->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
     } 
@@ -60,7 +61,7 @@ bool USetLocationReplicate::ClientSetPosition_Validate(FTransform position) {
 }
 
 void USetLocationReplicate::ClientSetPosition_Implementation(FTransform position) {
-    if (!(Pawn->HasAuthority()) &&  !(Pawn->IsLocallyControlled())    ) {
+    if (!(Pawn->HasAuthority()) && !(Pawn->IsLocallyControlled())) {
         Owner->SetActorTransform(position);
     }
 }

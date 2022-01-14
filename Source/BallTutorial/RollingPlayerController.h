@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "ControllerInterface.h"
 #include "RollingPlayerController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BALLTUTORIAL_API ARollingPlayerController : public APlayerController
+class BALLTUTORIAL_API ARollingPlayerController : public APlayerController, public IControllerInterface
 {
 	GENERATED_BODY()
 public:
@@ -28,4 +29,9 @@ public:
 	void slow(float AxisValue);
 	void attack(float AxisValue);
 	void act(float AxisValue);
+
+	UFUNCTION(Server, Unreliable, WithValidation)
+	void ServerHurt(AActor* toHurt, float pain) override;
+	bool ServerHurt_Validate(AActor* toHurt, float pain) override;
+	void ServerHurt_Implementation(AActor* toHurt, float pain) override;
 };

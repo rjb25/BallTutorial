@@ -1,7 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ModularPlayerController.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "HealthComponent.h"
+#include "MyUtil.h"
 
 AModularPlayerController::AModularPlayerController()
 {
@@ -9,7 +13,10 @@ AModularPlayerController::AModularPlayerController()
     Left = 0.0f;
     Forward = 0.0f;
     Back = 0.0f;
-    Movement = nullptr;
+    MovementComp = nullptr;
+    JumpComp = nullptr;
+    SpringComp = nullptr;
+    CameraTurnSpeed = 1.0f;
 }
 
 void AModularPlayerController::OnPossess(APawn* InPawn)
@@ -27,11 +34,9 @@ void AModularPlayerController::AcknowledgePossession(APawn* InPawn)
 }
 
 void AModularPlayerController::Possessed(APawn* InPawn) {
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("ResponseChannel")));
-    Movement = InPawn->FindComponentByClass<UMove>();
-    if (Movement == nullptr) {
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("OOPS")));
-    }
+    MovementComp = InPawn->FindComponentByClass<UMove>();
+    JumpComp = InPawn->FindComponentByClass<UJump>();
+    SpringComp = InPawn->FindComponentByClass<USpringArmComponent>();
 }
 
 // Called to bind functionality to input
@@ -50,7 +55,8 @@ void AModularPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("Boost", this, &AModularPlayerController::boost);
 	InputComponent->BindAxis("Attack", this, &AModularPlayerController::attack);
 	InputComponent->BindAxis("Act", this, &AModularPlayerController::act);
-	InputComponent->BindAction("Jump", IE_Pressed, this, &AModularPlayerController::jump);
+	InputComponent->BindAction("Jump", IE_Pressed, this, &AModularPlayerController::JumpPressed);
+	InputComponent->BindAction("Jump", IE_Released, this, &AModularPlayerController::JumpReleased);
 	InputComponent->BindAction("Menu", IE_Pressed, this, &AModularPlayerController::menu);
 }
 
@@ -78,7 +84,11 @@ void AModularPlayerController::rotateLeft(float AxisValue) {
     RotateLeft = AxisValue;
 }
 
-void AModularPlayerController::jump() {
+void AModularPlayerController::JumpPressed() {
+    Jump = true;
+}
+void AModularPlayerController::JumpReleased() {
+    Jump = false;
 }
 
 void AModularPlayerController::menu() {
@@ -106,47 +116,45 @@ void AModularPlayerController::act(float AxisValue) {
 void AModularPlayerController::boost(float AxisValue) {
 }
 
+
 void AModularPlayerController::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    if (Movement != nullptr){
+    if (SpringComp != nullptr && MovementComp != nullptr && DeltaTime < 0.3f){
         float Side = Right + Left;
         float Ahead = Forward + Back;
         if (!(Side == 0 && Ahead == 0)){
             FVector Direction = { Ahead, Side, 0 };
-            Movement->Move(Direction,DeltaTime);
+            FVector Nowhere = { 0,0,0 };
+            FVector UnitDirection = UKismetMathLibrary::GetDirectionUnitVector(Nowhere, Direction);
+            FVector VerticalAxis = { 0,0,1 };
+            FRotator SpringRotation = SpringComp->GetComponentRotation();
+            FVector RotatedUnitDirection = UKismetMathLibrary::RotateAngleAxis(UnitDirection, SpringRotation.Yaw, VerticalAxis);
+            MovementComp->Move(RotatedUnitDirection,DeltaTime);
         }
-        /*
-        float Rotate = RotateRight + RotateLeft;
-        if(Rotate != 0){
-            FRotator RotationChange = FRotator(0.0f, 0.0f, 0.0f);
-            float RotationScale = 3.0 * 60 * DeltaTime;
-            rotationChange.Yaw = rotation * rotationScale;
-            USceneComponent * springComponent = CastChecked<USceneComponent>(spring);
-            springComponent->AddWorldRotation(rotationChange);
-        }
-
-        //Directional push
-        float side = m_right + m_left;
-        float ahead = m_forward + m_back;
-        FVector direction = { ahead, side, 0 };
-        FVector nowhere = { 0,0,0 };
-        FVector verticalAxis = { 0,0,1 };
-        FVector unitDirection = UKismetMathLibrary::GetDirectionUnitVector(nowhere, direction);
-        float pushScale = 3000.0;
-        FVector rotatedUnitDirection = UKismetMathLibrary::RotateAngleAxis(unitDirection, springRotation.Yaw, verticalAxis);
-        base->AddForce(DeltaTime * rotatedUnitDirection * mod * pushScale * base->GetMass());
-
-        //Rotational torque for movement
-        float swap = rotatedUnitDirection.Y;
-        rotatedUnitDirection.Y = rotatedUnitDirection.X;
-        rotatedUnitDirection.X = swap * (-1);
-        float torqueScale = 1000000.0;
-        base->AddTorqueInRadians(DeltaTime * rotatedUnitDirection * mod * torqueScale * base->GetMass());
-        */
     }
     else {
 
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("LOST OOPSY")));
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("MOVEMENT NULL")));
+    }
+        if (JumpComp != nullptr && Jump){
+            JumpComp->Jump();
+        }
+        float Rotate = RotateRight + RotateLeft;
+        if(SpringComp != nullptr && Rotate != 0){
+            FRotator RotationChange = FRotator(0.0f, 0.0f, 0.0f);
+            RotationChange.Yaw = Rotate * CameraTurnSpeed;
+            SpringComp->AddWorldRotation(RotationChange);
+        }
+}
+
+bool AModularPlayerController::ServerHurt_Validate(AActor* toHurt, float pain) {
+    return true;
+}
+
+void AModularPlayerController::ServerHurt_Implementation(AActor* toHurt, float pain) {
+    UHealthComponent * health = toHurt->FindComponentByClass<UHealthComponent>();
+    if (health != nullptr){
+        health->Suffer(pain);
     }
 }

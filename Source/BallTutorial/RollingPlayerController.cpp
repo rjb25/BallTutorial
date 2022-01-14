@@ -6,6 +6,7 @@
 #include "AdventureGameInstance.h"
 #include "AdventureSaveGame.h"
 #include "ControllableInterface.h"
+#include "HealthComponent.h"
 // Called to bind functionality to input
 void ARollingPlayerController::SetupInputComponent()
 {
@@ -104,4 +105,15 @@ void ARollingPlayerController::boost(float AxisValue) {
 	if (pawn) {
 		pawn->boost(AxisValue);
 	}
+}
+
+bool ARollingPlayerController::ServerHurt_Validate(AActor* toHurt, float pain) {
+    return true;
+}
+
+void ARollingPlayerController::ServerHurt_Implementation(AActor* toHurt, float pain) {
+    UHealthComponent * health = toHurt->FindComponentByClass<UHealthComponent>();
+    if (health != nullptr){
+        health->Suffer(pain);
+    }
 }

@@ -5,13 +5,15 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Move.h"
+#include "Jump.h"
+#include "ControllerInterface.h"
 #include "ModularPlayerController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BALLTUTORIAL_API AModularPlayerController : public APlayerController
+class BALLTUTORIAL_API AModularPlayerController : public APlayerController, public IControllerInterface
 {
 	GENERATED_BODY()
 
@@ -30,19 +32,27 @@ public:
 
     virtual void SetupInputComponent() override;
 
+	UFUNCTION(Server, Unreliable, WithValidation)
+	void ServerHurt(AActor* toHurt, float pain) override;
+	bool ServerHurt_Validate(AActor* toHurt, float pain) override;
+	void ServerHurt_Implementation(AActor* toHurt, float pain) override;
+
 	void moveRight(float AxisValue);
 	void moveLeft(float AxisValue);
 	void moveForward(float AxisValue);
 	void moveBack(float AxisValue);
 	void rotateRight(float AxisValue);
 	void rotateLeft(float AxisValue);
-	void jump();
+	void JumpPressed();
+	void JumpReleased();
 	void menu();
 	void boost(float AxisValue);
 	void slow(float AxisValue);
 	void attack(float AxisValue);
 	void act(float AxisValue);
 
+    UPROPERTY(EditAnywhere)
+    float CameraTurnSpeed;
 	float Right;
 	float Left;
 	float Forward;
@@ -50,8 +60,11 @@ public:
 	float RotateRight;
 	float RotateLeft;
 	float Slow;
+	bool Jump;
 	float Boost;
 	float Attack;
-    UMove * Movement;
+    UMove * MovementComp;
+    UJump * JumpComp;
+    USceneComponent * SpringComp;
 	
 };

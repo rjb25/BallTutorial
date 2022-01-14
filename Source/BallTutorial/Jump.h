@@ -4,17 +4,30 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "GroundedCheck.generated.h"
+#include "Jump.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BALLTUTORIAL_API UGroundedCheck : public UActorComponent
+class BALLTUTORIAL_API UJump : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UGroundedCheck();
+	UJump();
+    void Jump();
+    UPROPERTY(EditAnywhere)
+    float JumpForce;
+    UPROPERTY(EditAnywhere)
+    float GripWidth;
+    UPROPERTY(EditAnywhere)
+    float GripDepth;
+    UPROPERTY(EditAnywhere)
+    float JumpReload;
+    float LastJump;
+private:
+    UStaticMeshComponent * Body;
+    AActor * Owner;
 
 protected:
 	// Called when the game starts

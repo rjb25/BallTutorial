@@ -10,7 +10,9 @@ UMove::UMove()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
     SpeedForce = 3000.0f;
-    SpeedRoll = 1000000.0f;
+    SpeedRoll = 150000000.0f;
+    Owner = nullptr;
+    Body = nullptr;
 
 	// ...
 }
@@ -22,9 +24,13 @@ void UMove::BeginPlay()
 	Super::BeginPlay();
     Owner = GetOwner();
     Body = Owner->FindComponentByClass<UStaticMeshComponent>();
+    if (Body != nullptr){
 	Body->SetSimulatePhysics(true);
 	Body->SetNotifyRigidBodyCollision(true);
 	Body->BodyInstance.SetCollisionProfileName("BlockAllDynamic");
+    } else {
+    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("CHICKEN BEFORE THE EGG IN MOVE.cpp")));
+    }
 }
 
 void UMove::Move(FVector Direction, float DeltaTime){
@@ -35,7 +41,8 @@ void UMove::Move(FVector Direction, float DeltaTime){
         FVector RotationDirection;
         RotationDirection.Y = Direction.X;
         RotationDirection.X = Direction.Y * (-1);
-        Body->AddTorqueInRadians(DeltaTime * RotationDirection * SpeedRoll * Body->GetMass());
+        RotationDirection.Z = Direction.Z;
+        Body->AddTorqueInDegrees(DeltaTime * RotationDirection * SpeedRoll * Body->GetMass());
 }
 
 
