@@ -5,6 +5,7 @@ set cpo&vim
 inoremap <C-U> u
 nmap  b :ls:b 
 map Q gq
+nmap gr :w"zyiw:grep -rIne z ./*<Left><Left><Left><Left>
 vmap gx <Plug>NetrwBrowseXVis
 nmap gx <Plug>NetrwBrowseX
 nmap s :w
@@ -100,11 +101,15 @@ $argadd ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.h
 set stal=2
 tabnew
 tabrewind
-edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/HealthComponent.cpp
+edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/C_HitDamager.cpp
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
 1wincmd h
+wincmd w
+wincmd _ | wincmd |
+split
+1wincmd k
 wincmd w
 set nosplitbelow
 set nosplitright
@@ -114,10 +119,13 @@ set winheight=1
 set winminwidth=0
 set winwidth=1
 exe 'vert 1resize ' . ((&columns * 118 + 118) / 237)
+exe '2resize ' . ((&lines * 56 + 35) / 70)
 exe 'vert 2resize ' . ((&columns * 118 + 118) / 237)
+exe '3resize ' . ((&lines * 10 + 35) / 70)
+exe 'vert 3resize ' . ((&columns * 118 + 118) / 237)
 argglobal
 44argu
-if bufexists("~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/HealthComponent.cpp") | buffer ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/HealthComponent.cpp | else | edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/HealthComponent.cpp | endif
+if bufexists("~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/C_HitDamager.cpp") | buffer ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/C_HitDamager.cpp | else | edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/C_HitDamager.cpp | endif
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -242,12 +250,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 58 - ((41 * winheight(0) + 33) / 67)
+let s:l = 49 - ((48 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-58
-normal! 030|
+49
+normal! 09|
 lcd ~/Documents/Unreal\ Projects/BallTutorial/Source
 wincmd w
 argglobal
@@ -377,7 +385,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 34 - ((33 * winheight(0) + 33) / 67)
+let s:l = 34 - ((5 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -385,18 +393,146 @@ normal! zt
 normal! 05|
 lcd ~/Documents/Unreal\ Projects/BallTutorial/Source
 wincmd w
+argglobal
+44argu
+enew
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal backupcopy=
+setlocal balloonexpr=
+setlocal nobinary
+setlocal nobreakindent
+setlocal breakindentopt=
+setlocal bufhidden=hide
+setlocal buflisted
+setlocal buftype=quickfix
+setlocal nocindent
+setlocal cinkeys=0{,0},0),0],:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
+setlocal commentstring=/*%s*/
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal cursorlineopt=both
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'qf'
+setlocal filetype=qf
+endif
+setlocal fixendofline
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=tcq
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal formatprg=
+setlocal grepprg=
+setlocal iminsert=0
+setlocal imsearch=-1
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=
+setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal lispwords=
+setlocal nolist
+setlocal makeencoding=
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal nomodifiable
+setlocal nrformats=bin,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal scrolloff=-1
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal showbreak=
+setlocal sidescrolloff=-1
+setlocal signcolumn=auto
+setlocal nosmartindent
+setlocal softtabstop=0
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal spelloptions=
+setlocal statusline=%t%{exists('w:quickfix_title')?\ '\ '.w:quickfix_title\ :\ ''}\ %=%-15(%l,%c%V%)\ %P
+setlocal suffixesadd=
+setlocal noswapfile
+setlocal synmaxcol=3000
+if &syntax != 'qf'
+setlocal syntax=qf
+endif
+setlocal tabstop=4
+setlocal tagcase=
+setlocal tagfunc=
+setlocal tags=
+setlocal termwinkey=
+setlocal termwinscroll=10000
+setlocal termwinsize=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal noundofile
+setlocal undolevels=-123456
+setlocal varsofttabstop=
+setlocal vartabstop=
+setlocal wincolor=
+setlocal winfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+lcd ~/Documents/Unreal\ Projects/BallTutorial/Source
+wincmd w
+3wincmd w
 exe 'vert 1resize ' . ((&columns * 118 + 118) / 237)
+exe '2resize ' . ((&lines * 56 + 35) / 70)
 exe 'vert 2resize ' . ((&columns * 118 + 118) / 237)
+exe '3resize ' . ((&lines * 10 + 35) / 70)
+exe 'vert 3resize ' . ((&columns * 118 + 118) / 237)
 tabnext
 edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Animation/AnimInstance.h
 set splitbelow splitright
 wincmd _ | wincmd |
-split
-1wincmd k
-wincmd _ | wincmd |
 vsplit
 1wincmd h
-wincmd w
 wincmd w
 set nosplitbelow
 set nosplitright
@@ -405,11 +541,8 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe '1resize ' . ((&lines * 51 + 35) / 70)
 exe 'vert 1resize ' . ((&columns * 118 + 118) / 237)
-exe '2resize ' . ((&lines * 51 + 35) / 70)
 exe 'vert 2resize ' . ((&columns * 118 + 118) / 237)
-exe '3resize ' . ((&lines * 15 + 35) / 70)
 argglobal
 1argu
 if bufexists("~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Animation/AnimInstance.h") | buffer ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Animation/AnimInstance.h | else | edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Animation/AnimInstance.h | endif
@@ -537,11 +670,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 140 - ((24 * winheight(0) + 25) / 51)
+let s:l = 138 - ((30 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-140
+138
 normal! 05|
 lcd ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine
 wincmd w
@@ -672,7 +805,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1675 - ((22 * winheight(0) + 25) / 51)
+let s:l = 1675 - ((0 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -680,149 +813,17 @@ normal! zt
 normal! 0
 lcd ~/Desktop/4.21EngineCopy
 wincmd w
-argglobal
-1argu
-enew
-setlocal keymap=
-setlocal noarabic
-setlocal autoindent
-setlocal backupcopy=
-setlocal balloonexpr=
-setlocal nobinary
-setlocal nobreakindent
-setlocal breakindentopt=
-setlocal bufhidden=hide
-setlocal nobuflisted
-setlocal buftype=quickfix
-setlocal nocindent
-setlocal cinkeys=0{,0},0),0],:,0#,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinwords=if,else,while,do,for,switch
-setlocal colorcolumn=
-setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
-setlocal commentstring=/*%s*/
-setlocal complete=.,w,b,u,t,i
-setlocal concealcursor=
-setlocal conceallevel=0
-setlocal completefunc=
-setlocal nocopyindent
-setlocal cryptmethod=
-setlocal nocursorbind
-setlocal nocursorcolumn
-setlocal nocursorline
-setlocal cursorlineopt=both
-setlocal define=
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal expandtab
-if &filetype != 'qf'
-setlocal filetype=qf
-endif
-setlocal fixendofline
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=0
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldmarker={{{,}}}
-setlocal foldmethod=manual
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldtext=foldtext()
-setlocal formatexpr=
-setlocal formatoptions=tcq
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal formatprg=
-setlocal grepprg=
-setlocal iminsert=0
-setlocal imsearch=-1
-setlocal include=
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
-setlocal nolinebreak
-setlocal nolisp
-setlocal lispwords=
-setlocal nolist
-setlocal makeencoding=
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal modeline
-setlocal nomodifiable
-setlocal nrformats=bin,hex
-set number
-setlocal number
-setlocal numberwidth=4
-setlocal omnifunc=
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal noreadonly
-setlocal norelativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal noscrollbind
-setlocal scrolloff=-1
-setlocal shiftwidth=4
-setlocal noshortname
-setlocal showbreak=
-setlocal sidescrolloff=-1
-setlocal signcolumn=auto
-setlocal nosmartindent
-setlocal softtabstop=0
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal spelloptions=
-setlocal statusline=%t%{exists('w:quickfix_title')?\ '\ '.w:quickfix_title\ :\ ''}\ %=%-15(%l,%c%V%)\ %P
-setlocal suffixesadd=
-setlocal noswapfile
-setlocal synmaxcol=3000
-if &syntax != 'qf'
-setlocal syntax=qf
-endif
-setlocal tabstop=4
-setlocal tagcase=
-setlocal tagfunc=
-setlocal tags=
-setlocal termwinkey=
-setlocal termwinscroll=10000
-setlocal termwinsize=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal noundofile
-setlocal undolevels=-123456
-setlocal varsofttabstop=
-setlocal vartabstop=
-setlocal wincolor=
-setlocal winfixheight
-setlocal nowinfixwidth
-setlocal wrap
-setlocal wrapmargin=0
-lcd ~/Desktop/4.21EngineCopy
-wincmd w
-exe '1resize ' . ((&lines * 51 + 35) / 70)
 exe 'vert 1resize ' . ((&columns * 118 + 118) / 237)
-exe '2resize ' . ((&lines * 51 + 35) / 70)
 exe 'vert 2resize ' . ((&columns * 118 + 118) / 237)
-exe '3resize ' . ((&lines * 15 + 35) / 70)
 tabnext 1
 set stal=1
-badd +25 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/MyUtil.cpp
 badd +4 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/AdventureGameInstance.cpp
 badd +4 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/AdventureSaveGame.cpp
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/BallTutorial.Build.cs
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/BallTutorial.cpp
 badd +0 BallTutorial/Components/
 badd +51 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/C_HitDamager.cpp
-badd +56 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/HealthComponent.cpp
+badd +57 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/HealthComponent.cpp
 badd +11 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/IsHazard.cpp
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/jasonbuf
 badd +3 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/OnComponentHit.cpp
@@ -860,11 +861,13 @@ badd +57 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingBa
 badd +30 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingPlayerController.h
 badd +25 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/SpawnBall.h
 badd +21 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.h
+badd +1 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Animation/AnimInstance.h
+badd +1500 ~/Desktop/4.21EngineCopy/Classes/GameFramework/PlayerController.h
+badd +25 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/MyUtil.cpp
+badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Components
 badd +22 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Actor.cpp
 badd +9 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/MyUtil.h
-badd +1500 ~/Desktop/4.21EngineCopy/Classes/GameFramework/PlayerController.h
 badd +28 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/SetLocationReplicate.cpp
-badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Components
 badd +11 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/SetLocationReplicate.h
 badd +6 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ActableInterface.h
 badd +167 ~/Desktop/4.21EngineCopy/Private/Pawn.cpp
@@ -880,7 +883,6 @@ badd +8 ~/Desktop/4.21EngineCopy/Classes/Engine/TriggerBox.h
 badd +2934 ~/Desktop/4.21EngineCopy/Classes/Engine/World.h
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ComponentBasicSpawn.cpp
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ComponentBasicSpawn.h
-badd +1 ~/Documents/Unreal\ Projects/BallTutorial
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Intermediate/Build/Win64/BallTutorialEditor/Development/BallTutorialEditor.uhtmanifest
 badd +119 ~/Desktop/4.21EngineCopy/Classes/Components/StaticMeshComponent.h
 badd +10 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ActorBasicSpawn.cpp
@@ -917,7 +919,7 @@ badd +26 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/GroundedC
 badd +24 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/GroundedCheck.h
 badd +71 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ModularPlayerController.h
 badd +730 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Engine/BlueprintGeneratedClass.h
-badd +0 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Animation/AnimInstance.h
+badd +10 ~/.vimrc
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf
 endif

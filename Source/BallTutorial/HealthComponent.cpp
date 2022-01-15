@@ -4,6 +4,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "RacingGameMode.h"
 #include "RollingBall.h"
+#include "ModularPlayerController.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -57,7 +58,13 @@ void UHealthComponent::Hurt(float Damage){
 
         if(Pawn != nullptr && Pawn->IsPlayerControlled())
         {
-            //player->checkpoint();
+            AController * Controller = Pawn->GetController();
+            if(Controller){
+                AModularPlayerController * Player = Cast<AModularPlayerController>(Controller);
+                if (Player){
+                    Player->ToCheckpoint();
+                }
+            }
         }
         else 
         {

@@ -53,6 +53,10 @@ public:
 	void attack(float AxisValue);
 	void act(float AxisValue);
 
+	void ToCheckpoint();
+	UPROPERTY(BlueprintReadWrite)
+    FVector Checkpoint;
+
     UPROPERTY(EditAnywhere)
     float CameraTurnSpeed = 1.0f;
 	float Right = 0.0f;
@@ -71,4 +75,10 @@ public:
     USceneComponent * SpringComp = nullptr;
     USpawnBall * SpawnBallComp = nullptr;
     USlow * SlowComp = nullptr;
+    APawn * Pawn = nullptr;
+    AActor * Actor = nullptr;
+    UStaticMeshComponent * Body = nullptr;
+    UPrimitiveComponent * Primitive = nullptr;
+private:
+    bool FirstPossession = true;
 };

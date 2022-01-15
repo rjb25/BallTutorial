@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "HealthComponent.h"
+#include "AdventureGameInstance.h"
 #include "MyUtil.h"
 
 AModularPlayerController::AModularPlayerController()
@@ -31,6 +32,23 @@ void AModularPlayerController::Possessed(APawn* InPawn) {
     SpringComp = InPawn->FindComponentByClass<USpringArmComponent>();
     SpawnBallComp = InPawn->FindComponentByClass<USpawnBall>();
     SlowComp = InPawn->FindComponentByClass<USlow>();
+    Body = InPawn->FindComponentByClass<UStaticMeshComponent>();
+    Pawn = InPawn;
+    Actor = Cast<AActor>(InPawn);
+    Primitive = Cast<UPrimitiveComponent>(Body);
+    if (FirstPossession){
+        UAdventureGameInstance * Game = Cast<UAdventureGameInstance>(GetGameInstance());
+        if (Game != nullptr){
+            UAdventureSaveGame * Save = Game->AdventureSave;
+            if (Save != nullptr){
+                if(!Save->newGame){
+                    Actor->SetActorLocation(Save->PlayerLocation);
+                    Checkpoint = Save->PlayerCheckpoint;
+                }
+            }
+        }
+    }
+    FirstPossession = false;
 }
 
 // Called to bind functionality to input
@@ -86,17 +104,14 @@ void AModularPlayerController::JumpReleased() {
 }
 
 void AModularPlayerController::menu() {
-    /*
-    UAdventureGameInstance * game = Cast<UAdventureGameInstance>(GetGameInstance());
-    UAdventureSaveGame * save = game->AdventureSave;
-    save->newGame = false;
-	AModularBall * rollingBall = Cast<AModularBall>(GetPawn());
-    if(rollingBall != nullptr){
-        save->PlayerLocation = rollingBall->GetActorLocation();
-        save->PlayerCheckpoint =  rollingBall->m_checkpoint;
+    UAdventureGameInstance * Game = Cast<UAdventureGameInstance>(GetGameInstance());
+    UAdventureSaveGame * Save = Game->AdventureSave;
+    Save->newGame = false;
+    if(Actor){
+        Save->PlayerLocation = Actor->GetActorLocation();
+        Save->PlayerCheckpoint =  Checkpoint;
     }
-    UGameplayStatics::SaveGameToSlot(save, game->AdventureSlot, 0);
-    */
+    UGameplayStatics::SaveGameToSlot(Save, Game->AdventureSlot, 0);
 }
 
 void AModularPlayerController::attack(float AxisValue) {
@@ -112,6 +127,14 @@ void AModularPlayerController::boost(float AxisValue) {
 
 void AModularPlayerController::slow(float AxisValue) {
     Slow = AxisValue;
+}
+
+void AModularPlayerController::ToCheckpoint() {
+    if(Primitive){
+        Primitive->SetPhysicsLinearVelocity(FVector(0,0,0));
+        Primitive->SetPhysicsAngularVelocityInDegrees(FVector(0,0,0));
+    }
+    Pawn->SetActorLocation(Checkpoint);
 }
 
 void AModularPlayerController::Tick(float DeltaTime)

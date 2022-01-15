@@ -18,19 +18,18 @@ bool MyUtil::GroundCheck(AActor * Actor, float GripDepth, float GripWidth) {
     ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery3);
     ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery4);
     UKismetSystemLibrary::SphereTraceMultiForObjects(Actor->GetWorld(), Start, End, GripWidth, ObjectTypes, bTraceComplex, ActorsToIgnore, EDrawDebugTrace::None, OutHits, ignoreSelf, TraceColor, TraceHitColor, DrawTime);
+    bool Grounded = false;
     for (FHitResult hit : OutHits) {
         AActor * otherActor = hit.GetActor();
         UPrimitiveComponent * Mesh = otherActor->FindComponentByClass<UPrimitiveComponent>();
         if (Mesh){
             ECollisionResponse response = Mesh->GetCollisionResponseToChannel(ECollisionChannel::ECC_PhysicsBody);
-        //GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("ResponseChannel: %d %s %s"), response, *otherActor->GetName(), *Mesh->GetName()));
+            //GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("ResponseChannel: %d %s %s"), response, *otherActor->GetName(), *Mesh->GetName()));
             if(response == ECollisionResponse::ECR_Block || response == ECollisionResponse::ECR_MAX){
-                return true;
-            }else{
-                return false;
+                Grounded = true;
             }
         }
     }
-            return false;
+    return Grounded;
 }
 
