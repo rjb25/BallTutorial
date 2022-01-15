@@ -17,17 +17,17 @@ public:
 	UJump();
     void Jump();
     UPROPERTY(EditAnywhere)
-    float JumpForce;
+    float JumpForce = 1000.0f;
     UPROPERTY(EditAnywhere)
-    float GripWidth;
+    float GripWidth = 40.0f;
     UPROPERTY(EditAnywhere)
-    float GripDepth;
+    float GripDepth = 10.0f;
     UPROPERTY(EditAnywhere)
-    float JumpReload;
-    float LastJump;
+    float JumpReload = 0.2f;
 private:
-    UStaticMeshComponent * Body;
-    AActor * Owner;
+    float LastJump = 0.0f;
+    UStaticMeshComponent * Body = nullptr;
+    AActor * Owner = nullptr;
 
 protected:
 	// Called when the game starts

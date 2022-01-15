@@ -10,15 +10,6 @@ UJump::UJump()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-    JumpForce = 1000.0f;
-    GripWidth = 40.0f;
-    GripDepth = 40.0f;
-    Body = nullptr;
-    Owner = nullptr;
-    JumpReload = 0.2f;
-    LastJump = 0.0f;
-
-	// ...
 }
 
 
@@ -28,9 +19,6 @@ void UJump::BeginPlay()
 	Super::BeginPlay();
     Owner = GetOwner();
     Body = Owner->FindComponentByClass<UStaticMeshComponent>();
-
-	// ...
-	
 }
 
 

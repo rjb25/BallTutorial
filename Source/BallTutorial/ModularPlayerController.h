@@ -7,6 +7,7 @@
 #include "Move.h"
 #include "Jump.h"
 #include "SpawnBall.h"
+#include "Slow.h"
 #include "ControllerInterface.h"
 #include "ModularPlayerController.generated.h"
 
@@ -69,5 +70,5 @@ public:
     UJump * JumpComp = nullptr;
     USceneComponent * SpringComp = nullptr;
     USpawnBall * SpawnBallComp = nullptr;
-	
+    USlow * SlowComp = nullptr;
 };

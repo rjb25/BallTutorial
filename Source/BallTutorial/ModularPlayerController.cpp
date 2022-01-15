@@ -30,6 +30,7 @@ void AModularPlayerController::Possessed(APawn* InPawn) {
     JumpComp = InPawn->FindComponentByClass<UJump>();
     SpringComp = InPawn->FindComponentByClass<USpringArmComponent>();
     SpawnBallComp = InPawn->FindComponentByClass<USpawnBall>();
+    SlowComp = InPawn->FindComponentByClass<USlow>();
 }
 
 // Called to bind functionality to input
@@ -98,9 +99,6 @@ void AModularPlayerController::menu() {
     */
 }
 
-void AModularPlayerController::slow(float AxisValue) {
-}
-
 void AModularPlayerController::attack(float AxisValue) {
 }
 void AModularPlayerController::act(float AxisValue) {
@@ -109,8 +107,12 @@ void AModularPlayerController::act(float AxisValue) {
 }
 
 void AModularPlayerController::boost(float AxisValue) {
+    Boost = AxisValue;
 }
 
+void AModularPlayerController::slow(float AxisValue) {
+    Slow = AxisValue;
+}
 
 void AModularPlayerController::Tick(float DeltaTime)
 {
@@ -122,7 +124,7 @@ void AModularPlayerController::Tick(float DeltaTime)
             float Side = Right + Left;
             float Ahead = Forward + Back;
             if (!(Side == 0 && Ahead == 0) && DeltaTime < 0.3f){
-                FVector Direction = { Ahead, Side, 0 };
+                FVector Direction = FVector(Ahead, Side, 0);
                 FVector Nowhere = { 0,0,0 };
                 FVector UnitDirection = 
                     UKismetMathLibrary::GetDirectionUnitVector(Nowhere, 
@@ -131,7 +133,7 @@ void AModularPlayerController::Tick(float DeltaTime)
                     UKismetMathLibrary::RotateAngleAxis(UnitDirection, 
                             SpringRotation.Yaw, 
                             VerticalAxis);
-                MovementComp->Move(RotatedUnitDirection,DeltaTime);
+                MovementComp->Move(RotatedUnitDirection,DeltaTime,Boost);
             }
         }
         if (SpawnBallComp != nullptr && Act != 0){
@@ -140,6 +142,9 @@ void AModularPlayerController::Tick(float DeltaTime)
                         SpringRotation.Yaw, 
                         VerticalAxis);
             SpawnBallComp->Spawn(RotatedUnitForwardDirection);
+        }
+        if (SlowComp != nullptr && Slow > 0.1f ){
+            SlowComp->Slow(DeltaTime);
         }
         float Rotate = RotateRight + RotateLeft;
         if( Rotate != 0){

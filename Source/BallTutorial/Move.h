@@ -15,14 +15,15 @@ class BALLTUTORIAL_API UMove : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UMove();
-    void Move(FVector Direction, float DeltaTime);
+    void Move(FVector Direction, float DeltaTime,float Boost);
     UPROPERTY(EditAnywhere)
     float SpeedForce;
     UPROPERTY(EditAnywhere)
     float SpeedRoll;
+    UPROPERTY(EditAnywhere)
+    float BoostMult = 3.0f;
 private:
     AActor * Owner;
-    APawn * Pawn;
     UStaticMeshComponent * Body;
 
 protected:

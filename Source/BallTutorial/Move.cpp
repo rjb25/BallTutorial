@@ -33,16 +33,24 @@ void UMove::BeginPlay()
     }
 }
 
-void UMove::Move(FVector Direction, float DeltaTime){
+void UMove::Move(FVector Direction, float DeltaTime, float Boost){
         //Force for movement
+    if(Boost > 0.9f){
+        Body->AddForce(DeltaTime * Direction * SpeedForce * Body->GetMass() * BoostMult);
+    }else{
         Body->AddForce(DeltaTime * Direction * SpeedForce * Body->GetMass());
+    }
 
-        //Rotational torque for movement
-        FVector RotationDirection;
-        RotationDirection.Y = Direction.X;
-        RotationDirection.X = Direction.Y * (-1);
-        RotationDirection.Z = Direction.Z;
+    //Rotational torque for movement
+    FVector RotationDirection;
+    RotationDirection.Y = Direction.X;
+    RotationDirection.X = Direction.Y * (-1);
+    RotationDirection.Z = Direction.Z;
+    if(Boost > 0.9f){
+        Body->AddTorqueInDegrees(DeltaTime * RotationDirection * SpeedRoll * Body->GetMass() * BoostMult);
+    }else{
         Body->AddTorqueInDegrees(DeltaTime * RotationDirection * SpeedRoll * Body->GetMass());
+    }
 }
 
 

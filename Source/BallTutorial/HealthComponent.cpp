@@ -57,10 +57,7 @@ void UHealthComponent::Hurt(float Damage){
 
         if(Pawn != nullptr && Pawn->IsPlayerControlled())
         {
-            /*
-            player->timeout(1.0f);
-            player->checkpoint();
-            */
+            //player->checkpoint();
         }
         else 
         {
