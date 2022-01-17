@@ -88,7 +88,7 @@ void UEnemyAIBasic::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 void UEnemyAIBasic::OnOverlapBegin(AActor * OverlappedActor, AActor * OtherActor){
 	APawn * pawn = Cast<APawn>(OtherActor);
-	if (pawn != nullptr && OverlappedActor != OtherActor) {
+	if (pawn != nullptr && Owner != OtherActor) {
         Targets.AddUnique(OtherActor);
         OldestTarget = Targets[0];
 	}
@@ -96,7 +96,7 @@ void UEnemyAIBasic::OnOverlapBegin(AActor * OverlappedActor, AActor * OtherActor
 
 void UEnemyAIBasic::OnOverlapEnd(AActor * OverlappedActor, AActor * OtherActor) {
 	APawn * pawn = Cast<APawn>(OtherActor);
-	if (pawn != nullptr && OverlappedActor != OtherActor) {
+	if (pawn != nullptr && Owner != OtherActor) {
         Targets.Remove(OtherActor);
         if (Targets.Num() > 0) {
             OldestTarget = Targets[0];

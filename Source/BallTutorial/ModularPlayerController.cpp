@@ -70,6 +70,7 @@ void AModularPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AModularPlayerController::JumpPressed);
 	InputComponent->BindAction("Jump", IE_Released, this, &AModularPlayerController::JumpReleased);
 	InputComponent->BindAction("Menu", IE_Pressed, this, &AModularPlayerController::menu);
+	InputComponent->BindAction("Possess", IE_Pressed, this, &AModularPlayerController::possess);
 }
 
 void AModularPlayerController::moveRight(float AxisValue) {
@@ -112,6 +113,38 @@ void AModularPlayerController::menu() {
         Save->PlayerCheckpoint =  Checkpoint;
     }
     UGameplayStatics::SaveGameToSlot(Save, Game->AdventureSlot, 0);
+}
+void AModularPlayerController::possess() {
+    FVector Start = Actor->GetActorLocation() - FVector(0.0f,0.0f,50.0f);
+    FVector End = Actor->GetActorLocation() + FVector(0.0f,0.0f,50.0f);
+    TArray<FHitResult> OutHits;
+    bool ignoreSelf = true;
+    float DrawTime = 5.0f;
+    FLinearColor TraceColor = FLinearColor::Red;
+    FLinearColor TraceHitColor = FLinearColor::Green;
+    TArray<AActor*> ActorsToIgnore;
+    ActorsToIgnore.Add(Actor);
+    bool bTraceComplex = true;
+    TArray<TEnumAsByte<EObjectTypeQuery> > ObjectTypes;
+    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery1);
+    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery2);
+    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery3);
+    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery4);
+    bool hit = UKismetSystemLibrary::SphereTraceMultiForObjects(GetWorld(), Start, End, 100.0f, ObjectTypes, bTraceComplex, ActorsToIgnore, EDrawDebugTrace::None, OutHits, ignoreSelf, TraceColor, TraceHitColor, DrawTime);
+    for (FHitResult OutHit : OutHits) {
+        AActor * OtherActor = OutHit.GetActor();
+        APawn * PossessMe = Cast<APawn>(OtherActor);
+        if (PossessMe != nullptr){
+            TryPossess(PossessMe);
+        }
+    }
+}
+void AModularPlayerController::TryPossess(APawn * PossessMe) {
+    if(Actor->HasAuthority()){
+        Possess(PossessMe);
+    } else {
+        ServerPossess(PossessMe);
+    }
 }
 
 void AModularPlayerController::attack(float AxisValue) {
@@ -190,4 +223,11 @@ void AModularPlayerController::ServerHurt_Implementation(AActor* toHurt, float p
     if (health != nullptr){
         health->Suffer(pain);
     }
+}
+bool AModularPlayerController::ServerPossess_Validate(APawn* PossessMe) {
+    return true;
+}
+
+void AModularPlayerController::ServerPossess_Implementation(APawn* PossessMe) {
+    Possess(PossessMe);
 }

@@ -34,10 +34,15 @@ public:
 
     virtual void SetupInputComponent() override;
 
-	UFUNCTION(Server, Unreliable, WithValidation)
+	UFUNCTION(Server, Reliable, WithValidation)
 	void ServerHurt(AActor* toHurt, float pain) override;
 	bool ServerHurt_Validate(AActor* toHurt, float pain) override;
 	void ServerHurt_Implementation(AActor* toHurt, float pain) override;
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerPossess(APawn* PossessMe);
+	bool ServerPossess_Validate(APawn* PossessMe);
+	void ServerPossess_Implementation(APawn* PossessMe);
 
 	void moveRight(float AxisValue);
 	void moveLeft(float AxisValue);
@@ -48,10 +53,12 @@ public:
 	void JumpPressed();
 	void JumpReleased();
 	void menu();
+	void possess();
 	void boost(float AxisValue);
 	void slow(float AxisValue);
 	void attack(float AxisValue);
 	void act(float AxisValue);
+	void TryPossess(APawn* PossessMe);
 
 	void ToCheckpoint();
 	UPROPERTY(BlueprintReadWrite)
