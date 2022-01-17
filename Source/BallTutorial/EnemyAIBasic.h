@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Engine/TriggerBase.h"
-#include "ActableInterface.h"
-#include "Components/SphereComponent.h"
 #include "EnemyAIBasic.generated.h"
 
+class UJump;
+class USlow;
+class UMove;
+class USpawnBall;
 
 UCLASS( ClassGroup=(Custom), Blueprintable, meta=(BlueprintSpawnableComponent) )
 class BALLTUTORIAL_API UEnemyAIBasic : public UActorComponent
@@ -18,23 +19,33 @@ class BALLTUTORIAL_API UEnemyAIBasic : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UEnemyAIBasic();
+
     UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> SensoryBoxToSpawn;
-    UPROPERTY(EditAnywhere)
-	AActor * SensoryBox;
-    AActor * Owner;
-    UPROPERTY(BlueprintReadWrite, meta = (MustImplement = "ActableInterface"))
-    UActorComponent * Action;
-    FVector StartLocation;
+
     TArray<AActor*> Targets;
+
     UPROPERTY(EditAnywhere)
-    float Speed;
+	AActor * SensoryBox = nullptr;
+    AActor * OldestTarget = nullptr;
+    AActor * Owner = nullptr;
+
+    UMove * MovementComp = nullptr;
+    UJump * JumpComp = nullptr;
+    USpawnBall * SpawnBallComp = nullptr;
+    USlow * SlowComp = nullptr;
+    UStaticMeshComponent * Body = nullptr;
+    UPrimitiveComponent * Primitive = nullptr;
+
     UPROPERTY(EditAnywhere)
-    FVector SensoryScale;
-    FVector Direction;
+    FVector SensoryScale = FVector(1.0f, 1.0f, 1.0f);
+    FVector StartLocation = FVector(0.0f,0.0f,0.0f);
+    FVector Direction = FVector(0.0f, 0.0f, 0.0f);
+
     UPROPERTY(EditAnywhere)
-    bool Enabled;
-    AActor * OldestTarget;
+    bool Enabled = true;
+    UPROPERTY(EditAnywhere)
+    bool JumpEvade = false;
 
 protected:
 	// Called when the game starts

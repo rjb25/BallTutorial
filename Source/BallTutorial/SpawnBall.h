@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "ActableInterface.h"
-#include "EnemyAIBasic.h"
 #include "SpawnBall.generated.h"
 
 UCLASS( ClassGroup=(Custom), Blueprintable, meta=(BlueprintSpawnableComponent) )
@@ -20,12 +18,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> ActorToSpawn;
 	UPROPERTY(EditAnywhere)
-    float m_speed;
+    float ProjectileSpeed = 2000.0f;
 	UPROPERTY(EditAnywhere)
-    float m_reload;
-    float m_timeLastFire;
+    float Reload = 3.0f;
+    float TimeLastFire = 0.0f;
+	UPROPERTY(EditAnywhere)
+    FVector ProjectileOffset = FVector(100.0f,0.0f,100.0f);
 
-    UEnemyAIBasic * AI;
     AActor * Owner;
 
 protected:
