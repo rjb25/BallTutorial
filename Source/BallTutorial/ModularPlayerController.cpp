@@ -27,28 +27,30 @@ void AModularPlayerController::AcknowledgePossession(APawn* InPawn)
 }
 
 void AModularPlayerController::Possessed(APawn* InPawn) {
-    MovementComp = InPawn->FindComponentByClass<UMove>();
-    JumpComp = InPawn->FindComponentByClass<UJump>();
-    SpringComp = InPawn->FindComponentByClass<USpringArmComponent>();
-    SpawnBallComp = InPawn->FindComponentByClass<USpawnBall>();
-    SlowComp = InPawn->FindComponentByClass<USlow>();
-    Body = InPawn->FindComponentByClass<UStaticMeshComponent>();
-    Pawn = InPawn;
-    Actor = Cast<AActor>(InPawn);
-    Primitive = Cast<UPrimitiveComponent>(Body);
-    if (FirstPossession){
-        UAdventureGameInstance * Game = Cast<UAdventureGameInstance>(GetGameInstance());
-        if (Game != nullptr){
-            UAdventureSaveGame * Save = Game->AdventureSave;
-            if (Save != nullptr){
-                if(!Save->newGame){
-                    Actor->SetActorLocation(Save->PlayerLocation);
-                    Checkpoint = Save->PlayerCheckpoint;
+    if (InPawn != nullptr){
+        MovementComp = InPawn->FindComponentByClass<UMove>();
+        JumpComp = InPawn->FindComponentByClass<UJump>();
+        SpringComp = InPawn->FindComponentByClass<USpringArmComponent>();
+        SpawnBallComp = InPawn->FindComponentByClass<USpawnBall>();
+        SlowComp = InPawn->FindComponentByClass<USlow>();
+        Body = InPawn->FindComponentByClass<UStaticMeshComponent>();
+        Pawn = InPawn;
+        Actor = Cast<AActor>(InPawn);
+        Primitive = Cast<UPrimitiveComponent>(Body);
+        if (FirstPossession){
+            UAdventureGameInstance * Game = Cast<UAdventureGameInstance>(GetGameInstance());
+            if (Game != nullptr){
+                UAdventureSaveGame * Save = Game->AdventureSave;
+                if (Save != nullptr){
+                    if(!Save->newGame){
+                        Actor->SetActorLocation(Save->PlayerLocation);
+                        Checkpoint = Save->PlayerCheckpoint;
+                    }
                 }
             }
         }
+        FirstPossession = false;
     }
-    FirstPossession = false;
 }
 
 // Called to bind functionality to input
@@ -71,6 +73,7 @@ void AModularPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Jump", IE_Released, this, &AModularPlayerController::JumpReleased);
 	InputComponent->BindAction("Menu", IE_Pressed, this, &AModularPlayerController::menu);
 	InputComponent->BindAction("Possess", IE_Pressed, this, &AModularPlayerController::possess);
+	InputComponent->BindAction("GetYouOne", IE_Pressed, this, &AModularPlayerController::GetYouOne);
 }
 
 void AModularPlayerController::moveRight(float AxisValue) {
@@ -144,6 +147,16 @@ void AModularPlayerController::TryPossess(APawn * PossessMe) {
         Possess(PossessMe);
     } else {
         ServerPossess(PossessMe);
+    }
+}
+void AModularPlayerController::GetYouOne() {
+    if(ActorToSpawn != nullptr){
+            FVector SpawnLocation = Actor->GetActorLocation() + FVector(200.0f, 0.0f, 10.0f);
+            FRotator SpawnRotation = Actor->GetActorRotation();
+            AActor* One = Actor->GetWorld()->SpawnActor<AActor>(ActorToSpawn, SpawnLocation, SpawnRotation);
+    } else {
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Actor class to spawn not set")));
+
     }
 }
 

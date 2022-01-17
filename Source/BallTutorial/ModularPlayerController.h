@@ -52,13 +52,17 @@ public:
 	void rotateLeft(float AxisValue);
 	void JumpPressed();
 	void JumpReleased();
-	void menu();
+	void GetYouOne();
 	void possess();
 	void boost(float AxisValue);
 	void slow(float AxisValue);
 	void attack(float AxisValue);
 	void act(float AxisValue);
+
+	void menu();
 	void TryPossess(APawn* PossessMe);
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> ActorToSpawn;
 
 	void ToCheckpoint();
 	UPROPERTY(BlueprintReadWrite)
