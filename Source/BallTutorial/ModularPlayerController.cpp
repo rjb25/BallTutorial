@@ -7,36 +7,64 @@
 #include "HealthComponent.h"
 #include "AdventureGameInstance.h"
 #include "MyUtil.h"
+#include "Move.h"
+#include "Jump.h"
+#include "SpawnBall.h"
+#include "Slow.h"
+#include "Soul.h"
 
 AModularPlayerController::AModularPlayerController()
 {
 }
 
+void AModularPlayerController::BeginPlay()
+{
+    Super::BeginPlay();
+    if(ActorToSpawn != nullptr){
+        if(IsLocalPlayerController()){
+            FVector SpawnPoint = FVector(0.0f,3150.0f,272.0f);
+            if (HasAuthority()){
+                SpawnPoint = FVector(0.0f,3350.0f,272.0f);
+            }
+            FRotator SpawnPointRotation = FRotator(0.0f,0.0f,0.0f);
+            ASoul* InSoul = GetWorld()->SpawnActor<ASoul>(ActorToSpawn, SpawnPoint, SpawnPointRotation);
+            Possessed(InSoul);
+        }
+    } else {
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Actor class to spawn not set")));
+    }
+}
+
 void AModularPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-    Possessed(InPawn);
+    Marker = InPawn;
+    MarkerBody = Marker->FindComponentByClass<UStaticMeshComponent>();
+    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, FString::Printf(TEXT("I spawned: %s %s"), *Marker->GetName(), Marker->HasAuthority() ? TEXT("SERVER") : TEXT("CLIENT")));
 
 }
 
 void AModularPlayerController::AcknowledgePossession(APawn* InPawn)
 {
     Super::AcknowledgePossession(InPawn);
-    Possessed(InPawn);
+    Marker = InPawn;
+    MarkerBody = Marker->FindComponentByClass<UStaticMeshComponent>();
+    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, FString::Printf(TEXT("I spawned: %s %s"), *Marker->GetName(), Marker->HasAuthority() ? TEXT("SERVER") : TEXT("CLIENT")));
 
 }
 
-void AModularPlayerController::Possessed(APawn* InPawn) {
-    if (InPawn != nullptr){
-        MovementComp = InPawn->FindComponentByClass<UMove>();
-        JumpComp = InPawn->FindComponentByClass<UJump>();
-        SpringComp = InPawn->FindComponentByClass<USpringArmComponent>();
-        SpawnBallComp = InPawn->FindComponentByClass<USpawnBall>();
-        SlowComp = InPawn->FindComponentByClass<USlow>();
-        Body = InPawn->FindComponentByClass<UStaticMeshComponent>();
-        Pawn = InPawn;
-        Actor = Cast<AActor>(InPawn);
+void AModularPlayerController::Possessed(ASoul* InSoul) {
+    if (InSoul != nullptr){
+        MovementComp = InSoul->FindComponentByClass<UMove>();
+        JumpComp = InSoul->FindComponentByClass<UJump>();
+        SpringComp = InSoul->FindComponentByClass<USpringArmComponent>();
+        SpawnBallComp = InSoul->FindComponentByClass<USpawnBall>();
+        SlowComp = InSoul->FindComponentByClass<USlow>();
+        Body = InSoul->FindComponentByClass<UStaticMeshComponent>();
+        Soul = InSoul;
+        Actor = Cast<AActor>(InSoul);
         Primitive = Cast<UPrimitiveComponent>(Body);
+        SetViewTarget(Actor);
         if (FirstPossession){
             UAdventureGameInstance * Game = Cast<UAdventureGameInstance>(GetGameInstance());
             if (Game != nullptr){
@@ -136,18 +164,14 @@ void AModularPlayerController::possess() {
     bool hit = UKismetSystemLibrary::SphereTraceMultiForObjects(GetWorld(), Start, End, 100.0f, ObjectTypes, bTraceComplex, ActorsToIgnore, EDrawDebugTrace::None, OutHits, ignoreSelf, TraceColor, TraceHitColor, DrawTime);
     for (FHitResult OutHit : OutHits) {
         AActor * OtherActor = OutHit.GetActor();
-        APawn * PossessMe = Cast<APawn>(OtherActor);
+        ASoul * PossessMe = Cast<ASoul>(OtherActor);
         if (PossessMe != nullptr){
             TryPossess(PossessMe);
         }
     }
 }
-void AModularPlayerController::TryPossess(APawn * PossessMe) {
-    if(Actor->HasAuthority()){
-        Possess(PossessMe);
-    } else {
-        ServerPossess(PossessMe);
-    }
+void AModularPlayerController::TryPossess(ASoul * PossessMe) {
+    Possessed(PossessMe);
 }
 void AModularPlayerController::GetYouOne() {
     if(ActorToSpawn != nullptr){
@@ -180,7 +204,7 @@ void AModularPlayerController::ToCheckpoint() {
         Primitive->SetPhysicsLinearVelocity(FVector(0,0,0));
         Primitive->SetPhysicsAngularVelocityInDegrees(FVector(0,0,0));
     }
-    Pawn->SetActorLocation(Checkpoint);
+    Soul->SetActorLocation(Checkpoint);
 }
 
 void AModularPlayerController::Tick(float DeltaTime)
@@ -237,10 +261,4 @@ void AModularPlayerController::ServerHurt_Implementation(AActor* toHurt, float p
         health->Suffer(pain);
     }
 }
-bool AModularPlayerController::ServerPossess_Validate(APawn* PossessMe) {
-    return true;
-}
 
-void AModularPlayerController::ServerPossess_Implementation(APawn* PossessMe) {
-    Possess(PossessMe);
-}

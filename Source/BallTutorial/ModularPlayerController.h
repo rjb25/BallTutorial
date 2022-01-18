@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "Move.h"
-#include "Jump.h"
-#include "SpawnBall.h"
-#include "Slow.h"
 #include "ControllerInterface.h"
 #include "ModularPlayerController.generated.h"
 
+class ASoul;
+class UMove;
+class UJump;
+class USpawnBall;
+class USlow;
 /**
  * 
  */
@@ -22,11 +23,13 @@ class BALLTUTORIAL_API AModularPlayerController : public APlayerController, publ
 
 protected:
 	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 	virtual void AcknowledgePossession(APawn* InPawn) override;
 	virtual void OnPossess(APawn* InPawn) override;
 
 public:
-	void Possessed(APawn* InPawn);
+	void Possessed(ASoul* InSoul);
 	AModularPlayerController();
 
 	// Called every frame
@@ -38,11 +41,6 @@ public:
 	void ServerHurt(AActor* toHurt, float pain) override;
 	bool ServerHurt_Validate(AActor* toHurt, float pain) override;
 	void ServerHurt_Implementation(AActor* toHurt, float pain) override;
-
-	UFUNCTION(Server, Reliable, WithValidation)
-	void ServerPossess(APawn* PossessMe);
-	bool ServerPossess_Validate(APawn* PossessMe);
-	void ServerPossess_Implementation(APawn* PossessMe);
 
 	void moveRight(float AxisValue);
 	void moveLeft(float AxisValue);
@@ -60,9 +58,9 @@ public:
 	void act(float AxisValue);
 
 	void menu();
-	void TryPossess(APawn* PossessMe);
+	void TryPossess(ASoul* PossessMe);
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> ActorToSpawn;
+	TSubclassOf<ASoul> ActorToSpawn;
 
 	void ToCheckpoint();
 	UPROPERTY(BlueprintReadWrite)
@@ -86,10 +84,14 @@ public:
     USceneComponent * SpringComp = nullptr;
     USpawnBall * SpawnBallComp = nullptr;
     USlow * SlowComp = nullptr;
-    APawn * Pawn = nullptr;
+    ASoul * Soul = nullptr;
     AActor * Actor = nullptr;
     UStaticMeshComponent * Body = nullptr;
     UPrimitiveComponent * Primitive = nullptr;
+
+    APawn * Marker = nullptr;
+    UStaticMeshComponent * MarkerBody = nullptr;
+
 private:
     bool FirstPossession = true;
 };

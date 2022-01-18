@@ -9,6 +9,7 @@
 #include "Jump.h"
 #include "SpawnBall.h"
 #include "Slow.h"
+#include "Soul.h"
 
 // Sets default values for this component's properties
 UEnemyAIBasic::UEnemyAIBasic()
@@ -91,16 +92,16 @@ void UEnemyAIBasic::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 }
 
 void UEnemyAIBasic::OnOverlapBegin(AActor * OverlappedActor, AActor * OtherActor){
-	APawn * pawn = Cast<APawn>(OtherActor);
-	if (pawn != nullptr && Owner != OtherActor) {
+	ASoul * soul = Cast<ASoul>(OtherActor);
+	if (soul != nullptr && Owner != OtherActor) {
         Targets.AddUnique(OtherActor);
         OldestTarget = Targets[0];
 	}
 }
 
 void UEnemyAIBasic::OnOverlapEnd(AActor * OverlappedActor, AActor * OtherActor) {
-	APawn * pawn = Cast<APawn>(OtherActor);
-	if (pawn != nullptr && Owner != OtherActor) {
+	ASoul * soul = Cast<ASoul>(OtherActor);
+	if (soul != nullptr && Owner != OtherActor) {
         Targets.Remove(OtherActor);
         if (Targets.Num() > 0) {
             OldestTarget = Targets[0];

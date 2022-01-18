@@ -54,22 +54,15 @@ void UHealthComponent::Hurt(float Damage){
 
     if(Health <= 0)
     {
-        APawn * Pawn = Cast<APawn>(owner);    
-
-        if(Pawn != nullptr && Pawn->IsPlayerControlled())
-        {
-            AController * Controller = Pawn->GetController();
+            APlayerController * Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
             if(Controller){
                 AModularPlayerController * Player = Cast<AModularPlayerController>(Controller);
-                if (Player){
+                if (Player != nullptr &&Player->Actor == owner){
                     Player->ToCheckpoint();
+                }else{
+                    Death();
                 }
             }
-        }
-        else 
-        {
-            Death();
-        }    
         Health = DefaultHealth;
     }
 }
