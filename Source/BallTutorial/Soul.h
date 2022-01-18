@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Soul.generated.h"
+class AModularPlayerController;
 
 UCLASS()
 class BALLTUTORIAL_API ASoul : public AActor
@@ -22,5 +23,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+    UPROPERTY(BlueprintReadWrite)
+    AModularPlayerController * PlayerController = nullptr;
+
+    
 
 };

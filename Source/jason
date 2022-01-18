@@ -101,7 +101,7 @@ $argadd ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.h
 set stal=2
 tabnew
 tabrewind
-edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ReplicateMarker.cpp
+edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ModularPlayerController.cpp
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -118,7 +118,7 @@ exe 'vert 1resize ' . ((&columns * 118 + 118) / 237)
 exe 'vert 2resize ' . ((&columns * 118 + 118) / 237)
 argglobal
 44argu
-if bufexists("~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ReplicateMarker.cpp") | buffer ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ReplicateMarker.cpp | else | edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ReplicateMarker.cpp | endif
+if bufexists("~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ModularPlayerController.cpp") | buffer ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ModularPlayerController.cpp | else | edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ModularPlayerController.cpp | endif
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -243,17 +243,17 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 32 - ((31 * winheight(0) + 33) / 67)
+let s:l = 76 - ((42 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-32
-normal! 018|
+76
+normal! 037|
 lcd ~/Documents/Unreal\ Projects/BallTutorial/Source
 wincmd w
 argglobal
 44argu
-if bufexists("~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ReplicateMarker.h") | buffer ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ReplicateMarker.h | else | edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ReplicateMarker.h | endif
+if bufexists("~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Soul.h") | buffer ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Soul.h | else | edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Soul.h | endif
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -378,19 +378,19 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 30 - ((29 * winheight(0) + 33) / 67)
+let s:l = 25 - ((24 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-30
-normal! 028|
+25
+normal! 037|
 lcd ~/Documents/Unreal\ Projects/BallTutorial/Source
 wincmd w
 2wincmd w
 exe 'vert 1resize ' . ((&columns * 118 + 118) / 237)
 exe 'vert 2resize ' . ((&columns * 118 + 118) / 237)
 tabnext
-edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Camera/CameraPhotography.h
+edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -414,7 +414,7 @@ exe '3resize ' . ((&lines * 10 + 35) / 70)
 exe 'vert 3resize ' . ((&columns * 118 + 118) / 237)
 argglobal
 1argu
-if bufexists("~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Camera/CameraPhotography.h") | buffer ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Camera/CameraPhotography.h | else | edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Camera/CameraPhotography.h | endif
+if bufexists("~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h") | buffer ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h | else | edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h | endif
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -539,12 +539,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 47 - ((46 * winheight(0) + 33) / 67)
+let s:l = 99 - ((29 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-47
-normal! 05|
+99
+normal! 0
 lcd ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine
 wincmd w
 argglobal
@@ -817,7 +817,7 @@ exe '3resize ' . ((&lines * 10 + 35) / 70)
 exe 'vert 3resize ' . ((&columns * 118 + 118) / 237)
 tabnext 1
 set stal=1
-badd +264 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ModularPlayerController.cpp
+badd +32 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ReplicateMarker.cpp
 badd +4 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/AdventureGameInstance.cpp
 badd +4 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/AdventureSaveGame.cpp
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/BallTutorial.Build.cs
@@ -861,10 +861,14 @@ badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RacingWidg
 badd +25 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingBall.h
 badd +30 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingPlayerController.h
 badd +18 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/SpawnBall.h
-badd +21 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.h
-badd +467 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h
-badd +87 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ModularPlayerController.h
+badd +28 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.h
+badd +46 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Camera/CameraPhotography.h
+badd +40 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ReplicateMarker.h
+badd +1 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Pawn.cpp
+badd +79 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ModularPlayerController.cpp
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Components
+badd +467 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h
+badd +70 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ModularPlayerController.h
 badd +136 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Animation/AnimInstance.h
 badd +1675 ~/Desktop/4.21EngineCopy/Classes/GameFramework/PlayerController.h
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/MyUtil.cpp
@@ -925,7 +929,6 @@ badd +268 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/ActorRepli
 badd +102 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/PrimitiveComponentPhysics.cpp
 badd +720 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/PhysicsEngine/BodyInstance.h
 badd +2456 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/PhysicsEngine/BodyInstance.cpp
-badd +0 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Pawn.cpp
 badd +432 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/PlayerController.cpp
 badd +2984 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Engine/EngineTypes.h
 badd +84 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/GameFramework/Controller.h
@@ -934,10 +937,9 @@ badd +1866 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/GameFrame
 badd +228 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Controller.cpp
 badd +737 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Camera/PlayerCameraManager.h
 badd +805 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Engine/DemoNetDriver.h
-badd +30 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ReplicateMarker.h
-badd +18 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Soul.cpp
-badd +27 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ReplicateMarker.cpp
-badd +0 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Camera/CameraPhotography.h
+badd +28 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Soul.cpp
+badd +0 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h
+badd +0 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Soul.h
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf
 endif

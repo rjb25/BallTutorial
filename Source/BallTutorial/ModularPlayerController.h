@@ -66,6 +66,10 @@ public:
 	UPROPERTY(BlueprintReadWrite)
     FVector Checkpoint;
 
+	UPROPERTY(EditAnywhere)
+    TSubclassOf<AActor> SpawnMarkerClass = nullptr;
+
+
     UPROPERTY(EditAnywhere)
     float CameraTurnSpeed = 1.0f;
 	float Right = 0.0f;

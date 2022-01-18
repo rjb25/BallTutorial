@@ -23,10 +23,18 @@ void AModularPlayerController::BeginPlay()
     if(ActorToSpawn != nullptr){
         if(IsLocalPlayerController()){
             FVector SpawnPoint = FVector(0.0f,3150.0f,272.0f);
-            if (HasAuthority()){
-                SpawnPoint = FVector(0.0f,3350.0f,272.0f);
-            }
             FRotator SpawnPointRotation = FRotator(0.0f,0.0f,0.0f);
+
+            if(SpawnMarkerClass != nullptr){
+                TArray<AActor*> OutActors;
+                UGameplayStatics::GetAllActorsOfClass(GetWorld(), SpawnMarkerClass, OutActors);
+                if(OutActors.Num() > 0){
+                    AActor * SpawnMarker = OutActors[0];
+                    SpawnPoint = SpawnMarker->GetActorLocation();
+                    SpawnPointRotation = SpawnMarker->GetActorRotation();
+                }
+            }
+
             ASoul* InSoul = GetWorld()->SpawnActor<ASoul>(ActorToSpawn, SpawnPoint, SpawnPointRotation);
             Possessed(InSoul);
         }
@@ -61,7 +69,11 @@ void AModularPlayerController::Possessed(ASoul* InSoul) {
         SpawnBallComp = InSoul->FindComponentByClass<USpawnBall>();
         SlowComp = InSoul->FindComponentByClass<USlow>();
         Body = InSoul->FindComponentByClass<UStaticMeshComponent>();
+        if(Soul != nullptr){
+            Soul->PlayerController = nullptr;
+        }
         Soul = InSoul;
+        Soul->PlayerController = this;
         Actor = Cast<AActor>(InSoul);
         Primitive = Cast<UPrimitiveComponent>(Body);
         SetViewTarget(Actor);
