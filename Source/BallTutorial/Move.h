@@ -7,7 +7,7 @@
 #include "Move.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), Blueprintable, meta=(BlueprintSpawnableComponent) )
 class BALLTUTORIAL_API UMove : public UActorComponent
 {
 	GENERATED_BODY()
@@ -21,7 +21,11 @@ public:
     UPROPERTY(EditAnywhere)
     float SpeedRoll;
     UPROPERTY(EditAnywhere)
-    float BoostMult = 3.0f;
+    float BoostForceMult = 2.0f;
+    UPROPERTY(EditAnywhere)
+    float BoostMaxAdd = 400.0f;
+    UPROPERTY(EditAnywhere)
+    float MaximumVelocity = 100.0f;
 private:
     AActor * Owner;
     UStaticMeshComponent * Body;
