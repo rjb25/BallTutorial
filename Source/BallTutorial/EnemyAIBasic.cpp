@@ -8,7 +8,6 @@
 #include "Move.h"
 #include "Jump.h"
 #include "SpawnBall.h"
-#include "Slow.h"
 #include "Soul.h"
 
 // Sets default values for this component's properties
@@ -51,7 +50,6 @@ void UEnemyAIBasic::BeginPlay()
         MovementComp = Owner->FindComponentByClass<UMove>();
         JumpComp = Owner->FindComponentByClass<UJump>();
         SpawnBallComp = Owner->FindComponentByClass<USpawnBall>();
-        SlowComp = Owner->FindComponentByClass<USlow>();
         Body = Owner->FindComponentByClass<UStaticMeshComponent>();
         Primitive = Cast<UPrimitiveComponent>(Body);
     }
@@ -70,14 +68,11 @@ void UEnemyAIBasic::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
                 //FString::Printf(TEXT("Unit Direction %s"), *(UnitDirection).ToString()));
         if (MovementComp != nullptr){
             if (DeltaTime < 0.3f){
-                MovementComp->Move(UnitDirection,DeltaTime,0.0f);
+                MovementComp->Move(UnitDirection,DeltaTime);
             }
         }
         if (SpawnBallComp != nullptr){
             SpawnBallComp->Spawn(UnitDirection);
-        }
-        if (SlowComp != nullptr){
-            //SlowComp->Slow(DeltaTime);
         }
         if (JumpComp != nullptr && JumpEvade){
             JumpComp->Jump();

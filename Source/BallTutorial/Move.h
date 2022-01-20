@@ -15,20 +15,63 @@ class BALLTUTORIAL_API UMove : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UMove();
-    void Move(FVector Direction, float DeltaTime,float Boost);
-    UPROPERTY(EditAnywhere)
-    float SpeedForce;
-    UPROPERTY(EditAnywhere)
-    float SpeedRoll;
-    UPROPERTY(EditAnywhere)
+    void Move(FVector Direction, float DeltaTime, bool Boost = false, bool Slow = false);
+    UPROPERTY(EditAnywhere, Category = "Force")
+    float SpeedForce = 3000000.0f;
+    UPROPERTY(EditAnywhere, Category = "Torque")
+    float SpeedTorque = 0.0f;
+
+    UPROPERTY(EditAnywhere, Category = "Force")
     float BoostForceMult = 2.0f;
+    UPROPERTY(EditAnywhere, Category = "Torque")
+    float BoostTorqueMult = 2.0f;
+
+    UPROPERTY(EditAnywhere, Category = "Force")
+    float SlowForceMult = 0.1f;
+    UPROPERTY(EditAnywhere, Category = "Torque")
+    float SlowTorqueMult = 0.1f;
+
+    UPROPERTY(EditAnywhere, Category = "Force")
+    float AirForceMult = 0.3f;
+    UPROPERTY(EditAnywhere, Category = "Torque")
+    float AirTorqueMult = 0.1f;
+
+    UPROPERTY(EditAnywhere, Category = "Force")
+    float BoostMaxAddForce = 400.0f;
+    UPROPERTY(EditAnywhere, Category = "Torque")
+    float BoostMaxAddTorque = 400.0f;
+
+    UPROPERTY(EditAnywhere, Category = "Force")
+    float SlowMaxAddForce = -300.0f;
+    UPROPERTY(EditAnywhere, Category = "Torque")
+    float SlowMaxAddTorque = -300.0f;
+
+    UPROPERTY(EditAnywhere, Category = "Force")
+    float AirMaxAddForce = -100.0f;
+    UPROPERTY(EditAnywhere, Category = "Torque")
+    float AirMaxAddTorque = -100.0f;
+
+    UPROPERTY(EditAnywhere, Category = "Force")
+    float MaximumVelocityForce = 400.0f;
+    UPROPERTY(EditAnywhere, Category = "Torque")
+    float MaximumVelocityTorque = 400.0f;
+
+    UPROPERTY(EditAnywhere, Category = "Force")
+    float GripForce = 1000.0f;
+    UPROPERTY(EditAnywhere, Category = "Torque")
+    float GripTorque = 1000000.0f;
+
     UPROPERTY(EditAnywhere)
-    float BoostMaxAdd = 400.0f;
+    float GripWidth = 40.0f;
     UPROPERTY(EditAnywhere)
-    float MaximumVelocity = 100.0f;
+    float GripDepth = 30.0f;
+
+    UPROPERTY(EditAnywhere)
+    float ExtraGravity = 10000.0f;
+
 private:
-    AActor * Owner;
-    UStaticMeshComponent * Body;
+    AActor * Owner = nullptr;
+    UStaticMeshComponent * Body = nullptr;
 
 protected:
 	// Called when the game starts

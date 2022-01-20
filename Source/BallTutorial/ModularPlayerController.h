@@ -11,7 +11,6 @@ class ASoul;
 class UMove;
 class UJump;
 class USpawnBall;
-class USlow;
 /**
  * 
  */
@@ -78,16 +77,15 @@ public:
 	float Back = 0.0f;
 	float RotateRight = 0.0f;
 	float RotateLeft = 0.0f;
-	float Slow = 0.0f;
 	float Act = 0.0f;
-	bool Jump = false;
-	float Boost = 0.0f;
 	float Attack = 0.0f;
+	bool Boost = false;
+	bool Slow = false;
+	bool Jump = false;
     UMove * MovementComp = nullptr;
     UJump * JumpComp = nullptr;
     USceneComponent * SpringComp = nullptr;
     USpawnBall * SpawnBallComp = nullptr;
-    USlow * SlowComp = nullptr;
     ASoul * Soul = nullptr;
     AActor * Actor = nullptr;
     UStaticMeshComponent * Body = nullptr;

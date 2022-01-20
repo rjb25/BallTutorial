@@ -12,9 +12,8 @@ struct BALLTUTORIAL_API FToState
     GENERATED_BODY()
 
 public:
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere,meta=(MakeEditWidget))
     FVector Destination;
-
     FVector SaveRelative;
 
     UPROPERTY(EditAnywhere)
@@ -49,7 +48,7 @@ public:
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BALLTUTORIAL_API UMover : public UActorComponent
+class BALLTUTORIAL_API UMover : public USceneComponent
 {
 	GENERATED_BODY()
 
@@ -68,7 +67,6 @@ public:
     UPROPERTY(EditAnywhere)
     bool UpdateActorDestinations;
 
-
     UPROPERTY(EditAnywhere)
     bool ReverseNotLoopLocation;
     UPROPERTY(EditAnywhere)
@@ -84,6 +82,7 @@ public:
     FStateSet SizeSet;
 
     float TimeTotal;
+    bool structbool = false;
 
     FVector ActorScale;
 

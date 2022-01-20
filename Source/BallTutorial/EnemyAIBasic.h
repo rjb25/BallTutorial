@@ -7,7 +7,6 @@
 #include "EnemyAIBasic.generated.h"
 
 class UJump;
-class USlow;
 class UMove;
 class USpawnBall;
 
@@ -33,7 +32,6 @@ public:
     UMove * MovementComp = nullptr;
     UJump * JumpComp = nullptr;
     USpawnBall * SpawnBallComp = nullptr;
-    USlow * SlowComp = nullptr;
     UStaticMeshComponent * Body = nullptr;
     UPrimitiveComponent * Primitive = nullptr;
 

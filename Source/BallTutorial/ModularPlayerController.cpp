@@ -10,7 +10,6 @@
 #include "Move.h"
 #include "Jump.h"
 #include "SpawnBall.h"
-#include "Slow.h"
 #include "Soul.h"
 
 AModularPlayerController::AModularPlayerController()
@@ -67,7 +66,6 @@ void AModularPlayerController::Possessed(ASoul* InSoul) {
         JumpComp = InSoul->FindComponentByClass<UJump>();
         SpringComp = InSoul->FindComponentByClass<USpringArmComponent>();
         SpawnBallComp = InSoul->FindComponentByClass<USpawnBall>();
-        SlowComp = InSoul->FindComponentByClass<USlow>();
         Body = InSoul->FindComponentByClass<UStaticMeshComponent>();
         if(Soul != nullptr){
             Soul->PlayerController = nullptr;
@@ -204,11 +202,19 @@ void AModularPlayerController::act(float AxisValue) {
 }
 
 void AModularPlayerController::boost(float AxisValue) {
-    Boost = AxisValue;
+    if (AxisValue > 0.1){
+        Boost = true;
+    }else {
+        Boost = false;
+    }
 }
 
 void AModularPlayerController::slow(float AxisValue) {
-    Slow = AxisValue;
+    if (AxisValue > 0.1){
+        Slow = true;
+    }else {
+        Slow = false;
+    }
 }
 
 void AModularPlayerController::ToCheckpoint() {
@@ -228,18 +234,21 @@ void AModularPlayerController::Tick(float DeltaTime)
         if (MovementComp != nullptr){
             float Side = Right + Left;
             float Ahead = Forward + Back;
+            FVector RotatedUnitDirection;
             if (!(Side == 0 && Ahead == 0) && DeltaTime < 0.3f){
                 FVector Direction = FVector(Ahead, Side, 0);
                 FVector Nowhere = { 0,0,0 };
-                FVector UnitDirection = 
-                    UKismetMathLibrary::GetDirectionUnitVector(Nowhere, 
-                            Direction);
-                FVector RotatedUnitDirection = 
-                    UKismetMathLibrary::RotateAngleAxis(UnitDirection, 
+                FVector RotatedDirection = 
+                    UKismetMathLibrary::RotateAngleAxis(Direction, 
                             SpringRotation.Yaw, 
                             VerticalAxis);
-                MovementComp->Move(RotatedUnitDirection,DeltaTime,Boost);
+                RotatedUnitDirection = 
+                    UKismetMathLibrary::GetDirectionUnitVector(Nowhere, 
+                            RotatedDirection);
+            } else {
+                RotatedUnitDirection = FVector(0,0,0);
             }
+            MovementComp->Move(RotatedUnitDirection,DeltaTime,Boost,Slow);
         }
         if (SpawnBallComp != nullptr && Act != 0){
             FVector RotatedUnitForwardDirection = 
@@ -247,9 +256,6 @@ void AModularPlayerController::Tick(float DeltaTime)
                         SpringRotation.Yaw, 
                         VerticalAxis);
             SpawnBallComp->Spawn(RotatedUnitForwardDirection);
-        }
-        if (SlowComp != nullptr && Slow > 0.1f ){
-            SlowComp->Slow(DeltaTime);
         }
         float Rotate = RotateRight + RotateLeft;
         if( Rotate != 0){
