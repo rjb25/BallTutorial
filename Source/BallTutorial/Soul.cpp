@@ -16,7 +16,7 @@ ASoul::ASoul()
 void ASoul::BeginPlay()
 {
 	Super::BeginPlay();
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("FOR AUIR")));
+    if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("FOR AUIR")));
 	
 }
 

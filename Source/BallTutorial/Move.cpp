@@ -19,26 +19,37 @@ void UMove::BeginPlay()
 {
 	Super::BeginPlay();
     Owner = GetOwner();
-    Body = Owner->FindComponentByClass<UStaticMeshComponent>();
+    TArray<UStaticMeshComponent*> Bodies;
+    Owner->GetComponents<UStaticMeshComponent>(Bodies);
+    for(UStaticMeshComponent * Bod : Bodies){
+        if (Bod->GetMass() > 0.001){
+            Body = Bod;
+            break;
+        }
+    }
+
     if (Body != nullptr){
         Body->SetSimulatePhysics(true);
         Body->SetNotifyRigidBodyCollision(true);
         Body->BodyInstance.SetCollisionProfileName("BlockAllDynamic");
     } else {
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("CHICKEN BEFORE THE EGG IN MOVE.cpp")));
+        if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("CHICKEN BEFORE THE EGG IN MOVE.cpp")));
     }
-    /*
-        GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, 
-                FString::Printf(TEXT("Force Roll %f %f"), SpeedForce, SpeedTorque));
-                */
+    if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, 
+            FString::Printf(TEXT("SpeedForce %f SpeedTorque %f"),SpeedForce, SpeedTorque));
 }
 
 void UMove::Move(FVector Direction, float DeltaTime, bool Boost, bool Slow){
     bool Grounded = MyUtil::GroundCheck(Owner,GripDepth,GripWidth);
+    /*
+        if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, 
+                FString::Printf(TEXT("Force %s"), *(Direction).ToString()));
+                */
 
 
     bool ActiveMovement = !Direction.IsZero();
-    if(ActiveMovement){
+    if(Body != nullptr){
+        float Mass = Body->GetMass() + 0.1f;
         float LBoostForceMult    = 1.0f;
         float LBoostTorqueMult   = 1.0f;
         float LAirForceMult      = 1.0f;
@@ -53,68 +64,104 @@ void UMove::Move(FVector Direction, float DeltaTime, bool Boost, bool Slow){
         float LAirMaxAddForce    = 0.0f;
         float LAirMaxAddTorque   = 0.0f;
 
-        if (Grounded){
-            if (Boost){
-                LBoostForceMult = BoostForceMult;
-                LBoostTorqueMult = BoostTorqueMult;
-                LBoostMaxAddForce = BoostMaxAddForce;
-                LBoostMaxAddTorque = BoostMaxAddTorque;
-            }
+        if (Boost){
+            LBoostForceMult = BoostForceMult;
+            LBoostTorqueMult = BoostTorqueMult;
+            LBoostMaxAddForce = BoostMaxAddForce;
+            LBoostMaxAddTorque = BoostMaxAddTorque;
+        }
 
-            if (Slow){
-                LSlowForceMult = SlowForceMult;
-                LSlowTorqueMult = SlowTorqueMult;
-                LSlowMaxAddForce = SlowMaxAddForce;
-                LSlowMaxAddTorque = SlowMaxAddTorque;
-            }
-        } else {
+        if (Slow){
+            LSlowForceMult = SlowForceMult;
+            LSlowTorqueMult = SlowTorqueMult;
+            LSlowMaxAddForce = SlowMaxAddForce;
+            LSlowMaxAddTorque = SlowMaxAddTorque;
+        }
+
+        if (!Grounded){
             LAirMaxAddForce = AirMaxAddForce;
             LAirMaxAddTorque = AirMaxAddTorque;
             LAirForceMult = AirForceMult;
             LAirTorqueMult = AirTorqueMult;
         }
 
-        float MoveForce = DeltaTime *  SpeedForce * Body->GetMass() * LBoostForceMult * LSlowForceMult * LAirForceMult;
+        float MoveForce = DeltaTime *  SpeedForce * Mass * LBoostForceMult * LSlowForceMult * LAirForceMult;
         Body->AddForce(Direction * MoveForce);
 
         FVector Velocity = Owner->GetVelocity();
-        //GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Velocity %f"),Velocity.Size()));
-        if(Velocity.Z < 0.0f){
-            Velocity.Z = 0.0f;
-        }
-        if(Velocity.Size() > MaximumVelocityForce + LBoostMaxAddForce + LSlowMaxAddForce + LAirMaxAddForce){
-            Velocity.Z = 0.0f;
-            FVector OppositeVelocityDirection = -1 * 
-                UKismetMathLibrary::GetDirectionUnitVector(FVector(0.0f,0.0f,0.0f), 
-                        Velocity);
-            Body->AddForce(OppositeVelocityDirection * MoveForce);
-        }
+        Velocity.Z = 0.0f;
+        float VelocitySize = Velocity.Size();
+        float TrueMaxSpeed = MaximumVelocityForce + LBoostMaxAddForce + LSlowMaxAddForce + LAirMaxAddForce;
+        float GripMoveForce = MoveForce * FMath::Min(VelocitySize/TrueMaxSpeed, 1.0f);
 
+
+        FVector OppositeVelocityDirection = -1 * 
+            UKismetMathLibrary::GetDirectionUnitVector(FVector(0.0f,0.0f,0.0f), 
+                    Velocity);
 
         //Rotational torque for movement
         FVector RotationDirection;
         RotationDirection.Y = Direction.X;
         RotationDirection.X = Direction.Y * (-1);
         RotationDirection.Z = Direction.Z;
-        float MoveTorque = DeltaTime * SpeedTorque * Body->GetMass() * LBoostTorqueMult * LSlowTorqueMult * LAirTorqueMult;
+
+        float MoveTorque = DeltaTime * SpeedTorque * Mass * LBoostTorqueMult * LSlowTorqueMult * LAirTorqueMult;
+        Body->AddTorqueInDegrees(RotationDirection * MoveTorque);
+
         FVector AngularVelocity = Body->GetPhysicsAngularVelocityInDegrees();
-        if(AngularVelocity.Size() > MaximumVelocityTorque + LBoostMaxAddTorque + LSlowMaxAddTorque + LAirMaxAddTorque){
-            FVector UnitAngularDirection = 
-                UKismetMathLibrary::GetDirectionUnitVector(FVector(0.0f,0.0f,0.0f), 
-                        AngularVelocity);
-            FVector OppositeVelocityRotation = -1 * UnitAngularDirection;
-            Body->AddTorqueInDegrees(OppositeVelocityRotation * MoveTorque );
+        float AngularVelocitySize = AngularVelocity.Size();
+        float TrueMaxRotation = MaximumVelocityTorque + LBoostMaxAddTorque + LSlowMaxAddTorque + LAirMaxAddTorque;
+        float GripMoveTorque = MoveTorque * FMath::Min(AngularVelocitySize/TrueMaxRotation, 1.0f);
+        FVector UnitAngularDirection = 
+            UKismetMathLibrary::GetDirectionUnitVector(FVector(0.0f,0.0f,0.0f), 
+                    AngularVelocity);
+
+        FVector OppositeVelocityRotation = -1 * UnitAngularDirection;
+        FVector AntiTwirlRotation = FVector(0.0f, 0.0f, -1 * FMath::Sign(UnitAngularDirection.Z));
+
+        if(ActiveMovement){
+            if(VelocitySize > TrueMaxSpeed){
+                Body->AddForce(OppositeVelocityDirection * MoveForce);
+                if(!Boost) Body->AddForce(OppositeVelocityDirection * GripMoveForce);
+            }
+
+            if(AngularVelocitySize > TrueMaxRotation){
+                Body->AddTorqueInDegrees(OppositeVelocityRotation * MoveTorque );
+                if(!Boost) Body->AddTorqueInDegrees(OppositeVelocityRotation * GripMoveTorque );
+            }
+        } else {
+            if(VelocitySize > 0.001f){
+                Body->AddForce(OppositeVelocityDirection * GripMoveForce);
+            }
+            if(AngularVelocitySize > 0.1f){
+                Body->AddTorqueInDegrees(OppositeVelocityRotation * GripMoveTorque);
+            }
         }
-    } else if(Grounded){
-        FVector Griped = -1 * Owner->GetVelocity() * GripForce;
-        Body->AddForce(DeltaTime * Griped * Body->GetMass());
-        FVector GripedAngular = -1 * (Body->GetPhysicsAngularVelocityInDegrees()) * GripTorque;
-        Body->AddTorqueInDegrees(DeltaTime * GripedAngular * Body->GetMass());
+
+
+        Body->AddTorqueInDegrees(AntiTwirlRotation * AntiTwirlGrip );
+        Body->AddForce(FVector(0.0f,0.0f,-1.0f) * ExtraGravity);
     }
-
-
-    Body->AddForce(FVector(0.0f,0.0f,-1.0f) * ExtraGravity);
 }
+
+/*
+void UMove::Grip(float DeltaTime){
+    GripVelocity(DeltaTime);
+    GripAngularVelocity(DeltaTime);
+}
+void UMove::GripVelocity(float DeltaTime){
+    FVector Velocity = Owner->GetVelocity();
+    Velocity.Z = 0.0f;
+    FVector Gripped = -1 * Velocity * GripForce;
+    Body->AddForce(DeltaTime * Gripped * Body->GetMass());
+}
+
+void UMove::GripAngularVelocity(float DeltaTime){
+    FVector AngularVelocity = Body->GetPhysicsAngularVelocityInDegrees();
+    FVector GrippedAngular = -1 * AngularVelocity * GripTorque;
+    Body->AddTorqueInDegrees(DeltaTime * GrippedAngular * Body->GetMass());
+}
+*/
 
 
 // Called every frame

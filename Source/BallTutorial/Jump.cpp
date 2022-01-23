@@ -18,7 +18,15 @@ void UJump::BeginPlay()
 {
 	Super::BeginPlay();
     Owner = GetOwner();
-    Body = Owner->FindComponentByClass<UStaticMeshComponent>();
+
+    TArray<UStaticMeshComponent*> Bodies;
+    Owner->GetComponents<UStaticMeshComponent>(Bodies);
+    for(UStaticMeshComponent * Bod : Bodies){
+        if (Bod->GetMass() > 0.001){
+            Body = Bod;
+            break;
+        }
+    }
 }
 
 
@@ -31,9 +39,11 @@ void UJump::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentT
 }
 
 void UJump::Jump(){
-    float CurrentTime = GetWorld()->GetTimeSeconds();
-    if(MyUtil::GroundCheck(Owner,GripDepth,GripWidth) && LastJump + JumpReload < CurrentTime){
-        Body->AddImpulse(FVector(0.0f,0.0f,1.0f) * JumpForce * Body->GetMass());
-        LastJump = CurrentTime;
+    if(Body!=nullptr){
+        float CurrentTime = GetWorld()->GetTimeSeconds();
+        if(MyUtil::GroundCheck(Owner,GripDepth,GripWidth) && LastJump + JumpReload < CurrentTime){
+            Body->AddImpulse(FVector(0.0f,0.0f,1.0f) * JumpForce * Body->GetMass());
+            LastJump = CurrentTime;
+        }
     }
 }

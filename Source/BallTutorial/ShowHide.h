@@ -4,30 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Jump.generated.h"
-
+#include "ShowHide.generated.h"
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BALLTUTORIAL_API UJump : public UActorComponent
+class BALLTUTORIAL_API UShowHide : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UJump();
-    void Jump();
-    UPROPERTY(EditAnywhere)
-    float JumpForce = 750.0f;
-    UPROPERTY(EditAnywhere)
-    float GripWidth = 40.0f;
-    UPROPERTY(EditAnywhere)
-    float GripDepth = 30.0f;
-    UPROPERTY(EditAnywhere)
-    float JumpReload = 0.2f;
-private:
-    float LastJump = 0.0f;
-    UStaticMeshComponent * Body = nullptr;
-    AActor * Owner = nullptr;
+	UShowHide();
+    void Show();
+    void Hide();
 
 protected:
 	// Called when the game starts
@@ -37,5 +25,10 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+private:
+    AActor * Owner = nullptr;
+    bool HiddenDefault = false;
+    bool TickDefault = false;
+    bool CollisionDefault = false;
 		
 };

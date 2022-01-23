@@ -25,7 +25,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
     UPROPERTY(BlueprintReadWrite)
     AModularPlayerController * PlayerController = nullptr;
-
     
 
 };

@@ -101,7 +101,7 @@ $argadd ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.h
 set stal=2
 tabnew
 tabrewind
-edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Drag.cpp
+edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.cpp
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -118,7 +118,7 @@ exe 'vert 1resize ' . ((&columns * 118 + 118) / 237)
 exe 'vert 2resize ' . ((&columns * 118 + 118) / 237)
 argglobal
 44argu
-if bufexists("~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Drag.cpp") | buffer ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Drag.cpp | else | edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Drag.cpp | endif
+if bufexists("~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.cpp") | buffer ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.cpp | else | edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.cpp | endif
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -243,17 +243,17 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 24 - ((23 * winheight(0) + 33) / 67)
+let s:l = 69 - ((43 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-24
-normal! 010|
+69
+normal! 034|
 lcd ~/Documents/Unreal\ Projects/BallTutorial/Source
 wincmd w
 argglobal
 44argu
-if bufexists("~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Drag.h") | buffer ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Drag.h | else | edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Drag.h | endif
+if bufexists("~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.h") | buffer ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.h | else | edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.h | endif
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -378,18 +378,18 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 36 - ((35 * winheight(0) + 33) / 67)
+let s:l = 43 - ((42 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-36
-normal! 015|
+43
+normal! 04|
 lcd ~/Documents/Unreal\ Projects/BallTutorial/Source
 wincmd w
 exe 'vert 1resize ' . ((&columns * 118 + 118) / 237)
 exe 'vert 2resize ' . ((&columns * 118 + 118) / 237)
 tabnext
-edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h
+edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -413,7 +413,7 @@ exe '3resize ' . ((&lines * 10 + 35) / 70)
 exe 'vert 3resize ' . ((&columns * 118 + 118) / 237)
 argglobal
 1argu
-if bufexists("~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h") | buffer ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h | else | edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h | endif
+if bufexists("~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h") | buffer ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h | else | edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h | endif
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -538,17 +538,17 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1442 - ((27 * winheight(0) + 33) / 67)
+let s:l = 65 - ((15 * winheight(0) + 33) / 67)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1442
-normal! 05|
+65
+normal! 0
 lcd ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine
 wincmd w
 argglobal
 1argu
-if bufexists("~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Pawn.cpp") | buffer ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Pawn.cpp | else | edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Pawn.cpp | endif
+if bufexists("~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Camera/CameraPhotography.h") | buffer ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Camera/CameraPhotography.h | else | edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Camera/CameraPhotography.h | endif
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -673,12 +673,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 30 - ((24 * winheight(0) + 28) / 56)
+let s:l = 42 - ((35 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-30
-normal! 0
+42
+normal! 05|
 lcd ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine
 wincmd w
 argglobal
@@ -816,13 +816,13 @@ exe '3resize ' . ((&lines * 10 + 35) / 70)
 exe 'vert 3resize ' . ((&columns * 118 + 118) / 237)
 tabnext 1
 set stal=1
-badd +26 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ModularPlayerController.cpp
+badd +36 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/WaveManager.h
 badd +4 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/AdventureGameInstance.cpp
 badd +4 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/AdventureSaveGame.cpp
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/BallTutorial.Build.cs
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/BallTutorial.cpp
 badd +0 BallTutorial/Components/
-badd +33 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/C_HitDamager.cpp
+badd +45 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/C_HitDamager.cpp
 badd +60 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/HealthComponent.cpp
 badd +11 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/IsHazard.cpp
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/jasonbuf
@@ -836,7 +836,7 @@ badd +17 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RacingGam
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RacingHUD.cpp
 badd +68 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RacingPlayerState.cpp
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RacingWidget.cpp
-badd +52 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingBall.cpp
+badd +45 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingBall.cpp
 badd +8 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingPlayerController.cpp
 badd +21 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/SpawnBall.cpp
 badd +32 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.cpp
@@ -861,30 +861,40 @@ badd +25 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingBa
 badd +30 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingPlayerController.h
 badd +18 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/SpawnBall.h
 badd +28 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.h
-badd +100 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h
-badd +25 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Soul.h
-badd +1 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Pawn.cpp
-badd +32 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ReplicateMarker.cpp
-badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Components
+badd +2017 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h
+badd +105 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/WaveManager.cpp
 badd +46 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Camera/CameraPhotography.h
+badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Components
+badd +1493 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h
+badd +78 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Move.h
+badd +637 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Animation/AnimationAsset.h
+badd +70 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Move.cpp
+badd +41 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Jump.cpp
+badd +1432 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Actor.cpp
+badd +21 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Jump.h
+badd +43 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Drag.cpp
+badd +36 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Drag.h
+badd +30 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Pawn.cpp
+badd +88 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ModularPlayerController.cpp
+badd +100 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h
+badd +27 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Soul.h
+badd +32 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ReplicateMarker.cpp
 badd +40 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ReplicateMarker.h
-badd +467 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h
-badd +70 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ModularPlayerController.h
+badd +86 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ModularPlayerController.h
 badd +136 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Animation/AnimInstance.h
 badd +1675 ~/Desktop/4.21EngineCopy/Classes/GameFramework/PlayerController.h
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/MyUtil.cpp
-badd +3411 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Actor.cpp
 badd +9 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/MyUtil.h
 badd +7 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/SetLocationReplicate.cpp
 badd +25 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/SetLocationReplicate.h
 badd +6 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ActableInterface.h
 badd +167 ~/Desktop/4.21EngineCopy/Private/Pawn.cpp
 badd +275 ~/Desktop/4.21EngineCopy/Private/Controller.cpp
-badd +32 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.h
+badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.h
 badd +713 ~/Desktop/4.21EngineCopy/Classes/Kismet/KismetMathLibrary.h
-badd +69 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.cpp
-badd +110 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Mover.cpp
-badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Mover.h
+badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.cpp
+badd +72 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Mover.cpp
+badd +45 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Mover.h
 badd +668 ~/Desktop/4.21EngineCopy/Classes/GameFramework/Actor.h
 badd +14 ~/Desktop/4.21EngineCopy/Classes/Engine/EngineTypes.h
 badd +8 ~/Desktop/4.21EngineCopy/Classes/Engine/TriggerBox.h
@@ -918,31 +928,35 @@ badd +34 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Gravitor.
 badd +95 ~/Desktop/4.21EngineCopy/Classes/Engine/DebugCameraController.h
 badd +89 ~/Desktop/4.21EngineCopy/Classes/GameFramework/Pawn.h
 badd +32 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Engine/StaticMeshActor.h
-badd +18 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Move.cpp
-badd +15 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Move.h
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/GroundedCheck.c
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/GroundedCheck.cpp
 badd +24 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/GroundedCheck.h
 badd +730 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Engine/BlueprintGeneratedClass.h
 badd +10 ~/.vimrc
-badd +1163 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h
 badd +268 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/ActorReplication.cpp
-badd +102 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/PrimitiveComponentPhysics.cpp
-badd +720 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/PhysicsEngine/BodyInstance.h
+badd +50 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/PrimitiveComponentPhysics.cpp
+badd +201 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/PhysicsEngine/BodyInstance.h
 badd +2456 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/PhysicsEngine/BodyInstance.cpp
 badd +432 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/PlayerController.cpp
-badd +2984 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Engine/EngineTypes.h
+badd +27 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Engine/EngineTypes.h
 badd +84 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/GameFramework/Controller.h
 badd +487 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/GameFramework/Pawn.h
 badd +1866 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/GameFramework/PlayerController.h
 badd +228 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Controller.cpp
 badd +737 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Camera/PlayerCameraManager.h
 badd +805 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Engine/DemoNetDriver.h
-badd +28 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Soul.cpp
-badd +44 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Drag.cpp
-badd +5 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Drag.h
+badd +19 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Soul.cpp
 badd +22 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Slow.cpp
 badd +18 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Slow.h
+badd +161 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/AI/Navigation/AvoidanceManager.h
+badd +30 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ShowHide.h
+badd +23 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ShowHide.cpp
+badd +31 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Components/PrimitiveComponent.cpp
+badd +796 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Components/SceneComponent.h
+badd +165 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/PhysicsEngine/PhysUtils.cpp
+badd +301 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Components/InstancedStaticMeshComponent.h
+badd +437 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Engine/LevelStreaming.h
+badd +498 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/EdGraph/EdGraphPin.h
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf
 endif

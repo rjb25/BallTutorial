@@ -20,12 +20,12 @@ public:
 	UEnemyAIBasic();
 
     UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> SensoryBoxToSpawn;
+	TSubclassOf<AActor> SensorBoxToSpawn = nullptr;
 
     TArray<AActor*> Targets;
 
     UPROPERTY(EditAnywhere)
-	AActor * SensoryBox = nullptr;
+	AActor * SensorBox = nullptr;
     AActor * OldestTarget = nullptr;
     AActor * Owner = nullptr;
 
@@ -55,6 +55,8 @@ public:
 	
 	UFUNCTION()
     void OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor) ;
+
+    void SetSensorBox(AActor*);
 
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

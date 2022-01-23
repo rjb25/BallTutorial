@@ -24,27 +24,18 @@ void UEnemyAIBasic::BeginPlay()
 	Super::BeginPlay();
     Owner = GetOwner();
     StartLocation = Owner->GetActorLocation();
-    if (SensoryBox == nullptr){
-        if (SensoryBoxToSpawn == nullptr){
+    if (SensorBox == nullptr){
+        if (SensorBoxToSpawn == nullptr){
             GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("No senses on an AI")));
         }else{
             FVector SpawnLocation = Owner->GetActorLocation();
             FRotator SpawnRotation = Owner->GetActorRotation();
-            SensoryBox = GetWorld()->SpawnActor<AActor>(SensoryBoxToSpawn,SpawnLocation, SpawnRotation);
-            SensoryBox->SetActorRelativeScale3D(SensoryScale);
-            Cast<AActor>(SensoryBox)->OnActorBeginOverlap.AddDynamic(this, &UEnemyAIBasic::OnOverlapBegin);
-            Cast<AActor>(SensoryBox)->OnActorEndOverlap.AddDynamic(this, &UEnemyAIBasic::OnOverlapEnd);
+            SensorBox = GetWorld()->SpawnActor<AActor>(SensorBoxToSpawn,SpawnLocation, SpawnRotation);
+            SensorBox->SetActorRelativeScale3D(SensoryScale);
         }
-    } else {
-        SensoryBox->OnActorBeginOverlap.AddDynamic(this, &UEnemyAIBasic::OnOverlapBegin);
-        SensoryBox->OnActorEndOverlap.AddDynamic(this, &UEnemyAIBasic::OnOverlapEnd);
-    }
-    if (SensoryBox != nullptr){
-        TArray<AActor*> InitialTargets;
-        SensoryBox->GetOverlappingActors(InitialTargets);
-        for( AActor * InitialTarget : InitialTargets){
-            OnOverlapBegin(Owner,InitialTarget);
-        }
+    } 
+    if (SensorBox != nullptr){
+        SetSensorBox(SensorBox);
     }
     if(Owner != nullptr){
         MovementComp = Owner->FindComponentByClass<UMove>();
@@ -55,15 +46,28 @@ void UEnemyAIBasic::BeginPlay()
     }
 }
 
+void UEnemyAIBasic::SetSensorBox(AActor* SensorBox){
+        SensorBox->OnActorBeginOverlap.AddDynamic(this, &UEnemyAIBasic::OnOverlapBegin);
+        SensorBox->OnActorEndOverlap.AddDynamic(this, &UEnemyAIBasic::OnOverlapEnd);
+        TArray<AActor*> InitialTargets;
+        SensorBox->GetOverlappingActors(InitialTargets);
+        for( AActor * InitialTarget : InitialTargets){
+            OnOverlapBegin(Owner,InitialTarget);
+        }
+}
 
 // Called every frame
 void UEnemyAIBasic::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
     if (OldestTarget != nullptr){
+        FVector TargetLocation = OldestTarget->GetActorLocation();
+        FVector MyLocation = Owner->GetActorLocation();
+        MyLocation.Z = 0.0f;
+        TargetLocation.Z = 0.0f;
         FVector UnitDirection = 
-            UKismetMathLibrary::GetDirectionUnitVector(Owner->GetActorLocation(), 
-                    OldestTarget->GetActorLocation());
+            UKismetMathLibrary::GetDirectionUnitVector(MyLocation, 
+                    TargetLocation);
         //GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, 
                 //FString::Printf(TEXT("Unit Direction %s"), *(UnitDirection).ToString()));
         if (MovementComp != nullptr){
@@ -88,7 +92,8 @@ void UEnemyAIBasic::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 void UEnemyAIBasic::OnOverlapBegin(AActor * OverlappedActor, AActor * OtherActor){
 	ASoul * soul = Cast<ASoul>(OtherActor);
-	if (soul != nullptr && Owner != OtherActor) {
+    //At some point this would be a comparison of tags between what we target and what they have
+	if (soul != nullptr && Owner != OtherActor && soul->PlayerController != nullptr) {
         Targets.AddUnique(OtherActor);
         OldestTarget = Targets[0];
 	}

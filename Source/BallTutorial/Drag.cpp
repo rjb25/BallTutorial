@@ -23,9 +23,6 @@ void UDrag::BeginPlay()
     Body = Owner->FindComponentByClass<UStaticMeshComponent>();
         //GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, 
                 //FString::Printf(TEXT("Torque %f"), FlatDragTorque));
-
-	// ...
-	
 }
 
 

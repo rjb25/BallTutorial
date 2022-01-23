@@ -31,7 +31,7 @@ public:
 };
 
 USTRUCT()
-struct FStateSet
+struct BALLTUTORIAL_API FStateSet
 {
     GENERATED_BODY()
 
