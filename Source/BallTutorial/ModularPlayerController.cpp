@@ -9,6 +9,7 @@
 #include "MyUtil.h"
 #include "Move.h"
 #include "Jump.h"
+#include "Joint.h"
 #include "SpawnBall.h"
 #include "Soul.h"
 
@@ -64,6 +65,7 @@ void AModularPlayerController::Possessed(ASoul* InSoul) {
     if (InSoul != nullptr){
         MovementComp = InSoul->FindComponentByClass<UMove>();
         JumpComp = InSoul->FindComponentByClass<UJump>();
+        JointComp = InSoul->FindComponentByClass<UJoint>();
         SpringComp = InSoul->FindComponentByClass<USpringArmComponent>();
         SpawnBallComp = InSoul->FindComponentByClass<USpawnBall>();
         Body = InSoul->FindComponentByClass<UStaticMeshComponent>();
@@ -262,6 +264,9 @@ void AModularPlayerController::Tick(float DeltaTime)
             FRotator RotationChange = FRotator(0.0f, 0.0f, 0.0f);
             RotationChange.Yaw = Rotate * CameraTurnSpeed;
             SpringComp->AddWorldRotation(RotationChange);
+            if(JointComp != nullptr){
+                JointComp->CurrentRotation = SpringComp->GetComponentRotation();
+            }
         }
     }
     if (JumpComp != nullptr && Jump){

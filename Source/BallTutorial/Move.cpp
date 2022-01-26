@@ -35,8 +35,8 @@ void UMove::BeginPlay()
     } else {
         if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("CHICKEN BEFORE THE EGG IN MOVE.cpp")));
     }
-    if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, 
-            FString::Printf(TEXT("SpeedForce %f SpeedTorque %f"),SpeedForce, SpeedTorque));
+    //if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, 
+            //FString::Printf(TEXT("SpeedForce %f SpeedTorque %f"),SpeedForce, SpeedTorque));
 }
 
 void UMove::Move(FVector Direction, float DeltaTime, bool Boost, bool Slow){

@@ -11,6 +11,7 @@ class ASoul;
 class UMove;
 class UJump;
 class USpawnBall;
+class UJoint;
 /**
  * 
  */
@@ -83,6 +84,7 @@ public:
 	bool Slow = false;
 	bool Jump = false;
     UMove * MovementComp = nullptr;
+    UJoint * JointComp = nullptr;
     UJump * JumpComp = nullptr;
     USceneComponent * SpringComp = nullptr;
     USpawnBall * SpawnBallComp = nullptr;

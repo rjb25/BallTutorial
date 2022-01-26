@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "EnemyAIBasic.generated.h"
 
+class UJoint;
 class UJump;
 class UMove;
 class USpawnBall;
@@ -34,6 +35,7 @@ public:
     USpawnBall * SpawnBallComp = nullptr;
     UStaticMeshComponent * Body = nullptr;
     UPrimitiveComponent * Primitive = nullptr;
+    UJoint * JointComp = nullptr;
 
     UPROPERTY(EditAnywhere)
     FVector SensoryScale = FVector(1.0f, 1.0f, 1.0f);
@@ -44,6 +46,10 @@ public:
     bool Enabled = true;
     UPROPERTY(EditAnywhere)
     bool JumpEvade = false;
+
+    FVector CurrentDirection = FVector(0.0f,0.0f,0.0f);
+    UPROPERTY(EditAnywhere)
+    float RotationSpeed = 30.0f;
 
 protected:
 	// Called when the game starts

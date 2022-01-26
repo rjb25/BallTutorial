@@ -63,8 +63,9 @@ void AWaveManager::Tick(float DeltaTime)
 void AWaveManager::OnOverlapBegin(AActor * OverlappedActor, AActor * OtherActor){
     ASoul * OtherSoul = Cast<ASoul>(OtherActor);
     if(OtherSoul != nullptr){
-        if(OtherSoul->PlayerController != nullptr){
+        if(OtherSoul->PlayerController != nullptr && AwaitingPlayer){
             SpawnWave();
+            AwaitingPlayer = false;
         }
     }
 }

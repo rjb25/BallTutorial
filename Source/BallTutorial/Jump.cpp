@@ -42,6 +42,11 @@ void UJump::Jump(){
     if(Body!=nullptr){
         float CurrentTime = GetWorld()->GetTimeSeconds();
         if(MyUtil::GroundCheck(Owner,GripDepth,GripWidth) && LastJump + JumpReload < CurrentTime){
+            FVector Velocity = Owner->GetVelocity();
+            UPrimitiveComponent * Primitive = Cast<UPrimitiveComponent>(Body);
+            if (Primitive != nullptr){
+                Primitive->SetPhysicsLinearVelocity(FVector(Velocity.X,Velocity.Y,0.0f));
+            }
             Body->AddImpulse(FVector(0.0f,0.0f,1.0f) * JumpForce * Body->GetMass());
             LastJump = CurrentTime;
         }

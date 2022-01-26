@@ -9,6 +9,7 @@
 #include "Jump.h"
 #include "SpawnBall.h"
 #include "Soul.h"
+#include "Joint.h"
 
 // Sets default values for this component's properties
 UEnemyAIBasic::UEnemyAIBasic()
@@ -43,6 +44,7 @@ void UEnemyAIBasic::BeginPlay()
         SpawnBallComp = Owner->FindComponentByClass<USpawnBall>();
         Body = Owner->FindComponentByClass<UStaticMeshComponent>();
         Primitive = Cast<UPrimitiveComponent>(Body);
+        JointComp = Owner->FindComponentByClass<UJoint>();
     }
 }
 
@@ -68,25 +70,26 @@ void UEnemyAIBasic::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
         FVector UnitDirection = 
             UKismetMathLibrary::GetDirectionUnitVector(MyLocation, 
                     TargetLocation);
-        //GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, 
-                //FString::Printf(TEXT("Unit Direction %s"), *(UnitDirection).ToString()));
+        if (RotationSpeed > -0.1f){
+            CurrentDirection = FMath::VInterpNormalRotationTo(CurrentDirection, UnitDirection, DeltaTime, RotationSpeed);
+        } else {
+            CurrentDirection = UnitDirection;
+        }
+
         if (MovementComp != nullptr){
             if (DeltaTime < 0.3f){
-                MovementComp->Move(UnitDirection,DeltaTime);
+                MovementComp->Move(CurrentDirection,DeltaTime);
             }
         }
         if (SpawnBallComp != nullptr){
-            SpawnBallComp->Spawn(UnitDirection);
+            SpawnBallComp->Spawn(CurrentDirection);
         }
         if (JumpComp != nullptr && JumpEvade){
             JumpComp->Jump();
         }
-    } else {
-            //GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("No target")));
-    }
-    if(Owner != nullptr && Owner->IsReplicatingMovement()){
-            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Movement is replicating")));
-
+        if(JointComp != nullptr){
+            JointComp->CurrentRotation = UKismetMathLibrary::FindLookAtRotation(FVector(0.0f,0.0f,0.0f),CurrentDirection);
+        }
     }
 }
 
@@ -110,3 +113,12 @@ void UEnemyAIBasic::OnOverlapEnd(AActor * OverlappedActor, AActor * OtherActor) 
         }
     }
 }
+/* from end of tick
+ * else {
+            //GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("No target")));
+    }
+    if(Owner != nullptr && Owner->IsReplicatingMovement()){
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Movement is replicating")));
+
+    }
+    */

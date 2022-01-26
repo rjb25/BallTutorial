@@ -121,6 +121,7 @@ public:
 
     void SpawnWave();
     void SpawnIt(FSpawnable Spawn);
+    bool AwaitingPlayer = true;
     /*
     void DropIt(FDropable Drop);
     */
