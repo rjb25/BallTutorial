@@ -1,6 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "WaveManager.h"
 #include "Soul.h"
 #include "EnemyAIBasic.h"
@@ -22,8 +20,8 @@ void AWaveManager::BeginPlay()
 	Super::BeginPlay();
 
     if(SensorBox != nullptr){
-    SensorBox->OnActorBeginOverlap.AddDynamic(this, &AWaveManager::OnOverlapBegin);
-    SensorBox->OnActorEndOverlap.AddDynamic(this, &AWaveManager::OnOverlapEnd);
+        SensorBox->OnActorBeginOverlap.AddDynamic(this, &AWaveManager::OnOverlapBegin);
+        SensorBox->OnActorEndOverlap.AddDynamic(this, &AWaveManager::OnOverlapEnd);
     }
     for ( int WaveIndex = 0; WaveIndex < Waves.Num(); WaveIndex++){
         FWave * Wave = &Waves[WaveIndex];
@@ -112,7 +110,9 @@ void AWaveManager::SpawnIt(FSpawnable Spawn){
     if(SpawnedActor){
         SpawnedActor->OnDestroyed.AddDynamic(this, &AWaveManager::SoulDied);
         UEnemyAIBasic * EnemyAIBasic = SpawnedActor->FindComponentByClass<UEnemyAIBasic>();
-        EnemyAIBasic->SetSensorBox(SensorBox);
+        if (EnemyAIBasic != nullptr) {
+            EnemyAIBasic->SetSensorBox(SensorBox);
+        }
     }
     if(Spawn.MustDie){
         ActorsAlive++;

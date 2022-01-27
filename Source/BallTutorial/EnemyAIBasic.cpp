@@ -34,10 +34,8 @@ void UEnemyAIBasic::BeginPlay()
             SensorBox = GetWorld()->SpawnActor<AActor>(SensorBoxToSpawn,SpawnLocation, SpawnRotation);
             SensorBox->SetActorRelativeScale3D(SensoryScale);
         }
-    } 
-    if (SensorBox != nullptr){
-        SetSensorBox(SensorBox);
     }
+    SetSensorBox(SensorBox);
     if(Owner != nullptr){
         MovementComp = Owner->FindComponentByClass<UMove>();
         JumpComp = Owner->FindComponentByClass<UJump>();
@@ -48,14 +46,18 @@ void UEnemyAIBasic::BeginPlay()
     }
 }
 
-void UEnemyAIBasic::SetSensorBox(AActor* SensorBox){
-        SensorBox->OnActorBeginOverlap.AddDynamic(this, &UEnemyAIBasic::OnOverlapBegin);
-        SensorBox->OnActorEndOverlap.AddDynamic(this, &UEnemyAIBasic::OnOverlapEnd);
+void UEnemyAIBasic::SetSensorBox(AActor* InSensorBox){
+    if(InSensorBox != nullptr){
+        GEngine->AddOnScreenDebugMessage(-1, 50.f, FColor::Green, 
+                FString::Printf(TEXT("FAKE POINTER %s"), *(InSensorBox->GetActorLocation()).ToString()));
+        InSensorBox->OnActorBeginOverlap.AddDynamic(this, &UEnemyAIBasic::OnOverlapBegin);
+        InSensorBox->OnActorEndOverlap.AddDynamic(this, &UEnemyAIBasic::OnOverlapEnd);
         TArray<AActor*> InitialTargets;
-        SensorBox->GetOverlappingActors(InitialTargets);
-        for( AActor * InitialTarget : InitialTargets){
+        InSensorBox->GetOverlappingActors(InitialTargets);
+        for(AActor * InitialTarget : InitialTargets){
             OnOverlapBegin(Owner,InitialTarget);
         }
+    }
 }
 
 // Called every frame
@@ -67,6 +69,16 @@ void UEnemyAIBasic::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
         FVector MyLocation = Owner->GetActorLocation();
         MyLocation.Z = 0.0f;
         TargetLocation.Z = 0.0f;
+        float Direction = 0.0f;
+        float CurrentDistance = FVector::Distance(TargetLocation, MyLocation);
+        if(CurrentDistance > TargetMaxDistance) {
+            Direction = 1.0f;
+        } else if (CurrentDistance < TargetMinDistance) {
+            Direction = -1.0f;
+        } else {
+            Direction = 0.0f;
+        } 
+
         FVector UnitDirection = 
             UKismetMathLibrary::GetDirectionUnitVector(MyLocation, 
                     TargetLocation);
@@ -77,8 +89,8 @@ void UEnemyAIBasic::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
         }
 
         if (MovementComp != nullptr){
-            if (DeltaTime < 0.3f){
-                MovementComp->Move(CurrentDirection,DeltaTime);
+            if (DeltaTime < 0.3f && (Direction > 0.1f || Direction < -0.1f)){
+                MovementComp->Move(CurrentDirection * Direction,DeltaTime);
             }
         }
         if (SpawnBallComp != nullptr){

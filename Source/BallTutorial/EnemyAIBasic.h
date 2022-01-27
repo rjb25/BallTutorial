@@ -43,6 +43,11 @@ public:
     FVector Direction = FVector(0.0f, 0.0f, 0.0f);
 
     UPROPERTY(EditAnywhere)
+    float TargetMaxDistance = 0.0f;
+    UPROPERTY(EditAnywhere)
+    float TargetMinDistance = 0.0f;
+
+    UPROPERTY(EditAnywhere)
     bool Enabled = true;
     UPROPERTY(EditAnywhere)
     bool JumpEvade = false;
@@ -62,7 +67,7 @@ public:
 	UFUNCTION()
     void OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor) ;
 
-    void SetSensorBox(AActor*);
+    void SetSensorBox(AActor* InSensorBox);
 
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

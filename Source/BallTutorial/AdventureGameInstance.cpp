@@ -2,3 +2,12 @@
 
 #include "AdventureGameInstance.h"
 
+void UAdventureGameInstance::PostInitProperties()
+{
+    Super::PostInitProperties();
+}
+
+void UAdventureGameInstance::BeginDestroy()
+{
+    Super::BeginDestroy();
+}

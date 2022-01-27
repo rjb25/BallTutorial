@@ -16,6 +16,8 @@ class BALLTUTORIAL_API UAdventureGameInstance : public UAdvancedFriendsGameInsta
 	GENERATED_BODY()
 
 public:
+    virtual void PostInitProperties() override;
+    virtual void BeginDestroy() override;
 
 	UPROPERTY(BlueprintReadWrite)
 	FString AdventureSlot = FString(TEXT("L_Adventure"));
