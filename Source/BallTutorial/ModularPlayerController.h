@@ -10,7 +10,7 @@
 class ASoul;
 class UMove;
 class UJump;
-class USpawnBall;
+class UAbility;
 class UJoint;
 /**
  * 
@@ -42,23 +42,23 @@ public:
 	bool ServerHurt_Validate(AActor* toHurt, float pain) override;
 	void ServerHurt_Implementation(AActor* toHurt, float pain) override;
 
-	void moveRight(float AxisValue);
-	void moveLeft(float AxisValue);
-	void moveForward(float AxisValue);
-	void moveBack(float AxisValue);
-	void rotateRight(float AxisValue);
-	void rotateLeft(float AxisValue);
+	void RightAxis(float AxisValue);
+	void ForwardAxis(float AxisValue);
+	void RotateAxis(float AxisValue);
 	void JumpPressed();
 	void JumpReleased();
 	void GetYouOne();
 	void possess();
-	void boost(float AxisValue);
-	void slow(float AxisValue);
-	void attack(float AxisValue);
-	void act(float AxisValue);
+	void BoostPressed();
+	void BoostReleased();
+	void SlowPressed();
+	void SlowReleased();
+	void AbilityPressed();
+	void AbilityReleased();
 
 	void menu();
 	void TryPossess(ASoul* PossessMe);
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ASoul> ActorToSpawn;
 
@@ -73,21 +73,17 @@ public:
     UPROPERTY(EditAnywhere)
     float CameraTurnSpeed = 1.0f;
 	float Right = 0.0f;
-	float Left = 0.0f;
 	float Forward = 0.0f;
-	float Back = 0.0f;
-	float RotateRight = 0.0f;
-	float RotateLeft = 0.0f;
-	float Act = 0.0f;
-	float Attack = 0.0f;
+	float Rotate = 0.0f;
 	bool Boost = false;
 	bool Slow = false;
 	bool Jump = false;
+	bool Ability = false;
     UMove * MovementComp = nullptr;
     UJoint * JointComp = nullptr;
     UJump * JumpComp = nullptr;
     USceneComponent * SpringComp = nullptr;
-    USpawnBall * SpawnBallComp = nullptr;
+    TArray<UAbility*> AbilityComps;
     ASoul * Soul = nullptr;
     AActor * Actor = nullptr;
     UStaticMeshComponent * Body = nullptr;

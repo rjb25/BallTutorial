@@ -2,19 +2,20 @@
 
 #pragma once
 
+#include "Ability.h"
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "SpawnBall.generated.h"
 
 UCLASS( ClassGroup=(Custom), Blueprintable, meta=(BlueprintSpawnableComponent) )
-class BALLTUTORIAL_API USpawnBall : public UActorComponent
+class BALLTUTORIAL_API USpawnBall : public UAbility
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
 	USpawnBall();
-	void Spawn(FVector Direction);
+	virtual void Use(FVector Direction) override;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> ActorToSpawn;
 	UPROPERTY(EditAnywhere)
@@ -24,6 +25,8 @@ public:
     float TimeLastFire = 0.0f;
 	UPROPERTY(EditAnywhere)
     FVector ProjectileOffset = FVector(100.0f,0.0f,100.0f);
+	UPROPERTY(EditAnywhere)
+    FRotator ProjectileRotation = FRotator(0.0f,0.0f,0.0f);
 
     AActor * Owner;
 

@@ -10,6 +10,7 @@ class UJoint;
 class UJump;
 class UMove;
 class USpawnBall;
+class UAbility;
 
 UCLASS( ClassGroup=(Custom), Blueprintable, meta=(BlueprintSpawnableComponent) )
 class BALLTUTORIAL_API UEnemyAIBasic : public UActorComponent
@@ -32,7 +33,7 @@ public:
 
     UMove * MovementComp = nullptr;
     UJump * JumpComp = nullptr;
-    USpawnBall * SpawnBallComp = nullptr;
+    TArray<UAbility*> AbilityComps;
     UStaticMeshComponent * Body = nullptr;
     UPrimitiveComponent * Primitive = nullptr;
     UJoint * JointComp = nullptr;

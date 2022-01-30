@@ -25,7 +25,7 @@ void USpawnBall::BeginPlay()
     Owner = GetOwner();
 }
 
-void USpawnBall::Spawn(FVector Direction)
+void USpawnBall::Use(FVector Direction)
 {
     if(ActorToSpawn != nullptr){
         float time = GetWorld()->GetTimeSeconds();
@@ -33,10 +33,11 @@ void USpawnBall::Spawn(FVector Direction)
             AActor * owner = GetOwner();
             FRotator OffsetRotator = UKismetMathLibrary::MakeRotFromX(Direction);
             FVector SpawnLocation = owner->GetActorLocation() + OffsetRotator.RotateVector(ProjectileOffset);
-            FRotator SpawnRotation = owner->GetActorRotation();
-            AActor* TempProjectile = GetWorld()->SpawnActor<AActor>(ActorToSpawn, SpawnLocation, SpawnRotation);
+            AActor* TempProjectile = GetWorld()->SpawnActor<AActor>(ActorToSpawn, SpawnLocation, ProjectileRotation);
             UStaticMeshComponent * body = TempProjectile->FindComponentByClass<UStaticMeshComponent>();
-            body->AddImpulse(Direction * ProjectileSpeed * body->GetMass());
+            if (body != nullptr && body->IsSimulatingPhysics()){
+                body->AddImpulse(Direction * ProjectileSpeed * body->GetMass());
+            }
             TimeLastFire = GetWorld()->GetTimeSeconds();
         }
     } else {

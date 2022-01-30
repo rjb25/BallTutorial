@@ -7,9 +7,9 @@
 #include "Components/SphereComponent.h"
 #include "Move.h"
 #include "Jump.h"
-#include "SpawnBall.h"
 #include "Soul.h"
 #include "Joint.h"
+#include "Ability.h"
 
 // Sets default values for this component's properties
 UEnemyAIBasic::UEnemyAIBasic()
@@ -39,10 +39,10 @@ void UEnemyAIBasic::BeginPlay()
     if(Owner != nullptr){
         MovementComp = Owner->FindComponentByClass<UMove>();
         JumpComp = Owner->FindComponentByClass<UJump>();
-        SpawnBallComp = Owner->FindComponentByClass<USpawnBall>();
         Body = Owner->FindComponentByClass<UStaticMeshComponent>();
         Primitive = Cast<UPrimitiveComponent>(Body);
         JointComp = Owner->FindComponentByClass<UJoint>();
+        Owner->GetComponents<UAbility>(AbilityComps);
     }
 }
 
@@ -93,8 +93,10 @@ void UEnemyAIBasic::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
                 MovementComp->Move(CurrentDirection * Direction,DeltaTime);
             }
         }
-        if (SpawnBallComp != nullptr){
-            SpawnBallComp->Spawn(CurrentDirection);
+        if (AbilityComps.Num() > 0){
+            for (UAbility * AbilityComp : AbilityComps){
+                AbilityComp->Use(CurrentDirection);
+            }
         }
         if (JumpComp != nullptr && JumpEvade){
             JumpComp->Jump();

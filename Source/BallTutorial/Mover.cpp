@@ -216,10 +216,6 @@ void UMover::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponent
                     FVector AdjustedScale = UKismetMathLibrary::Multiply_VectorVector(Current, ActorScale);
                     GetOwner()->SetActorScale3D(AdjustedScale);
             }
-
-            //Do wrap up stuff for next iteration
-
-
         }
     }
 }

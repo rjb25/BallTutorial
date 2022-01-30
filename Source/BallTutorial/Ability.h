@@ -4,34 +4,26 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "ControllerInterface.h"
-#include "Spike.generated.h"
+#include "Ability.generated.h"
 
-class AActor;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BALLTUTORIAL_API USpike : public UActorComponent
+class BALLTUTORIAL_API UAbility : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	USpike();
-	AActor * Owner;
-
-	float TimeLastHit;
-    UPROPERTY(EditAnywhere)
-    float m_damage;
+	UAbility();
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UFUNCTION()
-	void DealDamage(AActor* OverlappedActor, AActor* OtherActor);
-
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+    virtual void Use(FVector Direction);
+
 		
 };

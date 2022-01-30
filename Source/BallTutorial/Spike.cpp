@@ -16,7 +16,6 @@ USpike::USpike()
 	// ...
 }
 
-
 // Called when the game starts
 void USpike::BeginPlay()
 {
@@ -26,7 +25,6 @@ void USpike::BeginPlay()
 	Owner->OnActorBeginOverlap.AddDynamic(this, &USpike::DealDamage);
 }
 
-
 // Called every frame
 void USpike::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -35,11 +33,20 @@ void USpike::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponent
 	// ...
 }
 
-
 void USpike::DealDamage(AActor* OverlappedActor, AActor* OtherActor){
-
+    float currentTime = GetWorld()->GetTimeSeconds();
+    if( currentTime > 1.0f + TimeLastHit){
         UHealthComponent * health = OtherActor->FindComponentByClass<UHealthComponent>();
-        if (health != nullptr){
-            health->Suffer(m_damage);
+        APlayerController* PController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+        IControllerInterface * MyController = Cast<IControllerInterface>(PController);
+        if (health != nullptr && (OtherActor != Owner)) {
+            if (health->m_networked && MyController != nullptr) {
+                MyController->ServerHurt(OtherActor, m_damage);
+            }
+            else {
+                health->Suffer(m_damage);
+            }
+            TimeLastHit = currentTime;
         }
+    }
 }

@@ -43,6 +43,7 @@ set ttimeoutlen=100
 set visualbell
 set wildmenu
 set wildmode=list:longest,longest:full
+set window=74
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -101,7 +102,7 @@ $argadd ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.h
 set stal=2
 tabnew
 tabrewind
-edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.cpp
+edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.h
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -114,11 +115,145 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 118 + 118) / 237)
-exe 'vert 2resize ' . ((&columns * 118 + 118) / 237)
+exe 'vert 1resize ' . ((&columns * 118 + 130) / 260)
+exe 'vert 2resize ' . ((&columns * 141 + 130) / 260)
 argglobal
 44argu
-if bufexists("~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.cpp") | buffer ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.cpp | else | edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.cpp | endif
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal backupcopy=
+setlocal balloonexpr=
+setlocal nobinary
+setlocal nobreakindent
+setlocal breakindentopt=
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),0],:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
+setlocal commentstring=/*%s*/
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal cursorlineopt=both
+setlocal define=^\\s*#\\s*define
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'cpp'
+setlocal filetype=cpp
+endif
+setlocal fixendofline
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=croql
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal formatprg=
+setlocal grepprg=
+setlocal iminsert=0
+setlocal imsearch=-1
+setlocal include=^\\s*#\\s*include
+setlocal includeexpr=
+setlocal indentexpr=
+setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal lispwords=
+setlocal nolist
+setlocal makeencoding=
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=bin,hex
+set number
+setlocal nonumber
+setlocal numberwidth=4
+setlocal omnifunc=ccomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal scrolloff=-1
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal showbreak=
+setlocal sidescrolloff=-1
+setlocal signcolumn=auto
+setlocal nosmartindent
+setlocal softtabstop=0
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal spelloptions=
+setlocal statusline=
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'cpp'
+setlocal syntax=cpp
+endif
+setlocal tabstop=4
+setlocal tagcase=
+setlocal tagfunc=
+setlocal tags=
+setlocal termwinkey=
+setlocal termwinscroll=10000
+setlocal termwinsize=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal noundofile
+setlocal undolevels=-123456
+setlocal varsofttabstop=
+setlocal vartabstop=
+setlocal wincolor=
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+silent! normal! zE
+let s:l = 22 - ((21 * winheight(0) + 36) / 72)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+22
+normal! 0
+lcd ~/Documents/Unreal\ Projects/BallTutorial/Source
+wincmd w
+argglobal
+44argu
+if bufexists("~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.cpp") | buffer ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.cpp | else | edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.cpp | endif
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -243,153 +378,19 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 92 - ((46 * winheight(0) + 33) / 67)
+let s:l = 42 - ((41 * winheight(0) + 36) / 72)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-92
-normal! 021|
+42
+normal! 035|
 lcd ~/Documents/Unreal\ Projects/BallTutorial/Source
 wincmd w
-argglobal
-44argu
-if bufexists("~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.h") | buffer ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.h | else | edit ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.h | endif
-setlocal keymap=
-setlocal noarabic
-setlocal autoindent
-setlocal backupcopy=
-setlocal balloonexpr=
-setlocal nobinary
-setlocal nobreakindent
-setlocal breakindentopt=
-setlocal bufhidden=
-setlocal buflisted
-setlocal buftype=
-setlocal cindent
-setlocal cinkeys=0{,0},0),0],:,0#,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinwords=if,else,while,do,for,switch
-setlocal colorcolumn=
-setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
-setlocal commentstring=/*%s*/
-setlocal complete=.,w,b,u,t,i
-setlocal concealcursor=
-setlocal conceallevel=0
-setlocal completefunc=
-setlocal nocopyindent
-setlocal cryptmethod=
-setlocal nocursorbind
-setlocal nocursorcolumn
-setlocal nocursorline
-setlocal cursorlineopt=both
-setlocal define=^\\s*#\\s*define
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal expandtab
-if &filetype != 'cpp'
-setlocal filetype=cpp
-endif
-setlocal fixendofline
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=0
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldmarker={{{,}}}
-setlocal foldmethod=manual
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldtext=foldtext()
-setlocal formatexpr=
-setlocal formatoptions=croql
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal formatprg=
-setlocal grepprg=
-setlocal iminsert=0
-setlocal imsearch=-1
-setlocal include=^\\s*#\\s*include
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
-setlocal nolinebreak
-setlocal nolisp
-setlocal lispwords=
-setlocal nolist
-setlocal makeencoding=
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal modeline
-setlocal modifiable
-setlocal nrformats=bin,hex
-set number
-setlocal number
-setlocal numberwidth=4
-setlocal omnifunc=ccomplete#Complete
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal noreadonly
-setlocal norelativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal noscrollbind
-setlocal scrolloff=-1
-setlocal shiftwidth=4
-setlocal noshortname
-setlocal showbreak=
-setlocal sidescrolloff=-1
-setlocal signcolumn=auto
-setlocal nosmartindent
-setlocal softtabstop=0
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal spelloptions=
-setlocal statusline=
-setlocal suffixesadd=
-setlocal swapfile
-setlocal synmaxcol=3000
-if &syntax != 'cpp'
-setlocal syntax=cpp
-endif
-setlocal tabstop=4
-setlocal tagcase=
-setlocal tagfunc=
-setlocal tags=
-setlocal termwinkey=
-setlocal termwinscroll=10000
-setlocal termwinsize=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal noundofile
-setlocal undolevels=-123456
-setlocal varsofttabstop=
-setlocal vartabstop=
-setlocal wincolor=
-setlocal nowinfixheight
-setlocal nowinfixwidth
-setlocal wrap
-setlocal wrapmargin=0
-silent! normal! zE
-let s:l = 47 - ((42 * winheight(0) + 33) / 67)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-47
-normal! 05|
-lcd ~/Documents/Unreal\ Projects/BallTutorial/Source
-wincmd w
-exe 'vert 1resize ' . ((&columns * 118 + 118) / 237)
-exe 'vert 2resize ' . ((&columns * 118 + 118) / 237)
+2wincmd w
+exe 'vert 1resize ' . ((&columns * 118 + 130) / 260)
+exe 'vert 2resize ' . ((&columns * 141 + 130) / 260)
 tabnext
-edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/KismetMathLibrary.inl
+edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h
 set splitbelow splitright
 wincmd _ | wincmd |
 split
@@ -402,11 +403,13 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe '1resize ' . ((&lines * 55 + 35) / 70)
-exe '2resize ' . ((&lines * 11 + 35) / 70)
+exe '1resize ' . ((&lines * 55 + 37) / 75)
+exe 'vert 1resize ' . ((&columns * 237 + 130) / 260)
+exe '2resize ' . ((&lines * 11 + 37) / 75)
+exe 'vert 2resize ' . ((&columns * 237 + 130) / 260)
 argglobal
 1argu
-if bufexists("~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/KismetMathLibrary.inl") | buffer ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/KismetMathLibrary.inl | else | edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/KismetMathLibrary.inl | endif
+if bufexists("~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h") | buffer ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h | else | edit ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h | endif
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -531,12 +534,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1577 - ((27 * winheight(0) + 27) / 55)
+let s:l = 2025 - ((27 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1577
-normal! 020|
+2025
+normal! 018|
 lcd ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine
 wincmd w
 argglobal
@@ -667,17 +670,19 @@ setlocal wrap
 setlocal wrapmargin=0
 lcd ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine
 wincmd w
-exe '1resize ' . ((&lines * 55 + 35) / 70)
-exe '2resize ' . ((&lines * 11 + 35) / 70)
+exe '1resize ' . ((&lines * 55 + 37) / 75)
+exe 'vert 1resize ' . ((&columns * 237 + 130) / 260)
+exe '2resize ' . ((&lines * 11 + 37) / 75)
+exe 'vert 2resize ' . ((&columns * 237 + 130) / 260)
 tabnext 1
 set stal=1
-badd +99 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.cpp
+badd +96 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.cpp
 badd +4 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/AdventureGameInstance.cpp
 badd +4 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/AdventureSaveGame.cpp
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/BallTutorial.Build.cs
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/BallTutorial.cpp
 badd +0 BallTutorial/Components/
-badd +45 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/C_HitDamager.cpp
+badd +8 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/C_HitDamager.cpp
 badd +4 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/HealthComponent.cpp
 badd +11 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/IsHazard.cpp
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/jasonbuf
@@ -694,12 +699,12 @@ badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RacingWidg
 badd +45 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingBall.cpp
 badd +8 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingPlayerController.cpp
 badd +36 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/SpawnBall.cpp
-badd +32 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.cpp
+badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.cpp
 badd +20 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/AdventureGameInstance.h
 badd +18 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/AdventureSaveGame.h
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/BallTutorial.h
 badd +32 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ControllableInterface.h
-badd +10 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/C_HitDamager.h
+badd +20 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/C_HitDamager.h
 badd +26 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/HealthComponent.h
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/IsHazard.h
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/OnComponentHit.h
@@ -714,13 +719,14 @@ badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RacingPlay
 badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RacingWidget.h
 badd +25 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingBall.h
 badd +30 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/RollingPlayerController.h
-badd +18 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/SpawnBall.h
-badd +28 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.h
+badd +30 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/SpawnBall.h
+badd +21 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Spike.h
+badd +1577 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/KismetMathLibrary.inl
+badd +47 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.h
+badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Components
 badd +1531 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/KismetMathLibrary.h
-badd +56 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/EnemyAIBasic.h
 badd +96 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Engine/EngineBaseTypes.h
 badd +32 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Jump.cpp
-badd +1 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Components
 badd +602 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Components/SceneComponent.h
 badd +41 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Joint.h
 badd +50 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Joint.cpp
@@ -738,7 +744,7 @@ badd +21 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Jump.h
 badd +44 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Drag.cpp
 badd +36 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Drag.h
 badd +30 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Pawn.cpp
-badd +259 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ModularPlayerController.cpp
+badd +257 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ModularPlayerController.cpp
 badd +100 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h
 badd +27 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Soul.h
 badd +32 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ReplicateMarker.cpp
@@ -809,9 +815,9 @@ badd +805 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Engine/Dem
 badd +19 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Soul.cpp
 badd +22 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Slow.cpp
 badd +18 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/Slow.h
-badd +161 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/AI/Navigation/AvoidanceManager.h
+badd +225 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/AI/Navigation/AvoidanceManager.h
 badd +30 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ShowHide.h
-badd +23 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ShowHide.cpp
+badd +32 ~/Documents/Unreal\ Projects/BallTutorial/Source/BallTutorial/ShowHide.cpp
 badd +31 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Components/PrimitiveComponent.cpp
 badd +165 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/PhysicsEngine/PhysUtils.cpp
 badd +301 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Components/InstancedStaticMeshComponent.h
@@ -823,7 +829,9 @@ badd +524 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/GameInstan
 badd +161 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/BlueprintPlatformLibrary.h
 badd +3 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Private/Kismet/BlueprintPlatformLibrary.cpp
 badd +203 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Atmosphere/AtmosphericFogComponent.h
-badd +0 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/Classes/Kismet/KismetMathLibrary.inl
+badd +1 \*\*/Array.h
+badd +1 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Engine/\*\*
+badd +1172 ~/Desktop/UnrealEngine/Engine/Source/Runtime/Core/Public/Containers/Array.h
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf
 endif

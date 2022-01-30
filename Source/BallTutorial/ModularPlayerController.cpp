@@ -10,7 +10,7 @@
 #include "Move.h"
 #include "Jump.h"
 #include "Joint.h"
-#include "SpawnBall.h"
+#include "Ability.h"
 #include "Soul.h"
 
 AModularPlayerController::AModularPlayerController()
@@ -67,7 +67,7 @@ void AModularPlayerController::Possessed(ASoul* InSoul) {
         JumpComp = InSoul->FindComponentByClass<UJump>();
         JointComp = InSoul->FindComponentByClass<UJoint>();
         SpringComp = InSoul->FindComponentByClass<USpringArmComponent>();
-        SpawnBallComp = InSoul->FindComponentByClass<USpawnBall>();
+        InSoul->GetComponents<UAbility>(AbilityComps);
         Body = InSoul->FindComponentByClass<UStaticMeshComponent>();
         if(Soul != nullptr){
             Soul->PlayerController = nullptr;
@@ -99,16 +99,15 @@ void AModularPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 
 	// Respond every frame to the values of our two movement axes, "MoveX" and "MoveY".
-	InputComponent->BindAxis("Right", this, &AModularPlayerController::moveRight);
-	InputComponent->BindAxis("Left", this, &AModularPlayerController::moveLeft);
-	InputComponent->BindAxis("Forward", this, &AModularPlayerController::moveForward);
-	InputComponent->BindAxis("Back", this, &AModularPlayerController::moveBack);
-	InputComponent->BindAxis("RotateRight", this, &AModularPlayerController::rotateRight);
-	InputComponent->BindAxis("RotateLeft", this, &AModularPlayerController::rotateLeft);
-	InputComponent->BindAxis("Slow", this, &AModularPlayerController::slow);
-	InputComponent->BindAxis("Boost", this, &AModularPlayerController::boost);
-	InputComponent->BindAxis("Attack", this, &AModularPlayerController::attack);
-	InputComponent->BindAxis("Act", this, &AModularPlayerController::act);
+	InputComponent->BindAxis("Right", this, &AModularPlayerController::RightAxis);
+	InputComponent->BindAxis("Forward", this, &AModularPlayerController::ForwardAxis);
+	InputComponent->BindAxis("Rotate", this, &AModularPlayerController::RotateAxis);
+	InputComponent->BindAction("Ability", IE_Pressed, this, &AModularPlayerController::AbilityPressed);
+	InputComponent->BindAction("Ability", IE_Released, this, &AModularPlayerController::AbilityReleased);
+	InputComponent->BindAction("Slow", IE_Pressed, this, &AModularPlayerController::SlowPressed);
+	InputComponent->BindAction("Slow", IE_Released, this, &AModularPlayerController::SlowReleased);
+	InputComponent->BindAction("Boost", IE_Pressed, this, &AModularPlayerController::BoostPressed);
+	InputComponent->BindAction("Boost", IE_Released, this, &AModularPlayerController::BoostReleased);
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AModularPlayerController::JumpPressed);
 	InputComponent->BindAction("Jump", IE_Released, this, &AModularPlayerController::JumpReleased);
 	InputComponent->BindAction("Menu", IE_Pressed, this, &AModularPlayerController::menu);
@@ -116,33 +115,22 @@ void AModularPlayerController::SetupInputComponent()
 	InputComponent->BindAction("GetYouOne", IE_Pressed, this, &AModularPlayerController::GetYouOne);
 }
 
-void AModularPlayerController::moveRight(float AxisValue) {
-    Right = AxisValue;
+void AModularPlayerController::RightAxis(float AxisValue) {
+    Right = FMath::Clamp(AxisValue,-1.0f,1.0f);
 }
 
-void AModularPlayerController::moveLeft(float AxisValue) {
-    Left = AxisValue;
+void AModularPlayerController::ForwardAxis(float AxisValue) {
+    Forward = FMath::Clamp(AxisValue,-1.0f,1.0f);
 }
 
-void AModularPlayerController::moveForward(float AxisValue) {
-    Forward = AxisValue;
-}
-
-void AModularPlayerController::moveBack(float AxisValue) {
-    Back = AxisValue;
-}
-
-void AModularPlayerController::rotateRight(float AxisValue) {
-    RotateRight = AxisValue;
-}
-
-void AModularPlayerController::rotateLeft(float AxisValue) {
-    RotateLeft = AxisValue;
+void AModularPlayerController::RotateAxis(float AxisValue) {
+    Rotate = FMath::Clamp(AxisValue,-1.0f,1.0f);
 }
 
 void AModularPlayerController::JumpPressed() {
     Jump = true;
 }
+
 void AModularPlayerController::JumpReleased() {
     Jump = false;
 }
@@ -153,10 +141,11 @@ void AModularPlayerController::menu() {
     Save->newGame = false;
     if(Actor){
         Save->PlayerLocation = Actor->GetActorLocation();
-        Save->PlayerCheckpoint =  Checkpoint;
+        Save->PlayerCheckpoint = Checkpoint;
     }
     UGameplayStatics::SaveGameToSlot(Save, Game->AdventureSlot, 0);
 }
+
 void AModularPlayerController::possess() {
     FVector Start = Actor->GetActorLocation() - FVector(0.0f,0.0f,50.0f);
     FVector End = Actor->GetActorLocation() + FVector(0.0f,0.0f,50.0f);
@@ -182,9 +171,11 @@ void AModularPlayerController::possess() {
         }
     }
 }
+
 void AModularPlayerController::TryPossess(ASoul * PossessMe) {
     Possessed(PossessMe);
 }
+
 void AModularPlayerController::GetYouOne() {
     if(ActorToSpawn != nullptr){
             FVector SpawnLocation = Actor->GetActorLocation() + FVector(200.0f, 0.0f, 10.0f);
@@ -196,27 +187,25 @@ void AModularPlayerController::GetYouOne() {
     }
 }
 
-void AModularPlayerController::attack(float AxisValue) {
+void AModularPlayerController::AbilityPressed() {
+    Ability = true;
 }
-void AModularPlayerController::act(float AxisValue) {
-
-    Act = AxisValue;
+void AModularPlayerController::AbilityReleased() {
+    Ability = false;
 }
 
-void AModularPlayerController::boost(float AxisValue) {
-    if (AxisValue > 0.1){
+void AModularPlayerController::BoostPressed() {
         Boost = true;
-    }else {
+}
+void AModularPlayerController::BoostReleased() {
         Boost = false;
-    }
 }
 
-void AModularPlayerController::slow(float AxisValue) {
-    if (AxisValue > 0.1){
+void AModularPlayerController::SlowPressed() {
         Slow = true;
-    }else {
+}
+void AModularPlayerController::SlowReleased() {
         Slow = false;
-    }
 }
 
 void AModularPlayerController::ToCheckpoint() {
@@ -234,11 +223,9 @@ void AModularPlayerController::Tick(float DeltaTime)
         FRotator SpringRotation = SpringComp->GetComponentRotation();
         FVector VerticalAxis = { 0,0,1 };
         if (MovementComp != nullptr){
-            float Side = Right + Left;
-            float Ahead = Forward + Back;
             FVector RotatedUnitDirection;
-            if (!(Side == 0 && Ahead == 0) && DeltaTime < 0.3f){
-                FVector Direction = FVector(Ahead, Side, 0);
+            if (!(Right == 0 && Forward == 0) && DeltaTime < 0.3f){
+                FVector Direction = FVector(Forward, Right, 0);
                 FVector Nowhere = { 0,0,0 };
                 FVector RotatedDirection = 
                     UKismetMathLibrary::RotateAngleAxis(Direction, 
@@ -252,14 +239,15 @@ void AModularPlayerController::Tick(float DeltaTime)
             }
             MovementComp->Move(RotatedUnitDirection,DeltaTime,Boost,Slow);
         }
-        if (SpawnBallComp != nullptr && Act != 0){
+        if (AbilityComps.Num() > 0 && Ability){
             FVector RotatedUnitForwardDirection = 
                 UKismetMathLibrary::RotateAngleAxis(FVector(1.0f,0.0f,0.0f), 
                         SpringRotation.Yaw, 
                         VerticalAxis);
-            SpawnBallComp->Spawn(RotatedUnitForwardDirection);
+            for (UAbility * AbilityComp : AbilityComps){
+                AbilityComp->Use(RotatedUnitForwardDirection);
+            }
         }
-        float Rotate = RotateRight + RotateLeft;
         if( Rotate != 0){
             FRotator RotationChange = FRotator(0.0f, 0.0f, 0.0f);
             RotationChange.Yaw = Rotate * CameraTurnSpeed;
