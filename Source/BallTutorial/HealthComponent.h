@@ -36,6 +36,7 @@ public:
     bool ClientSuffer_Validate(float Damage);
     void ClientSuffer_Implementation(float Damage);
 
+    TArray<int> Teams;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

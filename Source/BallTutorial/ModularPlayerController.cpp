@@ -12,6 +12,8 @@
 #include "Joint.h"
 #include "Ability.h"
 #include "Soul.h"
+#include "HealthComponent.h"
+#include "Camera/CameraComponent.h"
 
 AModularPlayerController::AModularPlayerController()
 {
@@ -39,7 +41,7 @@ void AModularPlayerController::BeginPlay()
             Possessed(InSoul);
         }
     } else {
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Actor class to spawn not set")));
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Actor class to spawn not set")));
     }
 }
 
@@ -65,10 +67,15 @@ void AModularPlayerController::Possessed(ASoul* InSoul) {
     if (InSoul != nullptr){
         MovementComp = InSoul->FindComponentByClass<UMove>();
         JumpComp = InSoul->FindComponentByClass<UJump>();
+        HealthComp = InSoul->FindComponentByClass<UHealthComponent>();
         JointComp = InSoul->FindComponentByClass<UJoint>();
         SpringComp = InSoul->FindComponentByClass<USpringArmComponent>();
+        CameraComp = InSoul->FindComponentByClass<UCameraComponent>();
         InSoul->GetComponents<UAbility>(AbilityComps);
         Body = InSoul->FindComponentByClass<UStaticMeshComponent>();
+        if(HealthComp != nullptr){
+            HealthComp->Teams.Add(0);
+        }
         if(Soul != nullptr){
             Soul->PlayerController = nullptr;
         }
@@ -102,6 +109,7 @@ void AModularPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("Right", this, &AModularPlayerController::RightAxis);
 	InputComponent->BindAxis("Forward", this, &AModularPlayerController::ForwardAxis);
 	InputComponent->BindAxis("Rotate", this, &AModularPlayerController::RotateAxis);
+	InputComponent->BindAxis("Nod", this, &AModularPlayerController::NodAxis);
 	InputComponent->BindAction("Ability", IE_Pressed, this, &AModularPlayerController::AbilityPressed);
 	InputComponent->BindAction("Ability", IE_Released, this, &AModularPlayerController::AbilityReleased);
 	InputComponent->BindAction("Slow", IE_Pressed, this, &AModularPlayerController::SlowPressed);
@@ -121,6 +129,9 @@ void AModularPlayerController::RightAxis(float AxisValue) {
 
 void AModularPlayerController::ForwardAxis(float AxisValue) {
     Forward = FMath::Clamp(AxisValue,-1.0f,1.0f);
+}
+void AModularPlayerController::NodAxis(float AxisValue) {
+    Nod = FMath::Clamp(AxisValue,-1.0f,1.0f);
 }
 
 void AModularPlayerController::RotateAxis(float AxisValue) {
@@ -189,9 +200,11 @@ void AModularPlayerController::GetYouOne() {
 
 void AModularPlayerController::AbilityPressed() {
     Ability = true;
+
 }
 void AModularPlayerController::AbilityReleased() {
     Ability = false;
+	SetInputMode(FInputModeGameOnly());
 }
 
 void AModularPlayerController::BoostPressed() {
@@ -248,10 +261,13 @@ void AModularPlayerController::Tick(float DeltaTime)
                 AbilityComp->Use(RotatedUnitForwardDirection);
             }
         }
-        if( Rotate != 0){
+        if( Rotate != 0 || Nod != 0){
             FRotator RotationChange = FRotator(0.0f, 0.0f, 0.0f);
+            FRotator CameraNod = FRotator(0.0f, 0.0f, 0.0f);
             RotationChange.Yaw = Rotate * CameraTurnSpeed;
+            CameraNod.Pitch = Nod * CameraTurnSpeed;
             SpringComp->AddWorldRotation(RotationChange);
+            CameraComp->AddLocalRotation(CameraNod);
             if(JointComp != nullptr){
                 JointComp->CurrentRotation = SpringComp->GetComponentRotation();
             }

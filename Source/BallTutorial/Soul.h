@@ -7,6 +7,14 @@
 #include "Soul.generated.h"
 class AModularPlayerController;
 
+UENUM()
+enum Trait
+{
+    Player     UMETA(DisplayName = "Player"),
+    Bot        UMETA(DisplayName = "Bot"),
+    Neutral    UMETA(DisplayName = "Neutral"),
+};
+
 UCLASS()
 class BALLTUTORIAL_API ASoul : public AActor
 {
@@ -21,10 +29,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
     UPROPERTY(BlueprintReadWrite)
     AModularPlayerController * PlayerController = nullptr;
-    
-
 };

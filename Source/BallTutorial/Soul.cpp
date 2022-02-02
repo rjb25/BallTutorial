@@ -8,7 +8,7 @@
 ASoul::ASoul()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 }
 
@@ -17,13 +17,4 @@ void ASoul::BeginPlay()
 {
 	Super::BeginPlay();
     if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("FOR AUIR")));
-	
 }
-
-// Called every frame
-void ASoul::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-

@@ -10,6 +10,7 @@
 #include "Soul.h"
 #include "Joint.h"
 #include "Ability.h"
+#include "HealthComponent.h"
 
 // Sets default values for this component's properties
 UEnemyAIBasic::UEnemyAIBasic()
@@ -42,6 +43,10 @@ void UEnemyAIBasic::BeginPlay()
         Body = Owner->FindComponentByClass<UStaticMeshComponent>();
         Primitive = Cast<UPrimitiveComponent>(Body);
         JointComp = Owner->FindComponentByClass<UJoint>();
+        HealthComp = Owner->FindComponentByClass<UHealthComponent>();
+        if(HealthComp != nullptr){
+            HealthComp->Teams.Add(1);
+        }
         Owner->GetComponents<UAbility>(AbilityComps);
     }
 }

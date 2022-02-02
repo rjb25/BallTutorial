@@ -108,6 +108,8 @@ public:
     AActor * SensorBox = nullptr;
 
     int CurrentWave = 0;
+    TArray<AActor*> SpawnedActors;
+    bool Resetting = false;
 
 	UFUNCTION()
 	void OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor);
@@ -116,12 +118,12 @@ public:
     void OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor) ;
 
 	UFUNCTION()
-    void SoulDied(AActor* DestroyedActor) ;
+    void SoulMustDied(AActor* DestroyedActor) ;
     int ActorsAlive = 0;
 
     void SpawnWave();
     void SpawnIt(FSpawnable Spawn);
-    bool AwaitingPlayer = true;
+    void Reset();
     /*
     void DropIt(FDropable Drop);
     */

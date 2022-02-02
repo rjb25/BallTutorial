@@ -29,8 +29,6 @@ void USpike::BeginPlay()
 void USpike::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
 void USpike::DealDamage(AActor* OverlappedActor, AActor* OtherActor){

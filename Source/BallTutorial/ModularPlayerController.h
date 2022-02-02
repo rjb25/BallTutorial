@@ -12,6 +12,9 @@ class UMove;
 class UJump;
 class UAbility;
 class UJoint;
+class UCameraComponent;
+class UHealthComponent;
+
 /**
  * 
  */
@@ -45,6 +48,7 @@ public:
 	void RightAxis(float AxisValue);
 	void ForwardAxis(float AxisValue);
 	void RotateAxis(float AxisValue);
+	void NodAxis(float AxisValue);
 	void JumpPressed();
 	void JumpReleased();
 	void GetYouOne();
@@ -75,6 +79,7 @@ public:
 	float Right = 0.0f;
 	float Forward = 0.0f;
 	float Rotate = 0.0f;
+	float Nod = 0.0f;
 	bool Boost = false;
 	bool Slow = false;
 	bool Jump = false;
@@ -83,6 +88,8 @@ public:
     UJoint * JointComp = nullptr;
     UJump * JumpComp = nullptr;
     USceneComponent * SpringComp = nullptr;
+    UCameraComponent * CameraComp = nullptr;
+    UHealthComponent * HealthComp = nullptr;
     TArray<UAbility*> AbilityComps;
     ASoul * Soul = nullptr;
     AActor * Actor = nullptr;

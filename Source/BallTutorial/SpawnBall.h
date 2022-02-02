@@ -7,6 +7,8 @@
 #include "Components/ActorComponent.h"
 #include "SpawnBall.generated.h"
 
+class UHealthComponent;
+
 UCLASS( ClassGroup=(Custom), Blueprintable, meta=(BlueprintSpawnableComponent) )
 class BALLTUTORIAL_API USpawnBall : public UAbility
 {
@@ -28,13 +30,10 @@ public:
 	UPROPERTY(EditAnywhere)
     FRotator ProjectileRotation = FRotator(0.0f,0.0f,0.0f);
 
-    AActor * Owner;
+    AActor * Owner = nullptr;
+    UHealthComponent * HealthComp = nullptr;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 };

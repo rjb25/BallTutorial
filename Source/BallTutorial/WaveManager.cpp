@@ -61,15 +61,19 @@ void AWaveManager::Tick(float DeltaTime)
 void AWaveManager::OnOverlapBegin(AActor * OverlappedActor, AActor * OtherActor){
     ASoul * OtherSoul = Cast<ASoul>(OtherActor);
     if(OtherSoul != nullptr){
-        if(OtherSoul->PlayerController != nullptr && AwaitingPlayer){
+        if(OtherSoul->PlayerController != nullptr && CurrentWave == 0){
             SpawnWave();
-            AwaitingPlayer = false;
         }
     }
 }
 
 void AWaveManager::OnOverlapEnd(AActor * OverlappedActor, AActor * OtherActor){
-
+    ASoul * OtherSoul = Cast<ASoul>(OtherActor);
+    if(OtherSoul != nullptr){
+        if(OtherSoul->PlayerController != nullptr && CurrentWave != Waves.Num()){
+            Reset();
+        }
+    }
 }
 
 void AWaveManager::SpawnWave(){
@@ -96,6 +100,7 @@ void AWaveManager::SpawnWave(){
            */
         CurrentWave++;
     }
+    SpawnedActors.Remove(nullptr);
 }
 
 void AWaveManager::SpawnIt(FSpawnable Spawn){
@@ -107,26 +112,37 @@ void AWaveManager::SpawnIt(FSpawnable Spawn){
     }
     FRotator SpawnRotation = FRotator(0.0f,0.0f,0.0f);
     AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(Spawn.SoulToSpawn, SpawnLocation, SpawnRotation);
+    SpawnedActors.Add(SpawnedActor);
     if(SpawnedActor){
-        SpawnedActor->OnDestroyed.AddDynamic(this, &AWaveManager::SoulDied);
+        if(Spawn.MustDie){
+            ActorsAlive++;
+            SpawnedActor->OnDestroyed.AddDynamic(this, &AWaveManager::SoulMustDied);
+        }
+
         UEnemyAIBasic * EnemyAIBasic = SpawnedActor->FindComponentByClass<UEnemyAIBasic>();
         if (EnemyAIBasic != nullptr) {
             EnemyAIBasic->SetSensorBox(SensorBox);
         }
     }
-    if(Spawn.MustDie){
-        ActorsAlive++;
-    }
 }
 
 /*
-
 void AWaveManager::DropIt(FDropable Drop){
 }
 */
-void AWaveManager::SoulDied(AActor * DestroyedActor){
+void AWaveManager::SoulMustDied(AActor * DestroyedActor){
     ActorsAlive--;
-    if (ActorsAlive < 1) {
+    if (ActorsAlive < 1 && !Resetting) {
         SpawnWave();
     }
+}
+
+void AWaveManager::Reset(){
+    SpawnedActors.Remove(nullptr);
+    Resetting = true;
+    for(AActor * Actor : SpawnedActors){
+        Actor->Destroy(true);
+    }
+    Resetting = false;
+    CurrentWave = 0;
 }
