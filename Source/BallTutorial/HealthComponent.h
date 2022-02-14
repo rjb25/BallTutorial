@@ -19,23 +19,25 @@ private:
 	float DefaultHealth = 3.0f;
 	float Health = 0.0f;
 	ARacingGameMode* GameModeRef;
-	AActor* owner;
+	AActor* Owner;
 
 public:	
-	UPROPERTY(EditAnywhere)
-    bool m_networked = false;
 	// Sets default values for this component's properties
 	UHealthComponent();
-	void Suffer(float Damage);
+    UFUNCTION()
+    void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+	//void Suffer(float Damage);
 
-	void Hurt(float Damage);
+	//void Hurt(float Damage);
 	void Death();
 
+    /*
 	UFUNCTION( NetMulticast, Reliable,  WithValidation)
 	void ClientSuffer(float Damage);
     bool ClientSuffer_Validate(float Damage);
     void ClientSuffer_Implementation(float Damage);
-
+    */
+    UPROPERTY()
     TArray<int> Teams;
 protected:
 	// Called when the game starts

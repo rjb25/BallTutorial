@@ -96,6 +96,7 @@ public:
     UPROPERTY(EditAnywhere)
     TArray<FWave> Waves;
 
+    UPROPERTY()
     TArray<ASoul*> NeededDeaths;
 
     UPROPERTY(EditAnywhere,meta=(MakeEditWidget))
@@ -108,6 +109,7 @@ public:
     AActor * SensorBox = nullptr;
 
     int CurrentWave = 0;
+    UPROPERTY()
     TArray<AActor*> SpawnedActors;
     bool Resetting = false;
 

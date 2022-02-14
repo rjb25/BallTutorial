@@ -2,8 +2,6 @@
 
 #include "HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "RacingGameMode.h"
-#include "RollingBall.h"
 #include "ModularPlayerController.h"
 
 // Sets default values for this component's properties
@@ -23,14 +21,40 @@ void UHealthComponent::BeginPlay()
     Super::BeginPlay();
 
     Health = DefaultHealth;	
-    GameModeRef = Cast<ARacingGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 
-    owner = GetOwner();
-    if(m_networked){
-        owner->SetReplicates(true);
+    Owner = GetOwner();
+    if(Owner->HasAuthority()){
+        Owner->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::TakeDamage);
+    }
+}
+void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser){
+    if(Damage == 0 || Health <= 0)
+    {
+        return;
+    }
+
+    Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
+
+    if(Health <= 0)
+    {
+        APlayerController * Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+        if(Controller){
+            AModularPlayerController * Player = Cast<AModularPlayerController>(Controller);
+            if (Player != nullptr &&Player->Actor == Owner){
+                Player->ToCheckpoint();
+            }else{
+                Death();
+            }
+        }
+        Health = DefaultHealth;
     }
 }
 
+void UHealthComponent::Death(){
+    Owner->Destroy();
+}
+
+/*
 void UHealthComponent::Suffer(float Damage){
     if(Damage == 0 || Health <= 0)
     {
@@ -67,9 +91,6 @@ void UHealthComponent::Hurt(float Damage){
     }
 }
 
-void UHealthComponent::Death(){
-    owner->Destroy(true);
-}
 
 bool UHealthComponent::ClientSuffer_Validate(float Damage) {
     return true;
@@ -77,3 +98,4 @@ bool UHealthComponent::ClientSuffer_Validate(float Damage) {
 void UHealthComponent::ClientSuffer_Implementation(float Damage) {
     Hurt(Damage);
 }
+*/

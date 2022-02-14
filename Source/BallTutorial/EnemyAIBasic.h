@@ -25,6 +25,7 @@ public:
     UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> SensorBoxToSpawn = nullptr;
 
+    UPROPERTY()
     TArray<AActor*> Targets;
 
     UPROPERTY(EditAnywhere)
@@ -35,6 +36,7 @@ public:
     UMove * MovementComp = nullptr;
     UJump * JumpComp = nullptr;
     UHealthComponent * HealthComp = nullptr;
+    UPROPERTY()
     TArray<UAbility*> AbilityComps;
     UStaticMeshComponent * Body = nullptr;
     UPrimitiveComponent * Primitive = nullptr;
@@ -43,7 +45,6 @@ public:
     UPROPERTY(EditAnywhere)
     FVector SensoryScale = FVector(1.0f, 1.0f, 1.0f);
     FVector StartLocation = FVector(0.0f,0.0f,0.0f);
-    FVector Direction = FVector(0.0f, 0.0f, 0.0f);
 
     UPROPERTY(EditAnywhere)
     float TargetMaxDistance = 0.0f;

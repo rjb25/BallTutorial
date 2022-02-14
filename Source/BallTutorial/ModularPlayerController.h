@@ -4,10 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "ControllerInterface.h"
 #include "ModularPlayerController.generated.h"
 
-class ASoul;
 class UMove;
 class UJump;
 class UAbility;
@@ -19,7 +17,7 @@ class UHealthComponent;
  * 
  */
 UCLASS()
-class BALLTUTORIAL_API AModularPlayerController : public APlayerController, public IControllerInterface
+class BALLTUTORIAL_API AModularPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
@@ -32,7 +30,7 @@ protected:
 	virtual void OnPossess(APawn* InPawn) override;
 
 public:
-	void Possessed(ASoul* InSoul);
+	void Possessed(APawn* InPawn);
 	AModularPlayerController();
 
 	// Called every frame
@@ -41,9 +39,9 @@ public:
     virtual void SetupInputComponent() override;
 
 	UFUNCTION(Server, Reliable, WithValidation)
-	void ServerHurt(AActor* toHurt, float pain) override;
-	bool ServerHurt_Validate(AActor* toHurt, float pain) override;
-	void ServerHurt_Implementation(AActor* toHurt, float pain) override;
+	void ServerHurt(AActor* toHurt, float pain, TSubclassOf<UDamageType> DamageType);
+	bool ServerHurt_Validate(AActor* toHurt, float pain, TSubclassOf<UDamageType> DamageType);
+	void ServerHurt_Implementation(AActor* toHurt, float pain, TSubclassOf<UDamageType> DamageType);
 
 	void RightAxis(float AxisValue);
 	void ForwardAxis(float AxisValue);
@@ -51,8 +49,8 @@ public:
 	void NodAxis(float AxisValue);
 	void JumpPressed();
 	void JumpReleased();
-	void GetYouOne();
-	void possess();
+	//void GetYouOne();
+	//void possess();
 	void BoostPressed();
 	void BoostReleased();
 	void SlowPressed();
@@ -61,25 +59,14 @@ public:
 	void AbilityReleased();
 
 	void menu();
-	void TryPossess(ASoul* PossessMe);
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<ASoul> ActorToSpawn;
+	//void TryPossess(APawn* PossessMe);
 
 	void ToCheckpoint();
 	UPROPERTY(BlueprintReadWrite)
     FVector Checkpoint;
 
-	UPROPERTY(EditAnywhere)
-    TSubclassOf<AActor> SpawnMarkerClass = nullptr;
-
-
-    UPROPERTY(EditAnywhere)
-    float CameraTurnSpeed = 1.0f;
 	float Right = 0.0f;
 	float Forward = 0.0f;
-	float Rotate = 0.0f;
-	float Nod = 0.0f;
 	bool Boost = false;
 	bool Slow = false;
 	bool Jump = false;
@@ -87,16 +74,16 @@ public:
     UMove * MovementComp = nullptr;
     UJoint * JointComp = nullptr;
     UJump * JumpComp = nullptr;
-    USceneComponent * SpringComp = nullptr;
     UCameraComponent * CameraComp = nullptr;
     UHealthComponent * HealthComp = nullptr;
+    UPROPERTY()
     TArray<UAbility*> AbilityComps;
-    ASoul * Soul = nullptr;
     AActor * Actor = nullptr;
     UStaticMeshComponent * Body = nullptr;
     UPrimitiveComponent * Primitive = nullptr;
 
-    APawn * Marker = nullptr;
+    APawn * Pawn = nullptr;
+    ACharacter * Character = nullptr;
     UStaticMeshComponent * MarkerBody = nullptr;
 
 private:

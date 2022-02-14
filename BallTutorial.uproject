@@ -11,7 +11,8 @@
 			"AdditionalDependencies": [
 				"Engine",
 				"UMG",
-				"AdvancedSessions"
+				"AdvancedSessions",
+				"GameplayAbilities"
 			]
 		}
 	],
@@ -32,6 +33,10 @@
 				"Win64",
 				"Android"
 			]
+		},
+		{
+			"Name": "GameplayAbilities",
+			"Enabled": true
 		}
 	]
 }

@@ -21,9 +21,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> ActorToSpawn;
 	UPROPERTY(EditAnywhere)
-    float ProjectileSpeed = 2000.0f;
-	UPROPERTY(EditAnywhere)
     float Reload = 3.0f;
+	UPROPERTY(EditAnywhere)
+    bool ClientSideHit = true;
     float TimeLastFire = 0.0f;
 	UPROPERTY(EditAnywhere)
     FVector ProjectileOffset = FVector(100.0f,0.0f,100.0f);
@@ -32,6 +32,20 @@ public:
 
     AActor * Owner = nullptr;
     UHealthComponent * HealthComp = nullptr;
+
+    /*
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerSpawn(FTransform position);
+	bool ServerSpawn_Validate(FTransform position);
+	void ServerSpawn_Implementation(FTransform position);
+
+	UFUNCTION( NetMulticast, Reliable,  WithValidation)
+	void ClientSpawn(FTransform position);
+    bool ClientSpawn_Validate(FTransform position);
+    void ClientSpawn_Implementation(FTransform position);
+    */
+
+    void Spawn(FVector Direction);
 
 protected:
 	// Called when the game starts
