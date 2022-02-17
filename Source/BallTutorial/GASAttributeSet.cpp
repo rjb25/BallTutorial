@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Net/UnrealNetwork.h"
 #include "GASAttributeSet.h"
+#include "Net/UnrealNetwork.h"
 
 UGASAttributeSet::UGASAttributeSet()
 {

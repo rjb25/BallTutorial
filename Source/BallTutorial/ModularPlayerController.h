@@ -49,8 +49,6 @@ public:
 	void NodAxis(float AxisValue);
 	void JumpPressed();
 	void JumpReleased();
-	//void GetYouOne();
-	//void possess();
 	void BoostPressed();
 	void BoostReleased();
 	void SlowPressed();
@@ -59,7 +57,6 @@ public:
 	void AbilityReleased();
 
 	void menu();
-	//void TryPossess(APawn* PossessMe);
 
 	void ToCheckpoint();
 	UPROPERTY(BlueprintReadWrite)

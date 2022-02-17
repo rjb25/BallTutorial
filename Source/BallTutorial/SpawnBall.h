@@ -1,4 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
+//if(Owner->controller = world->controller) then we know to do this. Otherwise check authority
+//Will need one for multicast to spawn bots ammo and server players ammo also to spawn replicas of client side bullets
+//client side bullets will know to spawn on the client because bullets will have a reference to their shooter? so if local player controller == my shooter player controller don't spawn?
 
 #pragma once
 
@@ -33,19 +36,10 @@ public:
     AActor * Owner = nullptr;
     UHealthComponent * HealthComp = nullptr;
 
-    /*
 	UFUNCTION(Server, Reliable, WithValidation)
-	void ServerSpawn(FTransform position);
-	bool ServerSpawn_Validate(FTransform position);
-	void ServerSpawn_Implementation(FTransform position);
-
-	UFUNCTION( NetMulticast, Reliable,  WithValidation)
-	void ClientSpawn(FTransform position);
-    bool ClientSpawn_Validate(FTransform position);
-    void ClientSpawn_Implementation(FTransform position);
-    */
-
-    void Spawn(FVector Direction);
+	void ServerSpawn(FVector position);
+	bool ServerSpawn_Validate(FVector position);
+	void ServerSpawn_Implementation(FVector position);
 
 protected:
 	// Called when the game starts

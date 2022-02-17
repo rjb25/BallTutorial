@@ -131,40 +131,6 @@ void AModularPlayerController::menu() {
     UGameplayStatics::SaveGameToSlot(Save, Game->AdventureSlot, 0);
 }
 
-/*
-void AModularPlayerController::possess() {
-    FVector Start = Actor->GetActorLocation() - FVector(0.0f,0.0f,50.0f);
-    FVector End = Actor->GetActorLocation() + FVector(0.0f,0.0f,50.0f);
-    TArray<FHitResult> OutHits;
-    bool ignoreSelf = true;
-    float DrawTime = 5.0f;
-    FLinearColor TraceColor = FLinearColor::Red;
-    FLinearColor TraceHitColor = FLinearColor::Green;
-    TArray<AActor*> ActorsToIgnore;
-    ActorsToIgnore.Add(Actor);
-    bool bTraceComplex = true;
-    TArray<TEnumAsByte<EObjectTypeQuery> > ObjectTypes;
-    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery1);
-    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery2);
-    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery3);
-    ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery4);
-    bool hit = UKismetSystemLibrary::SphereTraceMultiForObjects(GetWorld(), Start, End, 100.0f, ObjectTypes, bTraceComplex, ActorsToIgnore, EDrawDebugTrace::None, OutHits, ignoreSelf, TraceColor, TraceHitColor, DrawTime);
-    for (FHitResult OutHit : OutHits) {
-        AActor * OtherActor = OutHit.GetActor();
-        ASoul * PossessMe = Cast<ASoul>(OtherActor);
-        if (PossessMe != nullptr){
-            TryPossess(PossessMe);
-        }
-    }
-}
-*/
-
-/*
-void AModularPlayerController::TryPossess(ASoul * PossessMe) {
-    Possessed(PossessMe);
-}
-*/
-
 void AModularPlayerController::AbilityPressed() {
     Ability = true;
 
@@ -216,7 +182,6 @@ void AModularPlayerController::Tick(float DeltaTime)
             AbilityComp->Use(RotatedUnitForwardDirection);
         }
     }
-
 
     if (Jump){
        Character->Jump(); 
